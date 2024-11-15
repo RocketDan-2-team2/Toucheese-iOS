@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct FilterView: View {
-    
-    @State var isChanged: Bool = true
+    // 임시
+    @State var isChanged: Bool = false
     
     var body: some View {
             
@@ -20,7 +20,7 @@ struct FilterView: View {
                     .padding(.trailing, 10)
             }
             ForEach(FilterType.allCases, id: \.self) { filter in
-                FilterButton(filterName: "\(filter.rawValue)")
+                FilterButton(filterName: "\(filter.title)")
             }
         }
     }

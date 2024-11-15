@@ -7,8 +7,18 @@
 
 import Foundation
 
-enum FilterType: String, CaseIterable {
-    case 지역별
-    case 평점별
-    case 가격별
+enum FilterType: CaseIterable {
+    
+    case region
+    case rating
+    case price
+    
+    var title: String {
+        switch self {
+        case .region: "지역순"
+        case .rating: "평점순"
+        case .price: "가격순"
+        }
+    }
+    
 }
