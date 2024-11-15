@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RegionType: CaseIterable{
+enum RegionType: CaseIterable, FilterProtocol {
     
     case first
     case second
