@@ -11,7 +11,7 @@ struct StudioListCell: View {
     
     var order: Int = 0
     
-    var profileImage: String = "photo"
+    var profileImage: String = "person.fill"
     
     var studioLabel: String = "dummy"
     
@@ -69,9 +69,9 @@ struct StudioListCell: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 120, height: 120)
-                            .padding(.horizontal, 5)
                     }
                 }
+                .padding(.horizontal)
             }
         }
         .padding(.vertical)
