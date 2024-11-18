@@ -9,14 +9,14 @@ import SwiftUI
 
 struct FilterView: View {
     
-    @State var isChanged: Bool = false
-    @State var isHidden: Bool = true
+    @Binding var isChanged: Bool
+    @Binding var isHidden: Bool
     
-    @State var selectedFilterType: FilterType?
+    @Binding var selectedFilterType: FilterType?
     
-    @State var selectedRegion: RegionType? = nil
-    @State var selectedRating: RatingType? = nil
-    @State var selectedPrice: PriceType? = nil
+    @Binding var selectedRegion: RegionType?
+    @Binding var selectedRating: RatingType?
+    @Binding var selectedPrice: PriceType?
     
     var body: some View {
         VStack {
@@ -48,19 +48,10 @@ struct FilterView: View {
                     }
                 }
             }
-            
-            FilterExpansionView(
-                isChanged: $isChanged,
-                isHidden: $isHidden,
-                selectedFilterType: $selectedFilterType,
-                selectedRegion: $selectedRegion,
-                selectedRating: $selectedRating,
-                selectedPrice: $selectedPrice
-            )
         }
     }
 }
 
 #Preview {
-    FilterView()
+    StudioListView()
 }

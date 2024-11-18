@@ -8,8 +8,35 @@
 import SwiftUI
 
 struct StudioListView: View {
+    
+    @State private var isChanged: Bool = false
+    @State private var isHidden: Bool = true
+    
+    @State private var selectedFilterType: FilterType?
+    
+    @State private var selectedRegion: RegionType? = nil
+    @State private var selectedRating: RatingType? = nil
+    @State private var selectedPrice: PriceType? = nil
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            FilterView(
+                isChanged: $isChanged,
+                isHidden: $isHidden,
+                selectedFilterType: $selectedFilterType,
+                selectedRegion: $selectedRegion,
+                selectedRating: $selectedRating,
+                selectedPrice: $selectedPrice
+            )
+            FilterExpansionView(
+                isChanged: $isChanged,
+                isHidden: $isHidden,
+                selectedFilterType: $selectedFilterType,
+                selectedRegion: $selectedRegion,
+                selectedRating: $selectedRating,
+                selectedPrice: $selectedPrice
+            )
+        }
     }
 }
 

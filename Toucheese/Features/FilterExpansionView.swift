@@ -74,5 +74,5 @@ struct FilterExpansionView: View {
 }
 
 #Preview {
-    FilterView()
+    StudioListView()
 }
