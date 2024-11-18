@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct FilterView: View {
-    // 임시
+
     @State var isChanged: Bool = false
     @State var isHidden: Bool = true
+    
     @State var selectedFilterType: FilterType?
     
     @State var selectedRegion: RegionType? = nil
@@ -25,9 +26,17 @@ struct FilterView: View {
                         Image(systemName: "arrow.clockwise")
                             .font(.system(size: 18))
                             .padding(.trailing, 10)
+                            .onTapGesture {
+                                selectedRegion = nil
+                                selectedRating = nil
+                                selectedPrice = nil
+                                selectedFilterType = nil
+                                isChanged.toggle()
+                                isHidden = true
+                            }
                     }
                     ForEach(FilterType.allCases, id: \.self) { filter in
-                        FilterButton(filterName: "\(filter.title)") {
+                        FilterButton(filterName: "\(filter.title)", isSelected: selectedFilterType == filter) {
                             if isHidden || selectedFilterType == nil {
                                 selectedFilterType = filter
                                 isHidden.toggle()
@@ -35,6 +44,7 @@ struct FilterView: View {
                                 selectedFilterType = filter
                             } else {
                                 isHidden = true
+                                selectedFilterType = nil
                             }
                         }
                     }
@@ -45,29 +55,32 @@ struct FilterView: View {
                     case .region:
                         FilterRadioButton(type: nil, selectedType: $selectedRegion) {
                             selectedRegion = nil
-//                            isHidden = true
                         }
                         ForEach(RegionType.allCases, id:
                                     \.self) { type in
-                            FilterRadioButton(type: type, selectedType: $selectedRegion)
+                            FilterRadioButton(type: type, selectedType: $selectedRegion) {
+                                isChanged = true
+                            }
                         }
                     case .rating:
                         FilterRadioButton<RatingType>(type: nil, selectedType: $selectedRating) {
                             selectedRating = nil
-//                            isHidden = true
                         }
                         ForEach(RatingType.allCases, id:
                                     \.self) { type in
-                            FilterRadioButton(type: type, selectedType: $selectedRating)
+                            FilterRadioButton(type: type, selectedType: $selectedRating) {
+                                isChanged = true
+                            }
                         }
                     case .price:
                         FilterRadioButton<PriceType>(type: nil, selectedType: $selectedPrice) {
                             selectedPrice = nil
-//                            isHidden = true
                         }
                         ForEach(PriceType.allCases, id:
                                     \.self) { type in
-                            FilterRadioButton(type: type, selectedType: $selectedPrice)
+                            FilterRadioButton(type: type, selectedType: $selectedPrice) {
+                                isChanged = true
+                            }
                         }
                     case nil:
                         Spacer()

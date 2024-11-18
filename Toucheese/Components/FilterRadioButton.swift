@@ -12,7 +12,6 @@ struct FilterRadioButton<T: FilterProtocol & Equatable>: View {
     let type: T?
     @Binding var selectedType: T?
     
-//    let filterName: String
     let filterAction: (() -> Void)?
     
     var isSelected: Bool {
