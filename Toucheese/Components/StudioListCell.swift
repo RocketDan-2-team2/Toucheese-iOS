@@ -31,7 +31,6 @@ struct StudioListCell: View {
                 
                 Image(systemName: profileImage)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
                     .frame(width: 50, height: 50)
                     .clipShape(.circle)
                 
