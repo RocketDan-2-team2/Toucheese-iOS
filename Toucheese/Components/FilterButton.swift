@@ -16,10 +16,13 @@ struct FilterButton: View {
     
     init(
         filterName: String,
+        isSelected: Bool = false,
         filterAction: (() -> Void)? = nil
     ) {
         self.filterName = filterName
+        self.isSelected = isSelected
         self.filterAction = filterAction
+
     }
     
     var body: some View {
