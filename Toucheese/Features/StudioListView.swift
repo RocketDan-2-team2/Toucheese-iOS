@@ -15,10 +15,6 @@ struct StudioListView: View {
     @State private var selectedRating: RatingType? = nil
     @State private var selectedPrice: PriceType? = nil
     
-    private var isHidden: Bool {
-        selectedFilterType == nil
-    }
-    
     private let studios = [
         Studio(),
         Studio(),
@@ -31,6 +27,10 @@ struct StudioListView: View {
         Studio(),
         Studio(),
     ]
+    
+    private var isHidden: Bool {
+        selectedFilterType == nil
+    }
     
     private var isChanged: Bool {
         !(selectedRegion == nil && selectedRating == nil && selectedPrice == nil)
