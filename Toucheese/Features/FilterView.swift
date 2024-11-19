@@ -49,6 +49,8 @@ struct FilterView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity)
+//        .border(.black)
     }
 }
 
