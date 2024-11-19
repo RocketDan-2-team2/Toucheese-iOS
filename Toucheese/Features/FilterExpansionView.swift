@@ -27,7 +27,7 @@ struct FilterExpansionView: View {
                     FilterRadioButton(type: type, selectedType: $selectedRegion)
                 }
             case .rating:
-                FilterRadioButton<RatingType>(type: nil, selectedType: $selectedRating) {
+                FilterRadioButton(type: nil, selectedType: $selectedRating) {
                     selectedRating = nil
                 }
                 ForEach(RatingType.allCases, id:
@@ -35,7 +35,7 @@ struct FilterExpansionView: View {
                     FilterRadioButton(type: type, selectedType: $selectedRating)
                 }
             case .price:
-                FilterRadioButton<PriceType>(type: nil, selectedType: $selectedPrice) {
+                FilterRadioButton(type: nil, selectedType: $selectedPrice) {
                     selectedPrice = nil
                 }
                 ForEach(PriceType.allCases, id:

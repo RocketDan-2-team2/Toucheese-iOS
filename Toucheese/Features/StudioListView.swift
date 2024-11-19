@@ -32,10 +32,6 @@ struct StudioListView: View {
         selectedFilterType == nil
     }
     
-    private var isChanged: Bool {
-        !(selectedRegion == nil && selectedRating == nil && selectedPrice == nil)
-    }
-    
     var body: some View {
         VStack(spacing: 0.0) {
             FilterView(
