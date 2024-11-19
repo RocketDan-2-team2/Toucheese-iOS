@@ -67,6 +67,12 @@ struct StudioListView: View {
                                 print("셀 누름")
                             }
                         }
+                        
+                        Color(.systemBackground)
+                            .frame(height: 5.0)
+                            .onAppear {
+                                loadData()
+                            }
                     }
                     .ignoresSafeArea()
                     .background {
@@ -77,8 +83,12 @@ struct StudioListView: View {
 //                            .border(.black)
                     }
                 }
-                
-                
+                .refreshable {
+                    loadData()
+                }
+                .onAppear {
+                    loadData()
+                }
                 
                 VStack {
                     FilterExpansionView(
@@ -118,6 +128,10 @@ struct StudioListView: View {
         print("배경 터치")
         isHidden = true
         selectedFilterType = nil
+    }
+    
+    func loadData() {
+        print("데이터 로드")
     }
 }
 
