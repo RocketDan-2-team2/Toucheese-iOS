@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct FilterView: View {
-    
-    @Binding var isChanged: Bool
-    @Binding var isHidden: Bool
-    
+
     @Binding var selectedFilterType: FilterType?
     
     @Binding var selectedRegion: RegionType?
     @Binding var selectedRating: RatingType?
     @Binding var selectedPrice: PriceType?
+    
+    private var isChanged: Bool {
+        !(selectedPrice == nil && selectedRating == nil && selectedRegion == nil)
+    }
     
     var body: some View {
         VStack {
@@ -30,19 +31,13 @@ struct FilterView: View {
                             selectedRating = nil
                             selectedPrice = nil
                             selectedFilterType = nil
-                            isChanged.toggle()
-                            isHidden = true
                         }
                 }
                 ForEach(FilterType.allCases, id: \.self) { filter in
                     FilterButton(filterName: "\(filter.title)", isSelected: selectedFilterType == filter) {
-                        if isHidden || selectedFilterType == nil {
-                            selectedFilterType = filter
-                            isHidden.toggle()
-                        } else if selectedFilterType != filter {
+                        if selectedFilterType == nil || selectedFilterType != filter {
                             selectedFilterType = filter
                         } else {
-                            isHidden = true
                             selectedFilterType = nil
                         }
                     }

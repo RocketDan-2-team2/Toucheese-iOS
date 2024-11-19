@@ -8,18 +8,16 @@
 import SwiftUI
 
 struct StudioListView: View {
-    
-//    let concept: String
-//    let concept: String = ""
-    
-    @State private var isChanged: Bool = false
-    @State private var isHidden: Bool = true
-    
+
     @State private var selectedFilterType: FilterType?
     
     @State private var selectedRegion: RegionType? = nil
     @State private var selectedRating: RatingType? = nil
     @State private var selectedPrice: PriceType? = nil
+    
+    private var isHidden: Bool {
+        selectedFilterType == nil
+    }
     
     private let studios = [
         Studio(),
@@ -34,11 +32,13 @@ struct StudioListView: View {
         Studio(),
     ]
     
+    private var isChanged: Bool {
+        !(selectedRegion == nil && selectedRating == nil && selectedPrice == nil)
+    }
+    
     var body: some View {
         VStack(spacing: 0.0) {
             FilterView(
-                isChanged: $isChanged,
-                isHidden: $isHidden,
                 selectedFilterType: $selectedFilterType,
                 selectedRegion: $selectedRegion,
                 selectedRating: $selectedRating,
@@ -55,7 +55,7 @@ struct StudioListView: View {
             ZStack {
                 ScrollView {
                     LazyVStack {
-                        ForEach(0..<studios.count, id: \.self) { index in
+                        ForEach(studios.indices, id: \.self) { index in
                             StudioListCell(
                                 order: index + 1,
                                 profileImage: studios[index].profileImage,
@@ -92,13 +92,13 @@ struct StudioListView: View {
                 
                 VStack {
                     FilterExpansionView(
-                        isChanged: $isChanged,
-                        isHidden: $isHidden,
                         selectedFilterType: $selectedFilterType,
                         selectedRegion: $selectedRegion,
                         selectedRating: $selectedRating,
                         selectedPrice: $selectedPrice
                     )
+                    .opacity(isHidden ? 0 : 1)
+                    .background(isHidden ? .orange.opacity(0) : .yellow)
                     
                     Spacer()
                 }
@@ -126,7 +126,6 @@ struct StudioListView: View {
     
     func hideFilterExtensionView() {
         print("배경 터치")
-        isHidden = true
         selectedFilterType = nil
     }
     
