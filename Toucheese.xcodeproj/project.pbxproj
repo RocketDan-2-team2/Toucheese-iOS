@@ -15,9 +15,22 @@
 		1317A4732CE5CE9B007264C7 /* Toucheese.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toucheese.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		136C7A202CEDB9D3009DEA76 /* Exceptions for "Toucheese" folder in "Toucheese" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Info.plist,
+			);
+			target = 1317A4722CE5CE9B007264C7 /* Toucheese */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1317A4752CE5CE9B007264C7 /* Toucheese */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				136C7A202CEDB9D3009DEA76 /* Exceptions for "Toucheese" folder in "Toucheese" target */,
+			);
 			path = Toucheese;
 			sourceTree = "<group>";
 		};
@@ -139,6 +152,8 @@
 /* Begin XCBuildConfiguration section */
 		1317A47F2CE5CE9D007264C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 1317A4752CE5CE9B007264C7 /* Toucheese */;
+			baseConfigurationReferenceRelativePath = Resources/ToucheeseSecret.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -202,6 +217,8 @@
 		};
 		1317A4802CE5CE9D007264C7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 1317A4752CE5CE9B007264C7 /* Toucheese */;
+			baseConfigurationReferenceRelativePath = Resources/ToucheeseSecret.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -266,6 +283,7 @@
 				DEVELOPMENT_TEAM = 3LTN66N935;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Toucheese/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -298,6 +316,7 @@
 				DEVELOPMENT_TEAM = 3LTN66N935;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Toucheese/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
