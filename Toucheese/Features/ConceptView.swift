@@ -6,14 +6,17 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ConceptView: View {
-    @State private var conceptList: [String] = [
-        "생동감 있는",
-        "플래쉬/유광",
-        "선명한",
-        "수체화 그림체"
-    ]
+    let studioService: StudioService = DefaultStudioService()
+    
+    @State private var conceptList: [ConceptEntity] = []
+    
+    @State private var selectedConcept: ConceptEntity?
+    
+    // MARK: 임시 상태 관리 CancellableBag - 추후 ViewModel로 분리 예정
+    @State private var bag = Set<AnyCancellable>()
     
     var body: some View {
         VStack {
@@ -26,22 +29,47 @@ struct ConceptView: View {
                 repeating: .init(.flexible()),
                 count: 2
             )) {
-                ForEach(conceptList.indices, id: \.self) { index in
+                ForEach(conceptList) { concept in
                     ConceptButton(
-                        conceptImage: "",
-                        conceptName: conceptList[index]
+                        conceptImage: concept.image ?? "",
+                        conceptName: concept.name
                     ) {
-                        print(conceptList[index])
+                        selectedConcept = concept
                     }
+                    .aspectRatio(1, contentMode: .fill)
                 }
             }
             
             Spacer()
         }
         .padding(12)
+        .task {
+            if !conceptList.isEmpty { return }
+            fetchConceptList()
+        }
+        .navigationDestination(item: $selectedConcept) { concept in
+            StudioListView()
+        }
+    }
+    
+    func fetchConceptList() {
+        studioService.getStudioConceptList()
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Concept: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { conceptList in
+                self.conceptList = conceptList
+            }
+            .store(in: &bag)
     }
 }
 
 #Preview {
-    ConceptView()
+    NavigationStack {
+        ConceptView()
+    }
 }

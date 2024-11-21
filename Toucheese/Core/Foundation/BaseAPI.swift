@@ -19,8 +19,8 @@ extension BaseAPI {
         var base = ToucheeseEnv.Network.baseURL
         
         switch Self.apiType {
-        default:
-            base += ""
+        case .studio:
+            base += "/studio"
         }
         
         guard let url = URL(string: base) else {
@@ -42,8 +42,7 @@ extension BaseAPI {
 
 
 enum APIType {
-    case auth
-    case notification
+    case studio
 }
 
 enum HeaderType {

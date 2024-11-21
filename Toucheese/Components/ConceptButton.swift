@@ -28,10 +28,15 @@ struct ConceptButton: View {
             tapAction?()
         } label: {
             VStack(spacing: 0) {
-                Image(conceptImage)
-                    .resizable()
-                    .scaledToFit()
-                    .background(.gray)
+                AsyncImage(url: URL(string: conceptImage)) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.gray)
                 
                 Text(conceptName)
                     .font(.system(size: 12))
@@ -42,4 +47,8 @@ struct ConceptButton: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
+}
+
+#Preview {
+    ConceptView()
 }
