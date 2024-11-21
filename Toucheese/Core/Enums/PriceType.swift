@@ -20,4 +20,12 @@ enum PriceType: CaseIterable, FilterProtocol {
         case .third: "20만원 이상"
         }
     }
+    
+    var key: String {
+        switch self {
+        case .first: "BELOW_10"
+        case .second: "BELOW_20"
+        case .third: "ABOVE_20"
+        }
+    }
 }

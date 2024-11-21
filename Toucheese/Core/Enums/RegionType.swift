@@ -21,24 +21,31 @@ enum RegionType: CaseIterable, FilterProtocol {
     
     var title: String {
         switch self {
-        case .first:
-            return "강남"
-        case .second:
-            return "서초"
-        case .third:
-            return "송파"
-        case .fourth:
-            return "강서"
-        case .fifth:
-            return "마포"
-        case .sixth:
-            return "영등포"
-        case .seventh:
-            return "강북"
-        case .eighth:
-            return "용산"
-        case .ninth:
-            return "성동"
+            
+        case .first: "강남"
+        case .second: "서초"
+        case .third: "송파"
+        case .fourth: "강서"
+        case .fifth: "마포"
+        case .sixth: "영등포"
+        case .seventh: "강북"
+        case .eighth: "용산"
+        case .ninth: "성동"
+        }
+    }
+    
+    var key: String {
+        switch self {
+            
+        case .first: "GANGNAM"
+        case .second: "SEOCHO"
+        case .third: "SONGPA"
+        case .fourth: "GANGSEO"
+        case .fifth: "MAPO"
+        case .sixth: "YEONGDEUNGPO"
+        case .seventh: "GANGBUK"
+        case .eighth: "YONGSAN"
+        case .ninth: "SEONGDONG"
         }
     }
 }

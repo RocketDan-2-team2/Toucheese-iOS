@@ -19,4 +19,12 @@ enum RatingType: CaseIterable, FilterProtocol {
         case .third: "4.5점 이상"
         }
     }
+    
+    var key: String {
+        switch self {
+        case .first: "ABOVE_3"
+        case .second: "ABOVE_4"
+        case .third: "ABOVE_4.5"
+        }
+    }
 }
