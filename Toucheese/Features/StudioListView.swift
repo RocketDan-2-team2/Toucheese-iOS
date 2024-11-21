@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct StudioListView: View {
-
+    let concept: ConceptEntity
+    
     @State private var selectedFilterType: FilterType?
     
     @State private var selectedRegion: RegionType? = nil
@@ -132,6 +133,6 @@ struct StudioListView: View {
 
 #Preview {
     NavigationStack {
-        StudioListView()
+        StudioListView(concept: .init(id: 1, name: "VIBRANT", image: nil))
     }
 }

@@ -48,7 +48,7 @@ struct ConceptView: View {
             fetchConceptList()
         }
         .navigationDestination(item: $selectedConcept) { concept in
-            StudioListView()
+            StudioListView(concept: concept)
         }
     }
     
