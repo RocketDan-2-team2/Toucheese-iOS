@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ConceptEntity: Codable, Identifiable, Hashable {
+struct ConceptEntity: Decodable, Identifiable, Hashable {
     let id: Int
     let name: String
     let image: String?
