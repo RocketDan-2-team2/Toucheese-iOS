@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct ConceptEntity: Codable, Identifiable {
+struct ConceptEntity: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
-    let conceptImage: String
+    let image: String?
     
     enum CodingKeys: String, CodingKey {
         case id, name
-        case conceptImage = "conceptImg"
+        case image = "conceptImg"
     }
 }
