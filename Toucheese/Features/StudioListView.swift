@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import Combine
 
 struct StudioListView: View {
+    let studioService: StudioService = DefaultStudioService()
     let concept: ConceptEntity
     
     @State private var selectedFilterType: FilterType?
@@ -15,19 +17,11 @@ struct StudioListView: View {
     @State private var selectedRegion: RegionType? = nil
     @State private var selectedRating: RatingType? = nil
     @State private var selectedPrice: PriceType? = nil
+    @State private var currentPage: Int = 0
     
-    private let studios = [
-        Studio(),
-        Studio(),
-        Studio(),
-        Studio(),
-        Studio(),
-        Studio(),
-        Studio(),
-        Studio(),
-        Studio(),
-        Studio(),
-    ]
+    @State private var studioList: [StudioEntity] = []
+
+    @State private var bag = Set<AnyCancellable>()
     
     private var isHidden: Bool {
         selectedFilterType == nil
@@ -52,13 +46,13 @@ struct StudioListView: View {
             ZStack {
                 ScrollView {
                     LazyVStack {
-                        ForEach(studios.indices, id: \.self) { index in
+                        ForEach(studioList.indices, id: \.self) { index in
                             StudioListCell(
                                 order: index + 1,
-                                profileImage: studios[index].profileImage,
-                                studioLabel: studios[index].studioLabel,
-                                rate: studios[index].rate,
-                                portfolioImages: studios[index].portfolioImages
+                                profileImage: studioList[index].profileImage,
+                                name: studioList[index].name,
+                                popularity: studioList[index].popularity,
+                                portfolios: studioList[index].portfolios
                             )
                             .onTapGesture {
                                 print("셀 누름")
@@ -68,7 +62,7 @@ struct StudioListView: View {
                         Color(.systemBackground)
                             .frame(height: 5.0)
                             .onAppear {
-                                loadData()
+                                print("페이지네이션 처리")
                             }
                     }
                     .ignoresSafeArea()
@@ -81,10 +75,7 @@ struct StudioListView: View {
                     }
                 }
                 .refreshable {
-                    loadData()
-                }
-                .onAppear {
-                    loadData()
+                    
                 }
                 
                 VStack {
@@ -112,13 +103,10 @@ struct StudioListView: View {
                 }
             }
         }
-    }
-    
-    private struct Studio {
-        let profileImage: String = "person.fill"
-        let studioLabel: String = "dummy"
-        let rate: Double = 0
-        let portfolioImages: [String] = []
+        .onAppear {
+            if !studioList.isEmpty { return }
+            fetchStudioList()
+        }
     }
     
     func hideFilterExtensionView() {
@@ -126,8 +114,32 @@ struct StudioListView: View {
         selectedFilterType = nil
     }
     
-    func loadData() {
-        print("데이터 로드")
+    func fetchStudioList() {
+        self.studioList = [
+            .init(id: 9, name: "아워유스", profileImage: "", popularity: 4.8, portfolios: ["a", "b", "c"]),
+            .init(id: 10, name: "허쉬스튜디오", profileImage: "", popularity: 4.3, portfolios: ["a", "b"]),
+            .init(id: 11, name: "레코디드(홍대)", profileImage: "", popularity: 4.7, portfolios: ["a", "b", "c", "d"]),
+            .init(id: 12, name: "레코디드(강남)", profileImage: "", popularity: 4.6, portfolios: ["a", "b", "c"])
+        ]
+//        studioService.searchStudio(
+//            conceptID: concept.id,
+//            region: .first,
+//            popularity: .first,
+//            price: .first,
+//            page: currentPage,
+//            size: 10
+//        )
+//        .sink { event in
+//            switch event {
+//            case .finished:
+//                print("Concept: \(event)")
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            }
+//        } receiveValue: { searchResult in
+//            self.studioList = searchResult.content
+//        }
+//        .store(in: &bag)
     }
 }
 
