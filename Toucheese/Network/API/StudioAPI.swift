@@ -20,7 +20,7 @@ extension StudioAPI: BaseAPI {
     var path: String {
         switch self {
         case .concept:
-            "/concept"
+            "/concepts"
         case .search(let conceptID, _):
             "/search/\(conceptID)"
         }
