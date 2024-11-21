@@ -11,7 +11,9 @@ import SwiftUI
 struct ToucheeseApp: App {
     var body: some Scene {
         WindowGroup {
-            ConceptView()
+            NavigationStack {
+                ConceptView()
+            }
         }
     }
 }
