@@ -55,5 +55,5 @@ struct FilterExpansionView: View {
 }
 
 #Preview {
-    StudioListView()
+    StudioListView(concept: .init(id: 1, name: "VIBRANT", image: nil))
 }
