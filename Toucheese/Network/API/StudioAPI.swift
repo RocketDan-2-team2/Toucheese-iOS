@@ -10,7 +10,7 @@ import Alamofire
 
 enum StudioAPI {
     case concept
-    case search(conceptID: String, parameters: Parameters)
+    case search(conceptID: Int, parameters: Parameters)
 }
 
 extension StudioAPI: BaseAPI {

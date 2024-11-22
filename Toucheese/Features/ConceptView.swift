@@ -36,13 +36,17 @@ struct ConceptView: View {
                     ) {
                         selectedConcept = concept
                     }
-                    .aspectRatio(1, contentMode: .fill)
+//                        .frame(width: (proxy.size.width - 42) / 2)
+//                        .aspectRatio(9 / 11, contentMode: .fill)
+//                        .containerRelativeFrame(.horizontal) { length, _ in
+//                            (length - 42) / 2
+//                        }
                 }
             }
             
             Spacer()
         }
-        .padding(12)
+        .padding()
         .task {
             if !conceptList.isEmpty { return }
             fetchConceptList()
