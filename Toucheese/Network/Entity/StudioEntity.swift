@@ -10,8 +10,8 @@ import Foundation
 struct StudioEntity: Codable {
     let id: Int
     let name: String
-    let profileImage: String
-    let popularity: Float
+    let profileImage: String?
+    let popularity: Float?
     let portfolios: [String]
     
     enum CodingKeys: String, CodingKey {

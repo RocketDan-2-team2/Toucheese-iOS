@@ -49,9 +49,9 @@ struct StudioListView: View {
                         ForEach(studioList.indices, id: \.self) { index in
                             StudioListCell(
                                 order: index + 1,
-                                profileImage: studioList[index].profileImage,
+                                profileImage: studioList[index].profileImage ?? "",
                                 name: studioList[index].name,
-                                popularity: studioList[index].popularity,
+                                popularity: studioList[index].popularity ?? 0.0,
                                 portfolios: studioList[index].portfolios
                             )
                             .onTapGesture {

@@ -70,7 +70,7 @@ struct StudioListCell: View {
                     ForEach(portfolios, id: \.self) { portfolio in
                         AsyncImage(url: URL(string: portfolio)) { image in
                             image.resizable()
-                                .scaledToFit()
+                                .scaledToFill()
                         } placeholder: {
                             ProgressView()
                         }
