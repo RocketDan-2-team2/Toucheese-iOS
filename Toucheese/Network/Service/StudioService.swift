@@ -12,12 +12,15 @@ import Moya
 // TODO: 기본값 설정하는 방법 생각해보기
 protocol StudioService {
     func getStudioConceptList() -> AnyPublisher<[ConceptEntity], Error>
-    func searchStudio(conceptID: String,
+    func getStudioList(conceptID: Int,
+                      page: Int,
+                      size: Int) -> AnyPublisher<StudioSearchResultEntity, Error>
+    func searchStudio(conceptID: Int,
                       region: RegionType,
                       popularity: RatingType,
                       price: PriceType,
                       page: Int,
-                      size: Int) -> AnyPublisher<Data, Error>
+                      size: Int) -> AnyPublisher<StudioSearchResultEntity, Error>
 }
 
 typealias DefaultStudioService = BaseService<StudioAPI>
@@ -28,21 +31,33 @@ extension DefaultStudioService: StudioService {
         requestObjectWith(.concept)
     }
     
+    func getStudioList(
+        conceptID: Int,
+        page: Int,
+        size: Int
+    ) -> AnyPublisher<StudioSearchResultEntity, any Error> {
+        requestObjectWithNetworkError(.search(
+            conceptID: conceptID,
+            parameters: [
+                "pageable": ["page": page, "size": 10]
+            ]
+        ))
+    }
+    
     func searchStudio(
-        conceptID: String,
+        conceptID: Int,
         region: RegionType,
         popularity: RatingType,
         price: PriceType,
-        page: Int = 0,
-        size: Int = 10
-    ) -> AnyPublisher<Data, any Error> {
+        page: Int,
+        size: Int
+    ) -> AnyPublisher<StudioSearchResultEntity, any Error> {
         requestObjectWithNetworkError(.search(
             conceptID: conceptID,
-            parameters: ["region": region,
-                         "popularity": popularity,
-                         "price": price,
-                         "page": page,
-                         "size": size]
+            parameters: [
+                "filters": ["region": region.key],
+                "pageable": ["page": page, "size": 10]
+            ]
         ))
     }
     

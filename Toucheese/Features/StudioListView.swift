@@ -115,31 +115,21 @@ struct StudioListView: View {
     }
     
     func fetchStudioList() {
-        self.studioList = [
-            .init(id: 9, name: "아워유스", profileImage: "", popularity: 4.8, portfolios: ["a", "b", "c"]),
-            .init(id: 10, name: "허쉬스튜디오", profileImage: "", popularity: 4.3, portfolios: ["a", "b"]),
-            .init(id: 11, name: "레코디드(홍대)", profileImage: "", popularity: 4.7, portfolios: ["a", "b", "c", "d"]),
-            .init(id: 12, name: "레코디드(강남)", profileImage: "", popularity: 4.6, portfolios: ["a", "b", "c"])
-        ]
-//        studioService.searchStudio(
-//            conceptID: concept.id,
-//            region: .first,
-//            popularity: .first,
-//            price: .first,
-//            page: currentPage,
-//            size: 10
-//        )
-//        .sink { event in
-//            switch event {
-//            case .finished:
-//                print("Concept: \(event)")
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//        } receiveValue: { searchResult in
-//            self.studioList = searchResult.content
-//        }
-//        .store(in: &bag)
+        studioService.getStudioList(
+            conceptID: concept.id,
+            page: currentPage,
+            size: 10
+        ).sink { event in
+            switch event {
+            case .finished:
+                print("Concept: \(event)")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        } receiveValue: { searchResult in
+            self.studioList = searchResult.content
+        }
+        .store(in: &bag)
     }
 }
 
