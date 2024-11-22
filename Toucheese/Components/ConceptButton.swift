@@ -35,13 +35,13 @@ struct ConceptButton: View {
                 } placeholder: {
                     ProgressView()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.gray)
                 
                 Text(conceptName)
                     .font(.system(size: 12))
                     .padding(.vertical, 4)
             }
+            .frame(maxWidth: .infinity)
+            .aspectRatio(9 / 11, contentMode: .fill)
             .background(.gray.opacity(0.4))
             .clipShape(.rect(cornerRadius: 20))
         }

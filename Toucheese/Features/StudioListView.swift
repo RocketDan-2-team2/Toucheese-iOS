@@ -107,6 +107,26 @@ struct StudioListView: View {
             if !studioList.isEmpty { return }
             fetchStudioList()
         }
+        .onChange(of: selectedRegion) { oldValue, newValue in
+            studioService.searchStudio(
+                conceptID: concept.id,
+                region: selectedRegion,
+                popularity: selectedRating,
+                price: selectedPrice,
+                page: currentPage,
+                size: 10
+            ).sink { event in
+                switch event {
+                case .finished:
+                    print("Concept: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { searchResult in
+                self.studioList = searchResult.content
+            }
+            .store(in: &bag)
+        }
     }
     
     func hideFilterExtensionView() {
