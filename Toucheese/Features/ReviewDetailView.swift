@@ -39,6 +39,11 @@ struct ReviewDetailView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding()
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                ThumbnailNavigationView(thumbnail: "", title: "김레이")
+            }
+        }
         
     }
 }
