@@ -19,6 +19,7 @@ struct ThumbnailNavigationView: View {
                 print("back!")
             }) {
                 Image(systemName: "chevron.left")
+                    .foregroundStyle(.black)
             }
             AsyncImage(url: URL(string: thumbnail)) { image in
                 image.resizable()
