@@ -36,15 +36,15 @@ class BaseService<Target: TargetType> {
         return provider
     }()
     
-    private lazy var testingProvider: MoyaProvider<API> = {
-        let testingProvider = MoyaProvider<API>(endpointClosure: endpointClosure, stubClosure: MoyaProvider.immediatelyStub)
-        return testingProvider
-    }()
-    
-    private lazy var testingProviderWithError: MoyaProvider<API> = {
-        let testingProvider = MoyaProvider<API>(endpointClosure: endpointClosureWithError, stubClosure: MoyaProvider.immediatelyStub)
-        return testingProvider
-    }()
+//    private lazy var testingProvider: MoyaProvider<API> = {
+//        let testingProvider = MoyaProvider<API>(endpointClosure: endpointClosure, stubClosure: MoyaProvider.immediatelyStub)
+//        return testingProvider
+//    }()
+//    
+//    private lazy var testingProviderWithError: MoyaProvider<API> = {
+//        let testingProvider = MoyaProvider<API>(endpointClosure: endpointClosureWithError, stubClosure: MoyaProvider.immediatelyStub)
+//        return testingProvider
+//    }()
     
     
     // MARK: Endpoint Closure
@@ -71,26 +71,6 @@ class BaseService<Target: TargetType> {
             httpHeaderFields: target.headers
         )
         return endpoint
-    }
-    
-}
-
-
-extension BaseService {
-    
-    var `default`: BaseService {
-        self.provider = self.defaultProvider
-        return self
-    }
-    
-    var test: BaseService {
-        self.provider = self.testingProvider
-        return self
-    }
-    
-    var testWithError: BaseService {
-        self.provider = self.testingProviderWithError
-        return self
     }
     
 }

@@ -7,8 +7,7 @@
 
 import Foundation
 
-enum RegionType: CaseIterable, FilterProtocol {
-    
+enum RegionType: FilterProtocol {
     case first
     case second
     case third
@@ -21,7 +20,6 @@ enum RegionType: CaseIterable, FilterProtocol {
     
     var title: String {
         switch self {
-            
         case .first: "강남"
         case .second: "서초"
         case .third: "송파"
@@ -36,7 +34,6 @@ enum RegionType: CaseIterable, FilterProtocol {
     
     var key: String {
         switch self {
-            
         case .first: "GANGNAM"
         case .second: "SEOCHO"
         case .third: "SONGPA"

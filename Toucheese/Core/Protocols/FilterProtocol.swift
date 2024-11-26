@@ -7,6 +7,7 @@
 
 import Foundation
 
-protocol FilterProtocol {
+protocol FilterProtocol: CaseIterable  {
     var title: String { get }
+    var key: String { get }
 }
