@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RatingType: CaseIterable, FilterProtocol {
+enum RatingType: FilterProtocol {
     case first
     case second
     case third

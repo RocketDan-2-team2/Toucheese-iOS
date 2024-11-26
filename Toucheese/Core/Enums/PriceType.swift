@@ -7,8 +7,7 @@
 
 import Foundation
 
-enum PriceType: CaseIterable, FilterProtocol {
-    
+enum PriceType: FilterProtocol {
     case first
     case second
     case third
