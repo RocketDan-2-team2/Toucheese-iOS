@@ -11,7 +11,7 @@ struct FilterExpansionView: View {
     
     @Binding var selectedFilterType: FilterType?
     
-    @Binding var selectedRegion: RegionType?
+    @Binding var selectedRegion: [RegionType]
     @Binding var selectedRating: RatingType?
     @Binding var selectedPrice: PriceType?
     
@@ -19,12 +19,12 @@ struct FilterExpansionView: View {
         HStack {
             switch selectedFilterType {
             case .region:
-                FilterRadioButton(type: nil, selectedType: $selectedRegion) {
-                    selectedRegion = nil
+                FilterDuplicatedButton(type: nil, selectedType: $selectedRegion) {
+                    selectedRegion = []
                 }
                 ForEach(RegionType.allCases, id:
                             \.self) { type in
-                    FilterRadioButton(type: type, selectedType: $selectedRegion)
+                    FilterDuplicatedButton(type: type, selectedType: $selectedRegion)
                 }
             case .rating:
                 FilterRadioButton(type: nil, selectedType: $selectedRating) {

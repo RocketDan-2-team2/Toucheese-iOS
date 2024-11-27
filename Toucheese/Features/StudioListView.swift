@@ -14,7 +14,7 @@ struct StudioListView: View {
     
     @State private var selectedFilterType: FilterType?
     
-    @State private var selectedRegion: RegionType? = nil
+    @State private var selectedRegion: [RegionType] = []
     @State private var selectedRating: RatingType? = nil
     @State private var selectedPrice: PriceType? = nil
     @State private var currentPage: Int = 0
@@ -107,26 +107,27 @@ struct StudioListView: View {
             if !studioList.isEmpty { return }
             fetchStudioList()
         }
-        .onChange(of: selectedRegion) { oldValue, newValue in
-            studioService.searchStudio(
-                conceptID: concept.id,
-                region: selectedRegion,
-                popularity: selectedRating,
-                price: selectedPrice,
-                page: currentPage,
-                size: 10
-            ).sink { event in
-                switch event {
-                case .finished:
-                    print("Concept: \(event)")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            } receiveValue: { searchResult in
-                self.studioList = searchResult.content
-            }
-            .store(in: &bag)
-        }
+        //TODO: 지역 중복 선택하는 API로 연결하기
+//        .onChange(of: selectedRegion) { oldValue, newValue in
+//            studioService.searchStudio(
+//                conceptID: concept.id,
+//                region: selectedRegion,
+//                popularity: selectedRating,
+//                price: selectedPrice,
+//                page: currentPage,
+//                size: 10
+//            ).sink { event in
+//                switch event {
+//                case .finished:
+//                    print("Concept: \(event)")
+//                case .failure(let error):
+//                    print(error.localizedDescription)
+//                }
+//            } receiveValue: { searchResult in
+//                self.studioList = searchResult.content
+//            }
+//            .store(in: &bag)
+//        }
     }
     
     func hideFilterExtensionView() {

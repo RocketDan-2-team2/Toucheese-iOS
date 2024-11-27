@@ -11,12 +11,12 @@ struct FilterView: View {
 
     @Binding var selectedFilterType: FilterType?
     
-    @Binding var selectedRegion: RegionType?
+    @Binding var selectedRegion: [RegionType]
     @Binding var selectedRating: RatingType?
     @Binding var selectedPrice: PriceType?
     
     private var isChanged: Bool {
-        !(selectedPrice == nil && selectedRating == nil && selectedRegion == nil)
+        !(selectedPrice == nil && selectedRating == nil && selectedRegion.count == 0)
     }
     
     var body: some View {
@@ -27,7 +27,7 @@ struct FilterView: View {
                         .font(.system(size: 18))
                         .padding(.trailing, 10)
                         .onTapGesture {
-                            selectedRegion = nil
+                            selectedRegion = []
                             selectedRating = nil
                             selectedPrice = nil
                             selectedFilterType = nil
