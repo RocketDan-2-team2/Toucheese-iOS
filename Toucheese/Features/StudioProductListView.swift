@@ -18,6 +18,7 @@ struct StudioProductListView: View {
             LazyVStack(alignment: .leading) {
                 Text("촬영 상품")
                     .font(.headline)
+                    .padding(.horizontal)
                 
                 ForEach(productList) { product in
                     NavigationLink(value: product) {
@@ -26,7 +27,6 @@ struct StudioProductListView: View {
                     .buttonStyle(PlainButtonStyle())
                 }
             }
-            .padding(.horizontal)
             .padding(.vertical, 8)
         }
         .navigationDestination(for: StudioProduct.self) { product in

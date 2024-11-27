@@ -15,11 +15,10 @@ struct StudioProductCell: View {
     }
     
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 8) {
             RoundedRectangle(cornerRadius: 16)
                 .fill(.placeholder)
                 .aspectRatio(5/7, contentMode: .fit)
-                .frame(height: 140)
             
             VStack(alignment: .leading, spacing: 6) {
                 Text(product.name)
@@ -41,8 +40,10 @@ struct StudioProductCell: View {
                         .font(.title3)
                 }
             }
-            .padding(12)
+            .padding(.vertical, 4)
         }
+        .frame(height: 140)
+        .padding(.horizontal, 12)
         .contentShape(.rect)
     }
 }
