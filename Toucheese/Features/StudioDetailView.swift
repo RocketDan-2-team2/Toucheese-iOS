@@ -10,7 +10,11 @@ import SwiftUI
 struct StudioDetailView: View {
     var body: some View {
         VStack {
-            CorouselView(urls: [""])
+            ZStack {
+                StudioCarouselView(urls: [""])
+                
+            }
+            
         }
     }
 }

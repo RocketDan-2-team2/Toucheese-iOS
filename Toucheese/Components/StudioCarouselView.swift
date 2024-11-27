@@ -9,7 +9,7 @@ import SwiftUI
 
 // TODO: 나중에 [스튜디오-리뷰-후기사진] 페이지에서도 쓰일 수 있도록 변경 예정
 
-struct CorouselView: View {
+struct StudioCarouselView: View {
     
     let urls: [String]
     
@@ -66,5 +66,5 @@ struct CorouselView: View {
 }
 
 #Preview {
-    CorouselView(urls: [""])
+    StudioCarouselView(urls: [""])
 }
