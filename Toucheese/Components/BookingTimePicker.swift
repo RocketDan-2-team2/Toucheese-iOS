@@ -77,7 +77,7 @@ struct TimeButtonGrid: View {
     
     var body: some View {
         if timeArr.count == 0 {
-            Text("쉬는 날 입니다.")
+            Text("운영중인 시간이 없습니다.")
                 .bold()
         } else {
             LazyVGrid(columns: columnsArr) {
