@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 struct StudioProductListView: View {
+    let studioService: StudioService = MockStudioService()
+    
     @State private var productList: [StudioProduct] = StudioProduct.mockData
+    @State private var selectedProduct: StudioProduct?
+    @State private var bag = Set<AnyCancellable>()
     
     var body: some View {
         ScrollView {
@@ -21,7 +26,20 @@ struct StudioProductListView: View {
                     .padding(.horizontal)
                 
                 ForEach(productList) { product in
-                    NavigationLink(value: product) {
+                    Button {
+                        studioService.getStudioProductDetail(productID: product.id)
+                            .sink { event in
+                                switch event {
+                                case .finished:
+                                    print("ProductDetail: \(event)")
+                                case .failure(let error):
+                                    print(error.localizedDescription)
+                                }
+                            } receiveValue: { product in
+                                selectedProduct = product.translate()
+                            }
+                            .store(in: &bag)
+                    } label: {
                         StudioProductCell(product: product)
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -29,8 +47,15 @@ struct StudioProductListView: View {
             }
             .padding(.vertical, 8)
         }
-        .navigationDestination(for: StudioProduct.self) { product in
-            Text(product.id)
+        .navigationDestination(item: $selectedProduct) { product in
+            VStack {
+                Text(product.name)
+                Text(product.description)
+                
+                ForEach(product.optionList) { option in
+                    AdditionalProductOptionCell(option: option)
+                }
+            }
         }
     }
 }
