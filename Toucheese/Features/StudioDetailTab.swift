@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StudioDetailTab: View {
-    @State private var tabSelection: Int = 0
+    @Binding var tabSelection: Int
     
     var body: some View {
         VStack {
@@ -23,6 +23,10 @@ struct StudioDetailTab: View {
                     }
             }
         }
+        .background(
+            Rectangle()
+                .fill(.background)
+        )
     }
     
     private struct TabButton: View {
@@ -48,5 +52,5 @@ struct StudioDetailTab: View {
 }
 
 #Preview {
-    StudioDetailTab()
+    StudioDetailTab(tabSelection: .constant(0))
 }
