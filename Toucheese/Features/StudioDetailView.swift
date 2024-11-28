@@ -34,6 +34,8 @@ struct StudioDetailView: View {
                     .padding(20.0)
                     Spacer()
                 }
+                
+                StudioDetailTab()
             }
         }
     }
