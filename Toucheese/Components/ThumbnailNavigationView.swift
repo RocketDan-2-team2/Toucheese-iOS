@@ -21,18 +21,25 @@ struct ThumbnailNavigationView: View {
                 Image(systemName: "chevron.left")
                     .foregroundStyle(.black)
             }
-            AsyncImage(url: URL(string: thumbnail)) { image in
-                image.resizable()
-                    .scaledToFit()
-            } placeholder: {
+            if let url = URL(string: thumbnail) {
+                CachedAsyncImage(
+                    url: url,
+                    size: CGSize(width: 50, height: 50)
+                )
+                .clipShape(.circle)
+                .overlay {
+                    Circle()
+                        .strokeBorder(.gray)
+                }
+            } else {
                 ProgressView()
-            }
-            .frame(width: 50, height: 50)
-            .background(.gray.opacity(0.3))
-            .clipShape(.circle)
-            .overlay {
-                Circle()
-                    .strokeBorder(.gray)
+                    .frame(width: 50, height: 50)
+                    .background(.gray.opacity(0.3))
+                    .clipShape(.circle)
+                    .overlay {
+                        Circle()
+                            .strokeBorder(.gray)
+                    }
             }
             
             Text(title)
