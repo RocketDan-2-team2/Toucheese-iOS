@@ -17,8 +17,8 @@ struct StudioDetailView: View {
     var body: some View {
         VStack {
             StudioCarouselView(urls: [""])
-                .containerRelativeFrame(.vertical) { cgFloat, _ in
-                    cgFloat * 0.3
+                .containerRelativeFrame(.vertical) { length, _ in
+                    length * 0.3
                 }
             
             HStack {
