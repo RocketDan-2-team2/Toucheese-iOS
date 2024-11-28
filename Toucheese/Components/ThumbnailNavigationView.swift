@@ -24,7 +24,7 @@ struct ThumbnailNavigationView: View {
             if let url = URL(string: thumbnail) {
                 CachedAsyncImage(
                     url: url,
-                    size: CGSize(width: 50, height: 50)
+                    size: CGSize(width: 45, height: 45)
                 )
                 .clipShape(.circle)
                 .overlay {
@@ -33,7 +33,7 @@ struct ThumbnailNavigationView: View {
                 }
             } else {
                 ProgressView()
-                    .frame(width: 50, height: 50)
+                    .frame(width: 45, height: 45)
                     .background(.gray.opacity(0.3))
                     .clipShape(.circle)
                     .overlay {
@@ -47,7 +47,7 @@ struct ThumbnailNavigationView: View {
                 .foregroundStyle(.primary)
             
         }
-        .padding(.top)
+        .padding(.vertical)
     }
 }
 
