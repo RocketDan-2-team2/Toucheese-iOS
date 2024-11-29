@@ -11,7 +11,6 @@ struct BookingTimePicker: View {
     @Binding var selectedDate: Date
     @Binding var selectedTime: Int
     
-    @State var closedDays: [Int]?
     @State var openedHours: [Int]
     
     private let gridRow = Array(repeating: GridItem(.adaptive(minimum: .infinity, maximum: .infinity)), count: 4)
@@ -20,7 +19,7 @@ struct BookingTimePicker: View {
     
     var body: some View {
         VStack {
-            RepresentableCalendar(closedDays: $closedDays)
+            CustomCalendar(selectedDate: $selectedDate)
             
             //            MARK: 하단 시간 선택 버튼
             VStack {
@@ -61,7 +60,7 @@ struct BookingTimePicker: View {
 }
 
 #Preview {
-    BookingTimePicker(selectedDate: .constant(Date()), selectedTime: .constant(10), openedHours: [])
+    BookingTimePicker(selectedDate: .constant(Date()), selectedTime: .constant(10), openedHours: [1,2,3,4])
 }
 
 struct TimeButtonGrid: View {
