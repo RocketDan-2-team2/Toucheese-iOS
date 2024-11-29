@@ -20,9 +20,13 @@ struct StudioCarouselView: View {
             LazyHStack(spacing: 0.0) {
                 ForEach(urls.indices, id: \.self) { index in
                     AsyncImage(url: URL(string: urls[index])) { image in
-                        image
-                            .resizable()
-                            .brightness(-0.5)
+                        ZStack {
+                            Color(.systemBackground)
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        }
+                        .brightness(-0.5)
                     } placeholder: {
                         ZStack {
                             Color(.black)
@@ -66,5 +70,13 @@ struct StudioCarouselView: View {
 }
 
 #Preview {
-    StudioCarouselView(urls: [""])
+    StudioCarouselView(
+        urls: [
+            "https://i.imgur.com/niY3nhv.jpeg",
+            "https://i.imgur.com/niY3nhv.jpeg",
+            "https://i.imgur.com/niY3nhv.jpeg",
+            "https://i.imgur.com/niY3nhv.jpeg",
+            "https://i.imgur.com/niY3nhv.jpeg",
+        ]
+    )
 }
