@@ -18,24 +18,18 @@ struct StudioReviewListView: View {
     var body: some View {
         LazyVGrid(columns: gridItems) {
             ForEach(portfolios.indices, id: \.self) { index in
-                AsyncImage(url: URL(string: portfolios[index])) { image in
-                    Rectangle()
-                        .fill(.placeholder)
-                        .aspectRatio(1, contentMode: .fill)
-                        .overlay {
-                            image
-                                .resizable()
-                                .scaledToFit()
-                        }
-                } placeholder: {
-                    ZStack {
-                        Rectangle()
-                            .fill(.placeholder)
-                            .aspectRatio(1, contentMode: .fill)
-                        ProgressView()
+                Rectangle()
+                    .fill(.placeholder)
+                    .aspectRatio(1, contentMode: .fill)
+                    .overlay {
+                        CachedAsyncImage(
+                            url: portfolios[index],
+                            size: CGSize(
+                                width: CGFloat.infinity,
+                                height: CGFloat.infinity
+                            )
+                        )
                     }
-                }
-                .clipShape(Rectangle())
             }
         }
         .padding(5.0)

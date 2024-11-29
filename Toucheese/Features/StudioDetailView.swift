@@ -111,8 +111,8 @@ struct StudioDetailView: View {
             ),
             studioBackgrounds: [
                 "https://i.imgur.com/niY3nhv.jpeg",
-//                "https://i.imgur.com/niY3nhv.jpeg",
-//                "https://i.imgur.com/niY3nhv.jpeg",
+                "https://i.imgur.com/niY3nhv.jpeg",
+                "https://i.imgur.com/niY3nhv.jpeg",
             ],
             workTime: "월~금 10:10-19:00 / 매주 월 휴무",
             location: "서울특별시 서초구 강남대로 11-11"
