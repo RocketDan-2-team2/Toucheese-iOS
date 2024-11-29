@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CachedAsyncImage: View {
     
-    let url: URL
+    let url: String
     let size: CGSize
     
     @State private var image: UIImage? = nil
@@ -34,6 +34,8 @@ struct CachedAsyncImage: View {
     private func loadImage() {
         
         // 캐싱되어있다면 이미지 return
+        guard let url = URL(string: url) else { return }
+        
         if let cachedResponse = URLCache.shared.cachedResponse(for: URLRequest(url: url)),
            let cachedImage = UIImage(data: cachedResponse.data) {
             self.image = cachedImage

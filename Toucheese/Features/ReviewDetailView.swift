@@ -18,20 +18,18 @@ struct ReviewDetailView: View {
             
             GeometryReader { geometry in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    // LazyHStack으로 하니까 옆에 슬쩍 보이는 사진이 안나옴..
                     HStack(spacing: -90) {
                         ForEach(imageList, id: \.self) { imageString in
-                            if let url = URL(string: imageString) {
-                                CachedAsyncImage(
-                                    url: url,
-                                    size: CGSize(
-                                        width: geometry.size.width * 0.8,
-                                        height: 350
-                                    )
+                            CachedAsyncImage(
+                                url: imageString,
+                                size: CGSize(
+                                    width: geometry.size.width * 0.8,
+                                    height: 350
                                 )
-                                .padding(.top, 50)
-                                .padding(.horizontal, (geometry.size.width * 0.1))
-                            }
+                            )
+                            .padding(.top, 50)
+                            .padding(.horizontal, (geometry.size.width * 0.1))
+                            
                         }
                     }
                     .scrollTargetLayout()
@@ -39,15 +37,17 @@ struct ReviewDetailView: View {
                 .scrollTargetBehavior(.viewAligned)
                 
             }
-            .frame(height: 420)
             
             Text("""
                  \(content)
                  """)
             .fixedSize(horizontal: false, vertical: true)
-            .padding()
+            .padding(.horizontal)
+            .padding(.bottom, 100)
+            
             Spacer()
         }
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 ThumbnailNavigationView(thumbnail: "", title: "김레이")
