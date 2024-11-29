@@ -11,11 +11,20 @@ struct BookingTimePicker: View {
     @Binding var selectedDate: Date
     @Binding var selectedTime: Int
     
-    @State var openedHours: [Int]
+    @State var openedHoursArr: [[Int]]
     
     private let gridRow = Array(repeating: GridItem(.adaptive(minimum: .infinity, maximum: .infinity)), count: 4)
     
     @State private var selectedButton: Int?
+    
+    ///이차원 배열로 시간을 받기위해 인덱스로 사용하려고 만들어진 일자 변수
+    ///처음에 selectedDate가 binding으로 현재 Date() 인스턴스를 받는다고 가정해서 언래핑함.
+    private var calculatedDate: Int {
+        let df = DateFormatter()
+        df.dateFormat = "d"
+        let temp = df.string(from: selectedDate)
+        return Int(temp)! - 2
+    }
     
     var body: some View {
         VStack {
@@ -32,7 +41,7 @@ struct BookingTimePicker: View {
                     .padding(.leading, 10)
                     
                     TimeButtonGrid(columnsArr: gridRow,
-                                   timeArr: openedHours,
+                                   timeArr: openedHoursArr[calculatedDate],
                                    selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
                                    isAM: true)
@@ -48,7 +57,7 @@ struct BookingTimePicker: View {
                     .padding(.leading, 10)
                     
                     TimeButtonGrid(columnsArr: gridRow,
-                                   timeArr: openedHours,
+                                   timeArr: openedHoursArr[calculatedDate],
                                    selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
                                    isAM: false)
@@ -60,7 +69,7 @@ struct BookingTimePicker: View {
 }
 
 #Preview {
-    BookingTimePicker(selectedDate: .constant(Date()), selectedTime: .constant(10), openedHours: [1,2,3,4])
+    BookingTimePicker(selectedDate: .constant(Date()), selectedTime: .constant(10), openedHoursArr: [[1,2,3,4],[9,10,11,13,14,15],[]])
 }
 
 struct TimeButtonGrid: View {
