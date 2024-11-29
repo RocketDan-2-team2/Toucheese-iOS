@@ -11,6 +11,7 @@ import Alamofire
 enum StudioAPI {
     case concept
     case search(conceptID: Int, parameters: Parameters)
+    case productDetail(itemID: Int)
 }
 
 extension StudioAPI: BaseAPI {
@@ -23,19 +24,21 @@ extension StudioAPI: BaseAPI {
             "/concepts"
         case .search(let conceptID, _):
             "/search/\(conceptID)"
+        case .productDetail(let itemID):
+            "/item/\(itemID)/details"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .concept: .get
+        case .concept, .productDetail: .get
         case .search : .post
         }
     }
     
     var task: Moya.Task {
         switch self {
-        case .concept:
+        case .concept, .productDetail:
                 .requestPlain
         case .search(_, let parameters):
                 .requestParameters(parameters: parameters, encoding: JSONEncoding.default)

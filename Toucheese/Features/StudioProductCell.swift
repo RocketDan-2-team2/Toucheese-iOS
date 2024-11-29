@@ -25,7 +25,7 @@ struct StudioProductCell: View {
                     .bold()
                     .font(.title3)
                 
-                Text(product.introduction)
+                Text(product.description)
                     .font(.system(size: 14))
                 
                 HStack {
@@ -50,10 +50,12 @@ struct StudioProductCell: View {
 
 #Preview {
     StudioProductCell(product: .init(
-        id: UUID().uuidString,
+        id: 0,
+        image: nil,
         name: "상품 이름",
-        introduction: "상품 소개\n상품 소개\n상품 소개",
+        description: "상품 소개\n상품 소개\n상품 소개",
         reviewCount: 1234,
-        price: 123456
+        price: 123456,
+        optionList: []
     ))
 }

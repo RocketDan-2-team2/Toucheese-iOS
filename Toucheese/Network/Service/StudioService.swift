@@ -21,6 +21,7 @@ protocol StudioService {
                       price: PriceType?,
                       page: Int,
                       size: Int) -> AnyPublisher<StudioSearchResultEntity, Error>
+    func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, Error>
 }
 
 
@@ -58,6 +59,10 @@ extension DefaultStudioService: StudioService {
                          "page": page,
                          "size": 10]
         ))
+    }
+    
+    func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, any Error> {
+        requestObjectWithNetworkError(.productDetail(itemID: productID))
     }
     
 }
@@ -158,6 +163,31 @@ extension MockStudioService: StudioService {
             )
             
             promise(.success(studioList))
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, any Error> {
+        return Future { promise in
+            let studioProduct: StudioProductEntity = .init(
+                itemInfoDto: .init(
+                    itemId: 0,
+                    itemImage: nil,
+                    itemName: "증명사진",
+                    itemDescription: "신원 확인이 주된 목적인 사진 입니다. 주로 공식 문서 및 신분증에 사용되는 사진으로 여권, 운전면허증, 학생증 등과 함께 나타납니다.",
+                    itemPrice: 75000
+                ),
+                optionDtoList: [
+                    .init(
+                        optionId: 0,
+                        optionName: "보정 사진 추가",
+                        optionDescription: nil,
+                        optionPrice: 30000
+                    )
+                ]
+            )
+            
+            promise(.success(studioProduct))
         }
         .eraseToAnyPublisher()
     }
