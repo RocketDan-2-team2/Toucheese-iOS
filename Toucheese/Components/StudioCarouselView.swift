@@ -19,19 +19,19 @@ struct StudioCarouselView: View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: 0.0) {
                 ForEach(urls.indices, id: \.self) { index in
-                    AsyncImage(url: URL(string: urls[index])) { image in
-                        image
-                            .resizable()
-                            .brightness(-0.5)
-                    } placeholder: {
-                        ZStack {
-                            Color(.black)
-                                .opacity(0.6)
-                            ProgressView()
+                    Color(.systemBackground)
+                        .overlay {
+                            CachedAsyncImage(
+                                url: urls[index],
+                                size: CGSize(
+                                    width: CGFloat.infinity,
+                                    height: CGFloat.infinity
+                                )
+                            )
                         }
-                    }
-                    .id(index + 1)
-                    .containerRelativeFrame(.horizontal)
+                        .brightness(-0.5)
+                        .id(index + 1)
+                        .containerRelativeFrame(.horizontal)
                 }
             }
             .scrollTargetLayout()
@@ -66,5 +66,13 @@ struct StudioCarouselView: View {
 }
 
 #Preview {
-    StudioCarouselView(urls: [""])
+    StudioCarouselView(
+        urls: [
+            "https://i.imgur.com/niY3nhv.jpeg",
+            "https://i.imgur.com/niY3nhv.jpeg",
+            "https://i.imgur.com/niY3nhv.jpeg",
+            "https://i.imgur.com/niY3nhv.jpeg",
+            "https://i.imgur.com/niY3nhv.jpeg",
+        ]
+    )
 }
