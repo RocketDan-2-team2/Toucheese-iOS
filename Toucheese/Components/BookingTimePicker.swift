@@ -21,7 +21,7 @@ struct BookingTimePicker: View {
         VStack {
             CustomCalendar(selectedDate: $selectedDate)
             
-            //            MARK: 하단 시간 선택 버튼
+//            MARK: 하단 시간 선택 버튼
             VStack {
                 VStack {
                     HStack {
@@ -72,7 +72,7 @@ struct TimeButtonGrid: View {
     
     let isAM: Bool
     
-    private let backgroundColor = Color(cgColor: CGColor(red: 255/255.0, green: 242/255.0, blue: 204/255.0, alpha: 1.0))
+    private let buttonYellow = Color(cgColor: CGColor(red: 255/255.0, green: 242/255.0, blue: 204/255.0, alpha: 1.0))
     
     var body: some View {
         if timeArr.count == 0 {
@@ -90,10 +90,10 @@ struct TimeButtonGrid: View {
                             .foregroundStyle(.black)
                             .padding(EdgeInsets(top: 2, leading: 10, bottom: 2, trailing: 10))
                             .frame(maxWidth: .infinity)
-                            .background(Capsule().fill(backgroundColor))
+                            .background(Capsule().fill(buttonYellow))
                             .overlay {
                                 Capsule()
-                                    .stroke(selectedButton == idx + offset ? .yellow : backgroundColor, lineWidth: 5)
+                                    .stroke(selectedButton == idx + offset ? .yellow : buttonYellow, lineWidth: 5)
                             }
                     }
                 }
