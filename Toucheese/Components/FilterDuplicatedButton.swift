@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FilterDuplicatedButton<T: FilterProtocol & Equatable>: View {
+struct FilterDuplicatedButton<T: FilterProtocol>: View {
     
     let type: T?
     @Binding var selectedType: [T]
