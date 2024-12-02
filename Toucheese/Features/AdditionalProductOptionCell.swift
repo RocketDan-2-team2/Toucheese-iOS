@@ -18,6 +18,10 @@ struct AdditionalProductOptionCell: View {
         }
     }
     
+    var totalPrice: Int {
+        option.count < 1 ? option.price : option.price * option.count
+    }
+    
     init(
         isGroupPhoto: Bool = false,
         option: Binding<StudioProductOption>
@@ -98,10 +102,6 @@ struct AdditionalProductOptionCell: View {
                     .bold()
             }
         }
-    }
-    
-    var totalPrice: Int {
-        option.count < 1 ? option.price : option.price * option.count
     }
 }
 
