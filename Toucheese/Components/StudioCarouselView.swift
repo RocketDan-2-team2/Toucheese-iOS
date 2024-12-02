@@ -15,6 +15,14 @@ struct StudioCarouselView: View {
     
     @State private var pageId: Int? = 1
     
+    init(urls: [String]) {
+        if urls.isEmpty {
+            self.urls = ["https://i.imgur.com/niY3nhv.jpeg"]
+        } else {
+            self.urls = urls
+        }
+    }
+    
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: 0.0) {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StudioReviewListView: View {
     
-    let portfolios: [String]
+    let studioReviews: [StudioReview]
     
     let gridItems: [GridItem] = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
@@ -17,13 +17,13 @@ struct StudioReviewListView: View {
     
     var body: some View {
         LazyVGrid(columns: gridItems) {
-            ForEach(portfolios.indices, id: \.self) { index in
+            ForEach(studioReviews.indices, id: \.self) { index in
                 Rectangle()
                     .fill(.placeholder)
                     .aspectRatio(1, contentMode: .fill)
                     .overlay {
                         CachedAsyncImage(
-                            url: portfolios[index],
+                            url: studioReviews[index].image,
                             size: CGSize(
                                 width: CGFloat.infinity,
                                 height: CGFloat.infinity
@@ -37,11 +37,5 @@ struct StudioReviewListView: View {
 }
 
 #Preview {
-    StudioReviewListView(portfolios: [
-        "https://i.imgur.com/niY3nhv.jpeg",
-        "https://i.imgur.com/niY3nhv.jpeg",
-        "https://i.imgur.com/niY3nhv.jpeg",
-        "https://i.imgur.com/niY3nhv.jpeg",
-        "https://i.imgur.com/niY3nhv.jpeg",
-    ])
+    StudioReviewListView(studioReviews: [])
 }
