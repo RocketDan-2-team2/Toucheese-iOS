@@ -42,6 +42,7 @@ struct StudioDetailView: View {
                         Label(studioInfo.address, systemImage: "map")
                     }
                     .padding(20.0)
+                    .font(.system(size: 14.0))
                     Spacer()
                 }
                 
