@@ -6,20 +6,28 @@
 //
 
 import SwiftUI
+import Combine
 
 struct StudioDetailView: View {
     
+//    let studioService: StudioService = DefaultStudioService()
+    let studioService: StudioService = MockStudioService()
+    
     @State private var tabSelection: Int = 0
     
-    let studioEntity: StudioEntity
-    let studioBackgrounds: [String]
-    let workTime: String
-    let location: String
+    @State private var studioInfo: StudioInfo = StudioInfo.initialData()
+    @State private var studioItems: [StudioProduct] = []
+    @State private var studioReviews: [StudioReview] = []
+    
+    
+    @State private var bag = Set<AnyCancellable>()
+    
+    let studioId: Int
     
     var body: some View {
         ScrollView {
             LazyVStack(pinnedViews: .sectionHeaders) {
-                StudioCarouselView(urls: studioBackgrounds)
+                StudioCarouselView(urls: studioInfo.backgrounds)
                     .containerRelativeFrame(.vertical) { length, _ in
                         length * 0.3
                     }
@@ -27,11 +35,11 @@ struct StudioDetailView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Label(
-                            "\(studioEntity.popularity ?? 0, specifier: "%.1f")",
+                            "\(studioInfo.popularity, specifier: "%.1f")",
                             systemImage: "star"
                         )
-                        Label(workTime, systemImage: "clock")
-                        Label(location, systemImage: "map")
+                        Label(studioInfo.dutyDate, systemImage: "clock")
+                        Label(studioInfo.address, systemImage: "map")
                     }
                     .padding(20.0)
                     Spacer()
@@ -42,7 +50,7 @@ struct StudioDetailView: View {
                     case 0:
                         StudioProductListView()
                     case 1:
-                        StudioReviewListView(portfolios: studioEntity.portfolios)
+                        StudioReviewListView(portfolios: [])
                     default:
                         Text("아무것도 없음.")
                     }
@@ -57,65 +65,48 @@ struct StudioDetailView: View {
                 }
             }
         }
+        .onAppear{ fetchStudioDetail() }
+        .refreshable { fetchStudioDetail() }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 ThumbnailNavigationView(
-                    thumbnail: studioEntity.profileImage ?? "",
-                    title: studioEntity.name
+                    thumbnail: studioInfo.profileImage,
+                    title: studioInfo.name
                 )
             }
         }
+    }
+    
+    func fetchStudioDetail() {
+        studioService.getStudioItems(studioID: studioId).sink { event in
+            switch event {
+            case .finished:
+                print("Studio Detail with Items: \(event)")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        } receiveValue: { studioDetailEntity in
+            self.studioInfo = studioDetailEntity.translateToInfo()
+            self.studioItems = studioDetailEntity.translateToFlatItems()
+        }
+        .store(in: &bag)
+        
+        studioService.getStudioReviews(studioID: studioId).sink { event in
+            switch event {
+            case .finished:
+                print("Studio Detail with Reviews: \(event)")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        } receiveValue: { studioDetailEntity in
+            self.studioReviews = studioDetailEntity.translateToReviews()
+        }
+        .store(in: &bag)
     }
 }
 
 #Preview {
     NavigationStack {
-        StudioDetailView(
-            studioEntity: StudioEntity(
-                id: 0,
-                name: "공원스튜디오",
-                profileImage: "https://i.imgur.com/niY3nhv.jpeg",
-                popularity: nil,
-                portfolios: [
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                    "https://i.imgur.com/niY3nhv.jpeg",
-                ]
-            ),
-            studioBackgrounds: [
-                "https://i.imgur.com/niY3nhv.jpeg",
-                "https://i.imgur.com/niY3nhv.jpeg",
-                "https://i.imgur.com/niY3nhv.jpeg",
-            ],
-            workTime: "월~금 10:10-19:00 / 매주 월 휴무",
-            location: "서울특별시 서초구 강남대로 11-11"
-        )
+        StudioDetailView(studioId: 1)
     }
 }
