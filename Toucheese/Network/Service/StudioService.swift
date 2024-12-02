@@ -22,6 +22,9 @@ protocol StudioService {
                       page: Int,
                       size: Int) -> AnyPublisher<StudioSearchResultEntity, Error>
     func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, Error>
+    
+    //MARK: - 리뷰
+    func getReviewDetail(reviewID: Int) -> AnyPublisher<ReviewEntity, Error>
 }
 
 
@@ -66,6 +69,10 @@ extension DefaultStudioService: StudioService {
     
     func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, any Error> {
         requestObjectWithNetworkError(.productDetail(itemID: productID))
+    }
+    
+    func getReviewDetail(reviewID: Int) -> AnyPublisher<ReviewEntity, any Error> {
+        requestObjectWithNetworkError(.reviewDetail(reviewID: reviewID))
     }
     
 }
@@ -188,6 +195,24 @@ extension MockStudioService: StudioService {
                         optionPrice: 30000
                     )
                 ]
+            )
+            
+            promise(.success(studioProduct))
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getReviewDetail(reviewID: Int) -> AnyPublisher<ReviewEntity, any Error> {
+        return Future { promise in
+            let studioProduct: ReviewEntity = .init(
+                reviewDto: Review(imageUrl: ["https://i.imgur.com/niY3nhv.jpeg",
+                                             "https://i.imgur.com/niY3nhv.jpeg",
+                                             "https://i.imgur.com/niY3nhv.jpeg",
+                                             "https://i.imgur.com/niY3nhv.jpeg",
+                                             "https://i.imgur.com/niY3nhv.jpeg"],
+                                  description: "프로필 사진 잘 찍었어요~!!!!!!!"),
+                userProfileDto: UserProfile(name: "김레이",
+                                            profileImg: "https://i.imgur.com/niY3nhv.jpeg")
             )
             
             promise(.success(studioProduct))
