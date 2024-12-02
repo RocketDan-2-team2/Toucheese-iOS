@@ -50,7 +50,7 @@ struct StudioDetailView: View {
                     case 0:
                         StudioProductListView()
                     case 1:
-                        StudioReviewListView(portfolios: [])
+                        StudioReviewListView(studioReviews: studioReviews)
                     default:
                         Text("아무것도 없음.")
                     }
