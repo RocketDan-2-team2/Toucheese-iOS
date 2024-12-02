@@ -10,27 +10,36 @@ import SwiftUI
 struct AdditionalProductOptionCell: View {
     let isGroupPhoto: Bool
     
-    @State private var isSelected: Bool = false {
+    @State private var isSelected: Bool = false
+    
+    @Binding private var option: StudioProductOption {
         didSet {
-            if !isSelected { option.count = 1 }
+            isSelected = option.count > 0
         }
     }
     
-    @State private var option: StudioProductOption
+    var totalPrice: Int {
+        option.count < 1 ? option.price : option.price * option.count
+    }
     
     init(
         isGroupPhoto: Bool = false,
-        option: StudioProductOption,
-        count: Int = 1
+        option: Binding<StudioProductOption>
     ) {
         self.isGroupPhoto = isGroupPhoto
-        self.option = option
+        self._option = option
     }
     
     var body: some View {
         HStack(alignment: .top) {
             Button {
-                isSelected.toggle()
+                if isSelected {
+                    option.count = 0
+                    isSelected = false
+                } else {
+                    option.count = max(option.count, 1)
+                    isSelected = true
+                }
             } label: {
                 Rectangle()
                     .fill(
@@ -48,11 +57,9 @@ struct AdditionalProductOptionCell: View {
                     }
             }
             .buttonStyle(.plain)
-            .padding(.top, 3)
             
             Text(option.name)
-                .font(.title3)
-                .bold()
+                .fontWeight(.medium)
             
             Spacer()
             
@@ -60,23 +67,24 @@ struct AdditionalProductOptionCell: View {
                 if isGroupPhoto {
                     HStack(spacing: 10) {
                         Button {
-                            if option.count <= 1 { return }
+                            if option.count <= 0 { return }
                             option.count -= 1
                         } label: {
                             Image(systemName: "minus")
                                 .frame(width: 20, height: 20)
                                 .background(.placeholder)
                                 .clipShape(.rect(cornerRadius: 6))
-                                .opacity(option.count <= 1 ? 0.5 : 1)
+                                .opacity(option.count <= 0 ? 0.5 : 1)
                         }
                         .buttonStyle(.plain)
-                        .disabled(option.count <= 1)
+                        .disabled(option.count <= 0)
                         
                         Text(option.count.formatted() + "명")
                             .font(.headline)
                         
                         Button {
                             if option.count >= 100 { return }
+                            isSelected = true
                             option.count += 1
                         } label: {
                             Image(systemName: "plus")
@@ -90,8 +98,7 @@ struct AdditionalProductOptionCell: View {
                     }
                 }
                 
-                Text((option.price * option.count).formatted() + "원")
-                    .font(.title3)
+                Text(totalPrice.formatted() + "원")
                     .bold()
             }
         }
@@ -101,12 +108,12 @@ struct AdditionalProductOptionCell: View {
 #Preview {
     AdditionalProductOptionCell(
         isGroupPhoto: true,
-        option: .init(
+        option: .constant(.init(
             id: 0,
             name: "보정 사진 추가",
             description: "설명",
             price: 30000,
-            count: 1
-        )
+            count: 0
+        ))
     )
 }
