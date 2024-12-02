@@ -8,15 +8,12 @@
 import SwiftUI
 
 struct FilterView: View {
-
+    
+    @ObservedObject var studioViewModel: StudioViewModel
     @Binding var selectedFilterType: FilterType?
     
-    @Binding var selectedRegion: [RegionType]
-    @Binding var selectedRating: RatingType?
-    @Binding var selectedPrice: PriceType?
-    
     private var isChanged: Bool {
-        !(selectedPrice == nil && selectedRating == nil && selectedRegion.count == 0)
+        !(studioViewModel.selectedPrice == nil && studioViewModel.selectedRating == nil && studioViewModel.selectedRegion.count == 0)
     }
     
     var body: some View {
@@ -27,9 +24,9 @@ struct FilterView: View {
                         .font(.system(size: 18))
                         .padding(.trailing, 10)
                         .onTapGesture {
-                            selectedRegion = []
-                            selectedRating = nil
-                            selectedPrice = nil
+                            studioViewModel.selectedRegion = []
+                            studioViewModel.selectedRating = nil
+                            studioViewModel.selectedPrice = nil
                             selectedFilterType = nil
                         }
                 }

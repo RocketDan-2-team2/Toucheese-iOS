@@ -20,12 +20,7 @@ struct StudioListView: View {
     
     var body: some View {
         VStack(spacing: 0.0) {
-            FilterView(
-                selectedFilterType: $selectedFilterType,
-                selectedRegion: $studioViewModel.selectedRegion,
-                selectedRating: $studioViewModel.selectedRating,
-                selectedPrice: $studioViewModel.selectedPrice
-            )
+            FilterView(studioViewModel: studioViewModel, selectedFilterType: $selectedFilterType)
             .padding(.bottom, 10.0)
             .background {
                 Color(.systemBackground)
@@ -70,10 +65,8 @@ struct StudioListView: View {
                 
                 VStack {
                     FilterExpansionView(
-                        selectedFilterType: $selectedFilterType,
-                        selectedRegion: $studioViewModel.selectedRegion,
-                        selectedRating: $studioViewModel.selectedRating,
-                        selectedPrice: $studioViewModel.selectedPrice
+                        studioViewModel: studioViewModel,
+                        selectedFilterType: $selectedFilterType
                     )
                     .opacity(isHidden ? 0 : 1)
                     .background(isHidden ? .orange.opacity(0) : .yellow)
