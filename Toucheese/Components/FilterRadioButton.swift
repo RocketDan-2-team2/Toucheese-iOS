@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FilterRadioButton<T: FilterProtocol & Equatable>: View {
+struct FilterRadioButton<T: FilterProtocol>: View {
     
     let type: T?
     @Binding var selectedType: T?
