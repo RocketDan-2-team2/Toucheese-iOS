@@ -9,38 +9,35 @@ import SwiftUI
 
 struct FilterExpansionView: View {
     
+    @ObservedObject var studioViewModel: StudioViewModel
     @Binding var selectedFilterType: FilterType?
-    
-    @Binding var selectedRegion: RegionType?
-    @Binding var selectedRating: RatingType?
-    @Binding var selectedPrice: PriceType?
     
     var body: some View {
         HStack {
             switch selectedFilterType {
             case .region:
-                FilterRadioButton(type: nil, selectedType: $selectedRegion) {
-                    selectedRegion = nil
+                FilterDuplicatedButton(type: nil, selectedType: $studioViewModel.selectedRegion) {
+                    studioViewModel.selectedRegion = []
                 }
                 ForEach(RegionType.allCases, id:
                             \.self) { type in
-                    FilterRadioButton(type: type, selectedType: $selectedRegion)
+                    FilterDuplicatedButton(type: type, selectedType: $studioViewModel.selectedRegion)
                 }
             case .rating:
-                FilterRadioButton(type: nil, selectedType: $selectedRating) {
-                    selectedRating = nil
+                FilterRadioButton(type: nil, selectedType: $studioViewModel.selectedRating) {
+                    studioViewModel.selectedRating = nil
                 }
                 ForEach(RatingType.allCases, id:
                             \.self) { type in
-                    FilterRadioButton(type: type, selectedType: $selectedRating)
+                    FilterRadioButton(type: type, selectedType: $studioViewModel.selectedRating)
                 }
             case .price:
-                FilterRadioButton(type: nil, selectedType: $selectedPrice) {
-                    selectedPrice = nil
+                FilterRadioButton(type: nil, selectedType: $studioViewModel.selectedPrice) {
+                    studioViewModel.selectedPrice = nil
                 }
                 ForEach(PriceType.allCases, id:
                             \.self) { type in
-                    FilterRadioButton(type: type, selectedType: $selectedPrice)
+                    FilterRadioButton(type: type, selectedType: $studioViewModel.selectedPrice)
                 }
             case nil:
                 Spacer()

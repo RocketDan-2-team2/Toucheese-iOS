@@ -9,19 +9,10 @@ import SwiftUI
 import Combine
 
 struct StudioListView: View {
-    let studioService: StudioService = DefaultStudioService()
     let concept: ConceptEntity
     
+    @StateObject private var studioViewModel: StudioViewModel = StudioViewModel()
     @State private var selectedFilterType: FilterType?
-    
-    @State private var selectedRegion: RegionType? = nil
-    @State private var selectedRating: RatingType? = nil
-    @State private var selectedPrice: PriceType? = nil
-    @State private var currentPage: Int = 0
-    
-    @State private var studioList: [StudioEntity] = []
-
-    @State private var bag = Set<AnyCancellable>()
     
     private var isHidden: Bool {
         selectedFilterType == nil
@@ -29,12 +20,7 @@ struct StudioListView: View {
     
     var body: some View {
         VStack(spacing: 0.0) {
-            FilterView(
-                selectedFilterType: $selectedFilterType,
-                selectedRegion: $selectedRegion,
-                selectedRating: $selectedRating,
-                selectedPrice: $selectedPrice
-            )
+            FilterView(studioViewModel: studioViewModel, selectedFilterType: $selectedFilterType)
             .padding(.bottom, 10.0)
             .background {
                 Color(.systemBackground)
@@ -46,13 +32,13 @@ struct StudioListView: View {
             ZStack {
                 ScrollView {
                     LazyVStack {
-                        ForEach(studioList.indices, id: \.self) { index in
+                        ForEach(studioViewModel.studioList.indices, id: \.self) { index in
                             StudioListCell(
                                 order: index + 1,
-                                profileImage: studioList[index].profileImage ?? "",
-                                name: studioList[index].name,
-                                popularity: studioList[index].popularity ?? 0.0,
-                                portfolios: studioList[index].portfolios
+                                profileImage: studioViewModel.studioList[index].profileImage ?? "",
+                                name: studioViewModel.studioList[index].name,
+                                popularity: studioViewModel.studioList[index].popularity ?? 0.0,
+                                portfolios: studioViewModel.studioList[index].portfolios
                             )
                             .onTapGesture {
                                 print("셀 누름")
@@ -71,7 +57,6 @@ struct StudioListView: View {
                             .onTapGesture {
                                 hideFilterExtensionView()
                             }
-//                            .border(.black)
                     }
                 }
                 .refreshable {
@@ -80,10 +65,8 @@ struct StudioListView: View {
                 
                 VStack {
                     FilterExpansionView(
-                        selectedFilterType: $selectedFilterType,
-                        selectedRegion: $selectedRegion,
-                        selectedRating: $selectedRating,
-                        selectedPrice: $selectedPrice
+                        studioViewModel: studioViewModel,
+                        selectedFilterType: $selectedFilterType
                     )
                     .opacity(isHidden ? 0 : 1)
                     .background(isHidden ? .orange.opacity(0) : .yellow)
@@ -104,53 +87,18 @@ struct StudioListView: View {
             }
         }
         .onAppear {
-            if !studioList.isEmpty { return }
-            fetchStudioList()
+            if !studioViewModel.studioList.isEmpty { return }
+            studioViewModel.concept = concept
+            studioViewModel.fetchStudioList()
         }
-        .onChange(of: selectedRegion) { oldValue, newValue in
-            studioService.searchStudio(
-                conceptID: concept.id,
-                region: selectedRegion,
-                popularity: selectedRating,
-                price: selectedPrice,
-                page: currentPage,
-                size: 10
-            ).sink { event in
-                switch event {
-                case .finished:
-                    print("Concept: \(event)")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            } receiveValue: { searchResult in
-                self.studioList = searchResult.content
-            }
-            .store(in: &bag)
-        }
+    
     }
     
     func hideFilterExtensionView() {
         print("배경 터치")
         selectedFilterType = nil
     }
-    
-    func fetchStudioList() {
-        studioService.getStudioList(
-            conceptID: concept.id,
-            page: currentPage,
-            size: 10
-        ).sink { event in
-            switch event {
-            case .finished:
-                print("Concept: \(event)")
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        } receiveValue: { searchResult in
-            self.studioList = searchResult.content
-        }
-        .store(in: &bag)
-    }
+
 }
 
 #Preview {

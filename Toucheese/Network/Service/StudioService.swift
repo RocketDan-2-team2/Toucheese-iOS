@@ -16,7 +16,7 @@ protocol StudioService {
                        page: Int,
                        size: Int) -> AnyPublisher<StudioSearchResultEntity, Error>
     func searchStudio(conceptID: Int,
-                      region: RegionType?,
+                      region: [RegionType],
                       popularity: RatingType?,
                       price: PriceType?,
                       page: Int,
@@ -47,15 +47,18 @@ extension DefaultStudioService: StudioService {
     
     func searchStudio(
         conceptID: Int,
-        region: RegionType?,
+        region: [RegionType],
         popularity: RatingType?,
         price: PriceType?,
         page: Int,
         size: Int
     ) -> AnyPublisher<StudioSearchResultEntity, any Error> {
+           
         requestObjectWithNetworkError(.search(
             conceptID: conceptID,
-            parameters: ["region": region?.key ?? "ALL",
+            parameters: ["region": region.map{ $0.key },
+                         "popularity": popularity?.key,
+                         "priceFilter": price?.key,
                          "page": page,
                          "size": 10]
         ))
@@ -128,7 +131,7 @@ extension MockStudioService: StudioService {
     
     func searchStudio(
         conceptID: Int,
-        region: RegionType?,
+        region: [RegionType],
         popularity: RatingType?,
         price: PriceType?,
         page: Int,

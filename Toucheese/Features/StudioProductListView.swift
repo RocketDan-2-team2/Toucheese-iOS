@@ -48,14 +48,7 @@ struct StudioProductListView: View {
             .padding(.vertical, 8)
         }
         .navigationDestination(item: $selectedProduct) { product in
-            VStack {
-                Text(product.name)
-                Text(product.description)
-                
-                ForEach(product.optionList) { option in
-                    AdditionalProductOptionCell(option: option)
-                }
-            }
+            StudioProductDetailView(product: product)
         }
     }
 }
