@@ -21,6 +21,8 @@ protocol StudioService {
                       price: PriceType?,
                       page: Int,
                       size: Int) -> AnyPublisher<StudioSearchResultEntity, Error>
+    func getStudioItems(studioID: Int) -> AnyPublisher<StudioDetailEntity, Error>
+    func getStudioReviews(studioID: Int) -> AnyPublisher<StudioDetailEntity, Error>
     func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, Error>
 }
 
@@ -62,6 +64,14 @@ extension DefaultStudioService: StudioService {
                          "page": page,
                          "size": 10]
         ))
+    }
+    
+    func getStudioItems(studioID: Int) -> AnyPublisher<StudioDetailEntity, Error> {
+        requestObjectWithNetworkError(.studioDetailProduct(studioID: studioID))
+    }
+    
+    func getStudioReviews(studioID: Int) -> AnyPublisher<StudioDetailEntity, Error> {
+        requestObjectWithNetworkError(.studioDetailReview(studioID: studioID))
     }
     
     func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, any Error> {
@@ -166,6 +176,60 @@ extension MockStudioService: StudioService {
             )
             
             promise(.success(studioList))
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getStudioItems(studioID: Int) -> AnyPublisher<StudioDetailEntity, any Error> {
+        return Future { promise in
+            let studioDetail: StudioDetailEntity = .init(
+                studioInfoDto: .init(
+                    studioId: 173,
+                    studioName: "레코디드(강남)",
+                    studioProfile: nil,
+                    studioBackgrounds: [],
+                    popularity: nil,
+                    dutyDate: "목, 금, 토: 13:30-21:00, 월, 화, 수, 일: 13:30-20:00",
+                    address: "서울 강남구 봉은사로2길 24 3층 301호\n",
+                    studioDescription: nil
+                ),
+                categorizedItems: [
+                    "PROFILE_PHOTO": [
+                        .init(itemId: 421, itemName: "1컷 프로필", itemDescription: nil, reviewCounts: 0, price: 99000)
+                    ],
+                    "ID_PHOTO": [
+                        .init(itemId: 1, itemName: "증명사진", itemDescription: nil, reviewCounts: 2, price: 78000)
+                    ]
+                ],
+                reviewImageDtos: nil
+            )
+            
+            promise(.success(studioDetail))
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getStudioReviews(studioID: Int) -> AnyPublisher<StudioDetailEntity, Error> {
+        return Future { promise in
+            let studioProduct: StudioDetailEntity = .init(
+                studioInfoDto: .init(
+                    studioId: 173,
+                    studioName: "레코디드(강남)",
+                    studioProfile: nil,
+                    studioBackgrounds: [],
+                    popularity: nil,
+                    dutyDate: "목, 금, 토: 13:30-21:00, 월, 화, 수, 일: 13:30-20:00",
+                    address: "서울 강남구 봉은사로2길 24 3층 301호\n",
+                    studioDescription: nil
+                ),
+                categorizedItems: nil,
+                reviewImageDtos: [
+                    .init(reviewId: 1, imageUrl: "1-1.jpg"),
+                    .init(reviewId: 2, imageUrl: "2-1.jpg")
+                ]
+            )
+            
+            promise(.success(studioProduct))
         }
         .eraseToAnyPublisher()
     }
