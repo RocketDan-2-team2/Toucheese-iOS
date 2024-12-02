@@ -15,7 +15,16 @@ struct StudioDetailView: View {
     
     @State private var tabSelection: Int = 0
     
-    @State private var studioInfo: StudioInfo = StudioInfo.initialData()
+    @State private var studioInfo: StudioInfo = .init(
+        id: 0,
+        name: "",
+        profileImage: "",
+        backgrounds: [],
+        popularity: 0.0,
+        dutyDate: "",
+        address: "",
+        description: ""
+    )
     @State private var studioItems: [StudioProduct] = []
     @State private var studioReviews: [StudioReview] = []
     

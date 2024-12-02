@@ -20,19 +20,6 @@ struct StudioInfo {
     let address: String
     let description: String
     
-    static func initialData() -> StudioInfo {
-        .init(
-            id: 0,
-            name: "",
-            profileImage: "",
-            backgrounds: [],
-            popularity: 0.0,
-            dutyDate: "",
-            address: "",
-            description: ""
-        )
-    }
-    
     static func mockData() -> StudioInfo {
         .init(
             id: 173,
@@ -127,11 +114,7 @@ struct StudioDetailEntity: Decodable {
     
     /// 스튜디오의 리뷰 리스트(배열)로 변환하는 메서드
     func translateToReviews() -> [StudioReview] {
-        if let reviewImageDtos {
-            return reviewImageDtos.map{ $0.translate() }
-        } else {
-            return []
-        }
+        reviewImageDtos?.map { $0.translate() } ?? []
     }
     
     struct Info: Decodable {
