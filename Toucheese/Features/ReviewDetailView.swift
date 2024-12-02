@@ -12,16 +12,17 @@ struct ReviewDetailView: View {
     let imageList: [String]
     let content: String
     
+    @State var isShowDetailImages: Bool = false
+    @State var selectedImageIndex: Int = 0
+
     var body: some View {
-        
         VStack {
-            
             GeometryReader { geometry in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: -90) {
-                        ForEach(imageList, id: \.self) { imageString in
+                        ForEach(imageList.indices, id: \.self) { index in
                             CachedAsyncImage(
-                                url: imageString,
+                                url: imageList[index],
                                 size: CGSize(
                                     width: geometry.size.width * 0.8,
                                     height: 350
@@ -29,7 +30,10 @@ struct ReviewDetailView: View {
                             )
                             .padding(.top, 50)
                             .padding(.horizontal, (geometry.size.width * 0.1))
-                            
+                            .onTapGesture {
+                                selectedImageIndex = index
+                                isShowDetailImages = true
+                            }
                         }
                     }
                     .scrollTargetLayout()
@@ -53,7 +57,12 @@ struct ReviewDetailView: View {
                 ThumbnailNavigationView(thumbnail: "", title: "김레이")
             }
         }
-        
+        .fullScreenCover(isPresented: $isShowDetailImages) {
+            ReviewPhotoDetailView(imageList: imageList, selectedPhotoIndex: $selectedImageIndex, isShowDetailImages: $isShowDetailImages)
+        }
+        .transaction { transaction in
+            transaction.disablesAnimations = true
+        }
     }
 }
 
