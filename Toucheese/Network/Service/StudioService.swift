@@ -56,7 +56,6 @@ extension DefaultStudioService: StudioService {
            
         requestObjectWithNetworkError(.search(
             conceptID: conceptID,
-            //TODO: region을 배열로 전달해야 함
             parameters: ["region": region.map{ $0.key },
                          "popularity": popularity?.key,
                          "priceFilter": price?.key,
