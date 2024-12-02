@@ -48,7 +48,10 @@ struct StudioDetailView: View {
                 Section {
                     switch tabSelection {
                     case 0:
-                        StudioProductListView()
+                        StudioProductListView(
+                            notice: studioInfo.description,
+                            productList: studioItems
+                        )
                     case 1:
                         StudioReviewListView(studioReviews: studioReviews)
                     default:
