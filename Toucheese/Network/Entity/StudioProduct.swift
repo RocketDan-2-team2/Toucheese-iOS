@@ -110,7 +110,7 @@ struct StudioProductEntity: Decodable {
                 name: self.optionName,
                 description: self.optionDescription ?? "",
                 price: self.optionPrice,
-                count: 1
+                count: 0
             )
         }
     }
