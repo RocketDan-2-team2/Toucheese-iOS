@@ -15,20 +15,18 @@ struct ThumbnailNavigationView: View {
     var body: some View {
         
         HStack(spacing: 10) {
+            
             Button(action: {
                 print("back!")
             }) {
                 Image(systemName: "chevron.left")
                     .foregroundStyle(.black)
             }
-            AsyncImage(url: URL(string: thumbnail)) { image in
-                image.resizable()
-                    .scaledToFit()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(width: 50, height: 50)
-            .background(.gray.opacity(0.3))
+            
+            CachedAsyncImage(
+                url: thumbnail,
+                size: CGSize(width: 45, height: 45)
+            )
             .clipShape(.circle)
             .overlay {
                 Circle()
@@ -40,7 +38,8 @@ struct ThumbnailNavigationView: View {
                 .foregroundStyle(.primary)
             
         }
-        .padding(.top)
+        .padding(.vertical)
+        
     }
 }
 
