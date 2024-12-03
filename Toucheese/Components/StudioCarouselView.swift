@@ -29,8 +29,16 @@ struct StudioCarouselView: View {
                 ForEach(urls.indices, id: \.self) { index in
                     Color(.systemBackground)
                         .overlay {
-                            CachedAsyncImage(url: urls[index])
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                            CachedAsyncImage(url: urls[index])
+//                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            AsyncImage(url: URL(string: urls[index])) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                                
                         }
                         .brightness(-0.5)
                         .id(index + 1)
