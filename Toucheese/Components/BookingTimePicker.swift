@@ -41,7 +41,7 @@ struct BookingTimePicker: View {
                     .padding(.leading, 10)
                     
                     TimeButtonGrid(columnsArr: gridRow,
-                                   timeArr: openedHoursArr[calculatedDate],
+                                   timeArr: [],//openedHoursArr[calculatedDate],
                                    selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
                                    isAM: true)
@@ -57,7 +57,7 @@ struct BookingTimePicker: View {
                     .padding(.leading, 10)
                     
                     TimeButtonGrid(columnsArr: gridRow,
-                                   timeArr: openedHoursArr[calculatedDate],
+                                   timeArr: [],//openedHoursArr[calculatedDate],
                                    selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
                                    isAM: false)

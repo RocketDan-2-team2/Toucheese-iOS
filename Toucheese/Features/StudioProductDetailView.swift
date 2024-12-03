@@ -9,7 +9,13 @@ import SwiftUI
 
 struct StudioProductDetailView: View {
     @State private var product: StudioProduct
+    
+    // MARK: 캘린더 API에 따라 달라질 예정. 현재 임시 값
     @State private var selectedDate: Date = .now
+    @State private var selectedTime: Int = 1
+    // ========================================
+    
+    @State private var showCalendar: Bool = false
     
     var totalPrice: Int {
         product.optionList.reduce(product.price) {
@@ -83,7 +89,7 @@ struct StudioProductDetailView: View {
                         Spacer()
                         
                         Button("날짜 선택") {
-                            
+                            showCalendar = true
                         }
                         .buttonStyle(.borderedProminent)
                         .foregroundStyle(.primary)
@@ -105,6 +111,37 @@ struct StudioProductDetailView: View {
                 .buttonStyle(.plain)
             }
             .padding(.horizontal, 36)
+        }
+        .overlay {
+            if showCalendar {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        showCalendar = false
+                    }
+                
+                VStack {
+                    HStack {
+                        Spacer()
+                        
+                        Button("닫기") {
+                            showCalendar = false
+                        }
+                        .tint(.yellow)
+                    }
+                    
+                    BookingTimePicker(
+                        selectedDate: $selectedDate,
+                        selectedTime: $selectedTime,
+                        openedHoursArr: []
+                    )
+                }
+                .padding()
+                .background(.background)
+                .clipShape(.rect(cornerRadius: 20))
+                .shadow(radius: 4, x: 1, y: 4)
+                .padding(.horizontal)
+            }
         }
     }
 }
