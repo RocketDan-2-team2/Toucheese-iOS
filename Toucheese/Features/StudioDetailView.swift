@@ -4,13 +4,13 @@
 //
 //  Created by SunJoon Lee on 11/26/24.
 //
-
+//TODO: 운영시간 빈 문자열로 왔을 때 처리하기 ex) 운영 시간 정보가 없습니다.
 import SwiftUI
 import Combine
 
 struct StudioDetailView: View {
     
-//    let studioService: StudioService = DefaultStudioService()
+    //    let studioService: StudioService = DefaultStudioService()
     let studioService: StudioService = MockStudioService()
     
     @State private var tabSelection: Int = 0
@@ -28,10 +28,15 @@ struct StudioDetailView: View {
     @State private var studioItems: [StudioProduct] = []
     @State private var studioReviews: [StudioReview] = []
     
+    @State private var review: ReviewEntity?
+    
     
     @State private var bag = Set<AnyCancellable>()
     
     let studioId: Int
+    let gridItems: [GridItem] = [
+        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
+    ]
     
     var body: some View {
         ScrollView {
@@ -63,7 +68,7 @@ struct StudioDetailView: View {
                             productList: studioItems
                         )
                     case 1:
-                        StudioReviewListView(studioReviews: studioReviews)
+                        studioReviewListView
                     default:
                         Text("아무것도 없음.")
                     }
@@ -115,6 +120,44 @@ struct StudioDetailView: View {
             self.studioReviews = studioDetailEntity.translateToReviews()
         }
         .store(in: &bag)
+    }
+    
+    private var studioReviewListView: some View {
+        
+        LazyVGrid(columns: gridItems) {
+            ForEach(studioReviews.indices, id: \.self) { index in
+                Rectangle()
+                    .fill(.placeholder)
+                    .aspectRatio(1, contentMode: .fill)
+                    .overlay {
+                        CachedAsyncImage(
+                            url: studioReviews[index].image,
+                            size: CGSize(
+                                width: CGFloat.infinity,
+                                height: CGFloat.infinity
+                            )
+                        )
+                        .onTapGesture {
+                            studioService.getReviewDetail(reviewID: studioReviews[index].id)
+                                .sink { event in
+                                    switch event {
+                                    case .finished:
+                                        print("Event: \(event)")
+                                    case .failure(let error):
+                                        print(error.localizedDescription)
+                                    }
+                                } receiveValue: { review in
+                                    self.review = review
+                                }
+                                .store(in: &bag)
+                        }
+                    }
+            }
+        }
+        .padding(5.0)
+        .navigationDestination(item: $review) { review in
+            ReviewDetailView(review: review.reviewDto, user: review.userProfileDto)
+        }
     }
 }
 
