@@ -74,6 +74,6 @@ struct ReviewPhotoDetailView: View {
                 }
         }
         .ignoresSafeArea()
-        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden()
     }
 }

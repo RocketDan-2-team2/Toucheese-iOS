@@ -6,23 +6,32 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ReviewDetailView: View {
+    private let studioService: StudioService = DefaultStudioService()
     
-    let imageList: [String]
-    let content: String
+    @State private var review: Review
+    @State private var user: UserProfile
     
-    @State var isShowDetailImages: Bool = false
-    @State var selectedImageIndex: Int = 0
-
+    @State private var isShowDetailImages: Bool = false
+    @State private var selectedImageIndex: Int = 0
+    
+    @State private var bag = Set<AnyCancellable>()
+    
+    init(review: Review, user: UserProfile) {
+        self.review = review
+        self.user = user
+    }
+    
     var body: some View {
         VStack {
             GeometryReader { geometry in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: -90) {
-                        ForEach(imageList.indices, id: \.self) { index in
+                        ForEach(review.imageUrl.indices, id: \.self) { index in
                             CachedAsyncImage(
-                                url: imageList[index],
+                                url: review.imageUrl[index],
                                 size: CGSize(
                                     width: geometry.size.width * 0.8,
                                     height: 350
@@ -43,7 +52,7 @@ struct ReviewDetailView: View {
             }
             
             Text("""
-                 \(content)
+                 \(review.description)
                  """)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)
@@ -51,33 +60,17 @@ struct ReviewDetailView: View {
             
             Spacer()
         }
-        .toolbarBackground(.visible, for: .navigationBar)
+        .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                ThumbnailNavigationView(thumbnail: "", title: "김레이")
+                ThumbnailNavigationView(thumbnail: "\(user.profileImg)", title: "\(user.name)")
             }
         }
         .fullScreenCover(isPresented: $isShowDetailImages) {
-            ReviewPhotoDetailView(imageList: imageList, selectedPhotoIndex: $selectedImageIndex, isShowDetailImages: $isShowDetailImages)
+            ReviewPhotoDetailView(imageList: review.imageUrl, selectedPhotoIndex: $selectedImageIndex, isShowDetailImages: $isShowDetailImages)
         }
         .transaction { transaction in
             transaction.disablesAnimations = true
         }
     }
-}
-
-#Preview {
-    ReviewDetailView(imageList: [
-        "https://i.imgur.com/niY3nhv.jpeg",
-        "https://i.imgur.com/OG7dB2M.jpeg",
-        "https://i.imgur.com/dOsihXY.jpeg",
-        "https://i.imgur.com/Gd7fz7R.jpeg",
-        "https://i.imgur.com/m7jMupR.jpeg",
-        "https://i.imgur.com/iyD8YGk.jpeg",
-    ],
-                     content: """
-                     공원스튜디오 다녀왔어요! 바디프로필 첫 촬영이라고 최대한 식단 관리하고 준비를 했는데도 사진이 잘 안나올까봐 엄청 걱정했지만 걱정도 잠시 작가님의 편안하고 자연스러운 분위기에 수십 장이 찍히는 줄도 모르고 웃고 떠들며 찍다보니 진짜 찐 웃음이 담긴 사진이 찍혀서 너무 자연스럽고 마음에 들더라구요 ㅠㅠㅠ
-                     
-                     공원스튜디오 진짜 짱 추천,,, 사장님도 왕예쁘고더 번창하세요 >_<~~~
-                    """)
 }
