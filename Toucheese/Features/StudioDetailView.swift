@@ -4,7 +4,7 @@
 //
 //  Created by SunJoon Lee on 11/26/24.
 //
-//TODO: 운영시간 빈 문자열로 왔을 때 처리하기 ex) 운영 시간 정보가 없습니다.
+
 import SwiftUI
 import Combine
 

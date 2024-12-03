@@ -135,7 +135,7 @@ struct StudioDetailEntity: Decodable {
                 profileImage: self.studioProfile ?? "",
                 backgrounds: self.studioBackgrounds,
                 popularity: self.popularity ?? 0.0,
-                dutyDate: self.dutyDate,
+                dutyDate: dutyDate.isEmpty ? "운영 시간 정보가 없습니다." : self.dutyDate,
                 address: self.address,
                 description: self.studioDescription ?? ""
             )
