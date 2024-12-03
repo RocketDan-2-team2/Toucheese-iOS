@@ -29,13 +29,8 @@ struct StudioCarouselView: View {
                 ForEach(urls.indices, id: \.self) { index in
                     Color(.systemBackground)
                         .overlay {
-                            CachedAsyncImage(
-                                url: urls[index],
-                                size: CGSize(
-                                    width: CGFloat.infinity,
-                                    height: CGFloat.infinity
-                                )
-                            )
+                            CachedAsyncImage(url: urls[index])
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                         .brightness(-0.5)
                         .id(index + 1)

@@ -35,13 +35,8 @@ struct ReviewPhotoDetailView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(imageList.indices, id: \.self) { index in
-                            CachedAsyncImage(
-                                url: imageList[index],
-                                size: CGSize(
-                                    width: UIScreen.main.bounds.width,
-                                    height: 500
-                                )
-                            )
+                            CachedAsyncImage(url: imageList[index])
+                            .frame(width: UIScreen.main.bounds.width,height: 500)
                             .id(index)
                         }
                     }

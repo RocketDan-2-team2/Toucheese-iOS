@@ -128,13 +128,8 @@ struct StudioDetailView: View {
                     .fill(.placeholder)
                     .aspectRatio(1, contentMode: .fill)
                     .overlay {
-                        CachedAsyncImage(
-                            url: studioReviews[index].image,
-                            size: CGSize(
-                                width: CGFloat.infinity,
-                                height: CGFloat.infinity
-                            )
-                        )
+                        CachedAsyncImage(url: studioReviews[index].image)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .onTapGesture {
                             studioService.getReviewDetail(reviewID: studioReviews[index].id)
                                 .sink { event in
