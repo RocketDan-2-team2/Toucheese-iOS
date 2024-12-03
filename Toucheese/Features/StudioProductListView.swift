@@ -14,7 +14,7 @@ struct StudioProductListView: View {
     let notice: String
     let productList: [StudioProduct]
     
-    @State private var selectedProduct: StudioProduct?
+    @Binding var selectedProduct: StudioProduct?
     @State private var bag = Set<AnyCancellable>()
     
     var body: some View {
@@ -48,9 +48,6 @@ struct StudioProductListView: View {
                 }
             }
             .padding(.vertical, 8)
-        }
-        .navigationDestination(item: $selectedProduct) { product in
-            StudioProductDetailView(product: product)
         }
     }
 }

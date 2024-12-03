@@ -28,6 +28,7 @@ struct StudioDetailView: View {
     @State private var studioItems: [StudioProduct] = []
     @State private var studioReviews: [StudioReview] = []
     @State private var review: ReviewEntity?
+    @State private var selectedProduct: StudioProduct?
     
     @State private var bag = Set<AnyCancellable>()
     
@@ -63,7 +64,8 @@ struct StudioDetailView: View {
                     case 0:
                         StudioProductListView(
                             notice: studioInfo.description,
-                            productList: studioItems
+                            productList: studioItems,
+                            selectedProduct: $selectedProduct
                         )
                     case 1:
                         studioReviewListView
@@ -83,6 +85,7 @@ struct StudioDetailView: View {
         }
         .onAppear{ fetchStudioDetail() }
         .refreshable { fetchStudioDetail() }
+        .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 ThumbnailNavigationView(
@@ -90,6 +93,12 @@ struct StudioDetailView: View {
                     title: studioInfo.name
                 )
             }
+        }
+        .navigationDestination(item: $selectedProduct) { product in
+            StudioProductDetailView(product: product)
+        }
+        .navigationDestination(item: $review) { review in
+            ReviewDetailView(review: review.reviewDto, user: review.userProfileDto)
         }
     }
     
@@ -121,7 +130,6 @@ struct StudioDetailView: View {
     }
     
     private var studioReviewListView: some View {
-        
         LazyVGrid(columns: gridItems) {
             ForEach(studioReviews.indices, id: \.self) { index in
                 Rectangle()
@@ -129,28 +137,24 @@ struct StudioDetailView: View {
                     .aspectRatio(1, contentMode: .fill)
                     .overlay {
                         CachedAsyncImage(url: studioReviews[index].image)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .onTapGesture {
-                            studioService.getReviewDetail(reviewID: studioReviews[index].id)
-                                .sink { event in
-                                    switch event {
-                                    case .finished:
-                                        print("Event: \(event)")
-                                    case .failure(let error):
-                                        print(error.localizedDescription)
-                                    }
-                                } receiveValue: { review in
-                                    self.review = review
+                    }
+                    .onTapGesture {
+                        studioService.getReviewDetail(reviewID: studioReviews[index].id)
+                            .sink { event in
+                                switch event {
+                                case .finished:
+                                    print("Event: \(event)")
+                                case .failure(let error):
+                                    print(error.localizedDescription)
                                 }
-                                .store(in: &bag)
-                        }
+                            } receiveValue: { review in
+                                self.review = review
+                            }
+                            .store(in: &bag)
                     }
             }
         }
         .padding(5.0)
-        .navigationDestination(item: $review) { review in
-            ReviewDetailView(review: review.reviewDto, user: review.userProfileDto)
-        }
     }
 }
 
