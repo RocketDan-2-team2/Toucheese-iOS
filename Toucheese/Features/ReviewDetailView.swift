@@ -11,28 +11,22 @@ import Combine
 struct ReviewDetailView: View {
     private let studioService: StudioService = DefaultStudioService()
     
-    let reviewID: Int
+    @State var review: Review
+    @State var user: UserProfile
     
-    @State private var review: Review?
-    @State private var user: UserProfile?
-    
-    @State var isShowDetailImages: Bool = false
-    @State var selectedImageIndex: Int = 0
+    @State private var isShowDetailImages: Bool = false
+    @State private var selectedImageIndex: Int = 0
     
     @State private var bag = Set<AnyCancellable>()
-    
-    var imageList: [String] {
-        review?.imageUrl ?? []
-    }
     
     var body: some View {
         VStack {
             GeometryReader { geometry in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: -90) {
-                        ForEach(imageList.indices, id: \.self) { index in
+                        ForEach(review.imageUrl.indices, id: \.self) { index in
                             CachedAsyncImage(
-                                url: imageList[index],
+                                url: review.imageUrl[index],
                                 size: CGSize(
                                     width: geometry.size.width * 0.8,
                                     height: 350
@@ -53,7 +47,7 @@ struct ReviewDetailView: View {
             }
             
             Text("""
-                 \(String(describing: review?.description ?? ""))
+                 \(review.description)
                  """)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)
@@ -61,32 +55,17 @@ struct ReviewDetailView: View {
             
             Spacer()
         }
-        .toolbarBackground(.visible, for: .navigationBar)
+        .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                ThumbnailNavigationView(thumbnail: "\(user?.profileImg ?? "")", title: "\(user?.name ?? "김레이")")
+                ThumbnailNavigationView(thumbnail: "\(user.profileImg)", title: "\(user.name)")
             }
         }
         .fullScreenCover(isPresented: $isShowDetailImages) {
-            ReviewPhotoDetailView(imageList: imageList, selectedPhotoIndex: $selectedImageIndex, isShowDetailImages: $isShowDetailImages)
+            ReviewPhotoDetailView(imageList: review.imageUrl, selectedPhotoIndex: $selectedImageIndex, isShowDetailImages: $isShowDetailImages)
         }
         .transaction { transaction in
             transaction.disablesAnimations = true
-        }
-        .onAppear {
-            studioService.getReviewDetail(reviewID: reviewID)
-                .sink { event in
-                    switch event {
-                    case .finished:
-                        print("Event: \(event)")
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                } receiveValue: { review in
-                    self.review = review.reviewDto
-                    self.user = review.userProfileDto
-                }
-                .store(in: &bag)
         }
     }
 }
