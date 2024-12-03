@@ -24,8 +24,6 @@ protocol StudioService {
     func getStudioItems(studioID: Int) -> AnyPublisher<StudioDetailEntity, Error>
     func getStudioReviews(studioID: Int) -> AnyPublisher<StudioDetailEntity, Error>
     func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, Error>
-    
-    //MARK: - 리뷰
     func getReviewDetail(reviewID: Int) -> AnyPublisher<ReviewEntity, Error>
 }
 
