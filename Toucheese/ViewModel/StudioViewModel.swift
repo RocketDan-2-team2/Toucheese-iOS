@@ -11,8 +11,7 @@ import Combine
 
 class StudioViewModel: ObservableObject {
     
-//    let studioService: StudioService = DefaultStudioService()
-    let studioService: MockStudioService = MockStudioService()
+    let studioService: StudioService = DefaultStudioService()
     
     @Published var concept: ConceptEntity = ConceptEntity(id: 0, name: "init", image: nil)
     @Published var selectedRegion: [RegionType] = []
