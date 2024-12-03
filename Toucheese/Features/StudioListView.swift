@@ -13,6 +13,7 @@ struct StudioListView: View {
     
     @StateObject private var studioViewModel: StudioViewModel = StudioViewModel()
     @State private var selectedFilterType: FilterType?
+    @State private var selectedStudio: StudioEntity?
     
     private var isHidden: Bool {
         selectedFilterType == nil
@@ -42,6 +43,7 @@ struct StudioListView: View {
                             )
                             .onTapGesture {
                                 print("셀 누름")
+                                selectedStudio = studioViewModel.studioList[index]
                             }
                         }
                         
@@ -49,10 +51,12 @@ struct StudioListView: View {
                             .frame(height: 5.0)
                             .onAppear {
                                 print("페이지네이션 처리")
+                                // TODO: 페이지 처리
                             }
                     }
                     .ignoresSafeArea()
                     .background {
+                        // 배경 눌러서 필터 뷰 올리기
                         Color(.systemBackground)
                             .onTapGesture {
                                 hideFilterExtensionView()
@@ -60,7 +64,10 @@ struct StudioListView: View {
                     }
                 }
                 .refreshable {
-                    
+                    studioViewModel.fetchStudioList()
+                }
+                .navigationDestination(item: $selectedStudio) { studio in
+                    StudioDetailView(studioId: studio.id)
                 }
                 
                 VStack {

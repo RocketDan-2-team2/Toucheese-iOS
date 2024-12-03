@@ -83,6 +83,10 @@ struct StudioListCell: View {
             }
             .scrollIndicators(.hidden)
         }
+        .background {
+            Rectangle()
+                .fill(.background)
+        }
         .padding(.vertical)
     }
 }
