@@ -84,8 +84,7 @@ struct StudioDetailView: View {
             }
         }
         .onAppear{ fetchStudioDetail() }
-        .refreshable { fetchStudioDetail() }
-        .navigationBarBackButtonHidden()
+        .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 ThumbnailNavigationView(

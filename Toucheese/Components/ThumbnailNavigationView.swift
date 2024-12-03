@@ -15,14 +15,6 @@ struct ThumbnailNavigationView: View {
     var body: some View {
         
         HStack(spacing: 10) {
-            
-            Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .foregroundStyle(.black)
-            }
-            
             CachedAsyncImage(url: thumbnail)
                 .frame(width: 45, height: 45)
                 .clipShape(.circle)

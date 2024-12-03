@@ -55,7 +55,7 @@ struct ReviewDetailView: View {
             
             Spacer()
         }
-        .navigationBarBackButtonHidden()
+        .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 ThumbnailNavigationView(thumbnail: "\(user.profileImg)", title: "\(user.name)")
