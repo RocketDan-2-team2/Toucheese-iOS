@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct StudioEntity: Codable {
+struct StudioEntity: Codable, Hashable {
     let id: Int
     let name: String
     let profileImage: String?

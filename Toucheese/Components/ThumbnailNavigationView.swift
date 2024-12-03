@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ThumbnailNavigationView: View {
-    
+    @Environment(\.dismiss) private var dismiss
     let thumbnail: String
     let title: String
     
@@ -17,7 +17,7 @@ struct ThumbnailNavigationView: View {
         HStack(spacing: 10) {
             
             Button(action: {
-                print("back!")
+                dismiss()
             }) {
                 Image(systemName: "chevron.left")
                     .foregroundStyle(.black)
