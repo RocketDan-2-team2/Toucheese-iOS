@@ -23,15 +23,13 @@ struct ThumbnailNavigationView: View {
                     .foregroundStyle(.black)
             }
             
-            CachedAsyncImage(
-                url: thumbnail,
-                size: CGSize(width: 45, height: 45)
-            )
-            .clipShape(.circle)
-            .overlay {
-                Circle()
-                    .strokeBorder(.gray)
-            }
+            CachedAsyncImage(url: thumbnail)
+                .frame(width: 45, height: 45)
+                .clipShape(.circle)
+                .overlay {
+                    Circle()
+                        .strokeBorder(.gray)
+                }
             
             Text(title)
                 .font(.headline)

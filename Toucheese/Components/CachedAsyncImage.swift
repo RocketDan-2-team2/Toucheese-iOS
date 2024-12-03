@@ -10,7 +10,6 @@ import SwiftUI
 struct CachedAsyncImage: View {
     
     let url: String
-    let size: CGSize
     
     @State private var image: UIImage? = nil
     
@@ -19,11 +18,9 @@ struct CachedAsyncImage: View {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFit()
-                .frame(width: size.width, height: size.height)
             
         } else {
             ProgressView()
-                .frame(width: size.width, height: size.height)
                 .onAppear {
                     loadImage()
                 }
