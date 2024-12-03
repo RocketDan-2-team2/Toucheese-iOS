@@ -11,7 +11,9 @@ struct BookingTimePicker: View {
     @Binding var selectedDate: Date
     @Binding var selectedTime: Int
     
-    @State var openedHoursArr: [[Int]]
+    @State var openedHoursArr: [[Int]] = Array(repeating: [10,11,14,15,16,17,20,21,22], count: 31)
+    
+    private let tempOHArr = Array(repeating: [10,11,14,15,16,17,20,21,22], count: 31)
     
     private let gridRow = Array(repeating: GridItem(.adaptive(minimum: .infinity, maximum: .infinity)), count: 4)
     
@@ -23,7 +25,7 @@ struct BookingTimePicker: View {
         let df = DateFormatter()
         df.dateFormat = "d"
         let temp = df.string(from: selectedDate)
-        return Int(temp)! - 2
+        return Int(temp)! - 1
     }
     
     var body: some View {
@@ -41,7 +43,7 @@ struct BookingTimePicker: View {
                     .padding(.leading, 10)
                     
                     TimeButtonGrid(columnsArr: gridRow,
-                                   timeArr: [],//openedHoursArr[calculatedDate],
+                                   timeArr: tempOHArr[calculatedDate], //openedHoursArr[calculatedDate],
                                    selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
                                    isAM: true)
@@ -57,13 +59,16 @@ struct BookingTimePicker: View {
                     .padding(.leading, 10)
                     
                     TimeButtonGrid(columnsArr: gridRow,
-                                   timeArr: [],//openedHoursArr[calculatedDate],
+                                   timeArr: tempOHArr[calculatedDate], //openedHoursArr[calculatedDate],
                                    selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
                                    isAM: false)
                 }
             }
             .padding(.horizontal)
+        }
+        .onAppear {
+            print(openedHoursArr)
         }
     }
 }
