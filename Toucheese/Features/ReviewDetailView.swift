@@ -11,13 +11,18 @@ import Combine
 struct ReviewDetailView: View {
     private let studioService: StudioService = DefaultStudioService()
     
-    @State var review: Review
-    @State var user: UserProfile
+    @State private var review: Review
+    @State private var user: UserProfile
     
     @State private var isShowDetailImages: Bool = false
     @State private var selectedImageIndex: Int = 0
     
     @State private var bag = Set<AnyCancellable>()
+    
+    init(review: Review, user: UserProfile) {
+        self.review = review
+        self.user = user
+    }
     
     var body: some View {
         VStack {

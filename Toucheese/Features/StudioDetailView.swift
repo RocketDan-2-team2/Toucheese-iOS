@@ -27,9 +27,7 @@ struct StudioDetailView: View {
     )
     @State private var studioItems: [StudioProduct] = []
     @State private var studioReviews: [StudioReview] = []
-    
     @State private var review: ReviewEntity?
-    
     
     @State private var bag = Set<AnyCancellable>()
     
