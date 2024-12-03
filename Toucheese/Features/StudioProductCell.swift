@@ -16,9 +16,17 @@ struct StudioProductCell: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(.placeholder)
-                .aspectRatio(5/7, contentMode: .fit)
+            AsyncImage(url: URL(string: product.image ?? "")) { image in
+                image
+                    .resizable()
+            } placeholder: {
+                ProgressView()
+            }
+            .frame(width: 100, height: 140)
+            .background {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.placeholder)
+            }
             
             VStack(alignment: .leading, spacing: 6) {
                 Text(product.name)
