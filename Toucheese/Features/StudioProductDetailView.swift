@@ -133,9 +133,7 @@ struct StudioProductDetailView: View {
                     BookingTimePicker(
                         selectedDate: $selectedDate,
                         selectedTime: $selectedTime,
-                        openedHoursArr: [
-                            [1, 2, 3, 20], [3, 4, 5, 10], [], []
-                        ]
+                        openedHoursArr: []
                     )
                 }
                 .padding()
