@@ -203,10 +203,10 @@ extension MockStudioService: StudioService {
                 ),
                 categorizedItems: [
                     "PROFILE_PHOTO": [
-                        .init(itemId: 421, itemName: "1컷 프로필", itemDescription: nil, reviewCounts: 0, price: 99000)
+                        .init(itemId: 421, itemName: "1컷 프로필", itemDescription: nil, reviewCounts: 0, price: 99000, itemImage: "")
                     ],
                     "ID_PHOTO": [
-                        .init(itemId: 1, itemName: "증명사진", itemDescription: nil, reviewCounts: 2, price: 78000)
+                        .init(itemId: 1, itemName: "증명사진", itemDescription: nil, reviewCounts: 2, price: 78000, itemImage: "")
                     ]
                 ],
                 reviewImageDtos: nil

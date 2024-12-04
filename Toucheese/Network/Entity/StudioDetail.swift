@@ -148,12 +148,13 @@ struct StudioDetailEntity: Decodable {
         let itemDescription: String?
         let reviewCounts: Int
         let price: Int
+        let itemImage: String
         
         // MARK: 여기서, nil 처리를 해주는게 맞을까요?
         func translate() -> StudioProduct {
             .init(
                 id: self.itemId,
-                image: "",
+                image: self.itemImage,
                 name: self.itemName,
                 description: self.itemDescription ?? "",
                 reviewCount: self.reviewCounts,
