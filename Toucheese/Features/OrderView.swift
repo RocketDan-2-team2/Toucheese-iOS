@@ -91,7 +91,7 @@ struct OrderView: View {
                     .fill(.yellow)
                     .frame(height: 40)
                     .overlay {
-                        Text("결제하기 (₩\(0))")
+                        Text("결제하기 (₩\(200000)")
                             .fontWeight(.bold)
                     }
             }
