@@ -24,7 +24,7 @@ enum RatingType: FilterProtocol {
         switch self {
         case .first: "ABOVE_3"
         case .second: "ABOVE_4"
-        case .third: "ABOVE_4.5"
+        case .third: "ABOVE_4_5"
         }
     }
 }
