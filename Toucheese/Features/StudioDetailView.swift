@@ -62,11 +62,12 @@ struct StudioDetailView: View {
                 Section {
                     switch tabSelection {
                     case 0:
-                        StudioProductListView(
-                            notice: studioInfo.description,
-                            productList: studioItems,
-                            selectedProduct: $selectedProduct
-                        )
+//                        StudioProductListView(
+//                            notice: studioInfo.description,
+//                            productList: studioItems,
+//                            selectedProduct: $selectedProduct
+//                        )
+                        studioReviewListView
                     case 1:
                         studioReviewListView
                     default:
@@ -111,7 +112,7 @@ struct StudioDetailView: View {
             }
         } receiveValue: { studioDetailEntity in
             self.studioInfo = studioDetailEntity.translateToInfo()
-            self.studioItems = studioDetailEntity.translateToFlatItems()
+//            self.studioItems = studioDetailEntity.translateToFlatItems()
         }
         .store(in: &bag)
         

@@ -202,12 +202,22 @@ extension MockStudioService: StudioService {
                     studioDescription: "저희 공운스튜디오는 주차장을 따로 운영하고 있습니다! 스튜디오 건물 오른 편으로 돌아 골목에 주차 가능합니다"
                 ),
                 categorizedItems: [
-                    "PROFILE_PHOTO": [
-                        .init(itemId: 421, itemName: "1컷 프로필", itemDescription: nil, reviewCounts: 0, price: 99000, itemImage: "")
-                    ],
-                    "ID_PHOTO": [
-                        .init(itemId: 1, itemName: "증명사진", itemDescription: nil, reviewCounts: 2, price: 78000, itemImage: "")
-                    ]
+                    .init(
+                        itemId: 421,
+                        itemName: "1컷 프로필",
+                        itemDescription: nil,
+                        reviewCounts: 0,
+                        price: 99000,
+                        category: "PROFILE_PHOTO"
+                    ),
+                    .init(
+                        itemId: 1,
+                        itemName: "증명사진",
+                        itemDescription: nil,
+                        reviewCounts: 2,
+                        price: 78000,
+                        category: "ID_PHOTO"
+                    )
                 ],
                 reviewImageDtos: nil
             )
