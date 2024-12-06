@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1333B3252D02B9F9002FB7BA /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1333B3242D02B9F9002FB7BA /* SkeletonUI */; };
 		136C79682CEC69E7009DEA76 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 136C79672CEC69E7009DEA76 /* CombineMoya */; };
 		136C796A2CEC69E7009DEA76 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 136C79692CEC69E7009DEA76 /* Moya */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				136C796A2CEC69E7009DEA76 /* Moya in Frameworks */,
+				1333B3252D02B9F9002FB7BA /* SkeletonUI in Frameworks */,
 				136C79682CEC69E7009DEA76 /* CombineMoya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				136C79672CEC69E7009DEA76 /* CombineMoya */,
 				136C79692CEC69E7009DEA76 /* Moya */,
+				1333B3242D02B9F9002FB7BA /* SkeletonUI */,
 			);
 			productName = Toucheese;
 			productReference = 1317A4732CE5CE9B007264C7 /* Toucheese.app */;
@@ -118,6 +121,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				136C79662CEC69E7009DEA76 /* XCRemoteSwiftPackageReference "Moya" */,
+				1333B3232D02B9F9002FB7BA /* XCRemoteSwiftPackageReference "SkeletonUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1317A4742CE5CE9B007264C7 /* Products */;
@@ -365,6 +369,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1333B3232D02B9F9002FB7BA /* XCRemoteSwiftPackageReference "SkeletonUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CSolanaM/SkeletonUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.2;
+			};
+		};
 		136C79662CEC69E7009DEA76 /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya";
@@ -376,6 +388,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1333B3242D02B9F9002FB7BA /* SkeletonUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1333B3232D02B9F9002FB7BA /* XCRemoteSwiftPackageReference "SkeletonUI" */;
+			productName = SkeletonUI;
+		};
 		136C79672CEC69E7009DEA76 /* CombineMoya */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 136C79662CEC69E7009DEA76 /* XCRemoteSwiftPackageReference "Moya" */;

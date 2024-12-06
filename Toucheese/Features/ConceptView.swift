@@ -6,17 +6,14 @@
 //
 
 import SwiftUI
-import Combine
 
 struct ConceptView: View {
-    let studioService: StudioService = DefaultStudioService()
-    
-    @State private var conceptList: [ConceptEntity] = []
-    
+    @State private var conceptList: [ConceptEntity]
     @State private var selectedConcept: ConceptEntity?
     
-    // MARK: 임시 상태 관리 CancellableBag - 추후 ViewModel로 분리 예정
-    @State private var bag = Set<AnyCancellable>()
+    init(conceptList: [ConceptEntity]) {
+        self.conceptList = conceptList
+    }
     
     var body: some View {
         VStack {
@@ -36,44 +33,21 @@ struct ConceptView: View {
                     ) {
                         selectedConcept = concept
                     }
-//                        .frame(width: (proxy.size.width - 42) / 2)
-//                        .aspectRatio(9 / 11, contentMode: .fill)
-//                        .containerRelativeFrame(.horizontal) { length, _ in
-//                            (length - 42) / 2
-//                        }
                 }
             }
             
             Spacer()
         }
         .padding()
-        .task {
-            if !conceptList.isEmpty { return }
-            fetchConceptList()
-        }
+        .toolbar(.hidden, for: .navigationBar)
         .navigationDestination(item: $selectedConcept) { concept in
             StudioListView(concept: concept)
         }
-    }
-    
-    func fetchConceptList() {
-        studioService.getStudioConceptList()
-            .sink { event in
-                switch event {
-                case .finished:
-                    print("Concept: \(event)")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            } receiveValue: { conceptList in
-                self.conceptList = conceptList
-            }
-            .store(in: &bag)
     }
 }
 
 #Preview {
     NavigationStack {
-        ConceptView()
+        IntroView()
     }
 }

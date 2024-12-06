@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SkeletonUI
 
 struct ConceptButton: View {
     let conceptImage: String
@@ -28,21 +29,32 @@ struct ConceptButton: View {
             tapAction?()
         } label: {
             VStack(spacing: 0) {
-                AsyncImage(url: URL(string: conceptImage)) { image in
-                    image
-                        .resizable()
-                        .scaledToFit()
-                } placeholder: {
-                    ProgressView()
+                AsyncImage(url: URL(string: conceptImage)) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    default:
+                        Rectangle()
+                            .fill(.clear)
+                            .skeleton(
+                                with: true,
+                                appearance: .gradient(
+                                    color: Color(uiColor: .lightGray).opacity(0.5),
+                                    background: .clear
+                                ),
+                                shape: .rectangle
+                            )
+                    }
                 }
+                .aspectRatio(9 / 11, contentMode: .fill)
                 
                 Text(conceptName)
                     .font(.system(size: 12))
                     .padding(.vertical, 4)
             }
-            .frame(maxWidth: .infinity)
-            .aspectRatio(9 / 11, contentMode: .fill)
-            .background(.gray.opacity(0.4))
+            .background(.placeholder.opacity(0.5))
             .clipShape(.rect(cornerRadius: 20))
         }
         .buttonStyle(PlainButtonStyle())
@@ -50,5 +62,5 @@ struct ConceptButton: View {
 }
 
 #Preview {
-    ConceptView()
+    ConceptButton(conceptImage: "", conceptName: "컨셉 이름")
 }
