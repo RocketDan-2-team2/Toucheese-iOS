@@ -17,6 +17,18 @@ struct StudioProductDetailView: View {
     
     @State private var showCalendar: Bool = false
     
+    private var calculatedDateNTime: String {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy/MM/dd"
+        let tempDate = df.string(from: selectedDate)
+        let tempAMPM = selectedTime > 11 ? "PM" : "AM"
+        let tempTime = selectedTime > 12 ? selectedTime - 12 : selectedTime
+        
+        let result = tempDate + " \(tempAMPM) \(tempTime):00"
+        
+        return result
+    }
+    
     var totalPrice: Int {
         product.optionList.reduce(product.price) {
             $0 + $1.price * $1.count
@@ -84,7 +96,7 @@ struct StudioProductDetailView: View {
                         .bold()
                     
                     HStack {
-                        Text(selectedDate.formatted())
+                        Text(calculatedDateNTime)
                         
                         Spacer()
                         
