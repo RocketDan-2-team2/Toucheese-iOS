@@ -67,7 +67,7 @@ struct CustomCalendar: View {
                         RoundedRectangle(cornerRadius: 5)
                             .foregroundColor(Color.clear)
                     } else {
-                        let date = getDate(for: index - firstWeekday + 1)
+                        let date = getDate(for: index - firstWeekday)
                         let day = index - firstWeekday + 1
                         
                         CellView(day: day)

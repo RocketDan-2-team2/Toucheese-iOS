@@ -13,7 +13,7 @@ struct BookingTimePicker: View {
     
     @State var openedHoursArr: [[Int]] = Array(repeating: [10,11,14,15,16,17,20,21,22], count: 31)
     
-    private let tempOHArr = Array(repeating: [10,11,14,15,16,17,20,21,22], count: 31)
+    private let tempOHArr = Array(repeating: [10,11,12,13,14,15,16,17,20,21,22], count: 31)
     
     private let gridRow = Array(repeating: GridItem(.adaptive(minimum: .infinity, maximum: .infinity)), count: 4)
     

@@ -12,7 +12,7 @@ struct ToucheeseApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                ConceptView()
+                IntroView()
             }
         }
     }
