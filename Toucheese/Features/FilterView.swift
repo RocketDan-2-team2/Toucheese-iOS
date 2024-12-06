@@ -22,7 +22,8 @@ struct FilterView: View {
                 if isChanged {
                     Image(systemName: "arrow.clockwise")
                         .font(.system(size: 18))
-                        .padding(.trailing, 10)
+                        .padding(.horizontal, 20)
+                        .contentShape(.rect())
                         .onTapGesture {
                             studioViewModel.selectedRegion = []
                             studioViewModel.selectedRating = nil
