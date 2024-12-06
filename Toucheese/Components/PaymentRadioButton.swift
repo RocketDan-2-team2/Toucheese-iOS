@@ -37,6 +37,7 @@ struct PaymentRadioButton: View {
         } label: {
             HStack(alignment: .center) {
                 Image(systemName: isSelected ? "circle.fill" : "circle")
+                    .foregroundStyle(.yellow)
                 
                 Text(type.title)
             }

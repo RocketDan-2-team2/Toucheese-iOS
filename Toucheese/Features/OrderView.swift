@@ -26,7 +26,8 @@ struct OrderView: View {
                     VStack(alignment: .leading) {
                         Text("강미미")
                         Text("010-9593-3561")
-                        Text("\("kan0@gmail.com")")
+                        Text("kan0@gmail.com")
+                            .tint(.black)
                     }
                     .padding(.leading, 50)
                 }
@@ -76,7 +77,9 @@ struct OrderView: View {
                     .fontWeight(.bold)
                     .padding(.vertical, 5)
                 ForEach(PaymentType.allCases, id: \.self) { type in
-                    PaymentRadioButton(type: type, selectedType: $selectedPayment)
+                    PaymentRadioButton(type: type, selectedType: $selectedPayment) {
+                        
+                    }
                         .padding(.vertical, 1)
                 }
             }
