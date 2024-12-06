@@ -9,15 +9,23 @@ import Foundation
 
 /// 스튜디오 상세 정보
 ///
-/// [스튜디오 상세 페이지]의 스튜디오 상세 정보로 사용할 데이터
+/// [스튜디오 상세 페이지] 스튜디오 상세 정보로 사용할 데이터
 struct StudioInfo {
+    /// 스튜디오 ID
     let id: Int
+    /// 스튜디오 이름
     let name: String
+    /// 스튜디오 이미지 URL 문자열
     let profileImage: String
+    /// 스튜디오 배경사진 URL 문자열들
     let backgrounds: [String]
+    /// 스튜디오 별점
     let popularity: Float
+    /// 스튜디오 근무일
     let dutyDate: String
+    /// 스튜디오 주소
     let address: String
+    /// 스튜디오 설명 (알림, notice)
     let description: String
     
     static func mockData() -> StudioInfo {
@@ -38,11 +46,17 @@ struct StudioInfo {
 ///
 /// [스튜디오 상세 페이지] 상품탭에서 사용할 상품 데이터
 struct StudioItem {
+    /// 상품 ID
     let id: Int
+    /// 상품 이름
     let name: String
+    /// 상품 이미지 URL 문자열
     let image: String
+    /// 상품 설명
     let description: String
+    /// 상품 리뷰 개수
     let reviewCount: Int
+    /// 상품 가격
     let price: Int
     
     // MARK: 필요하면 아래 프로퍼티 추가
