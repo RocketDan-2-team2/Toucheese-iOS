@@ -36,11 +36,6 @@ struct ConceptView: View {
                     ) {
                         selectedConcept = concept
                     }
-//                        .frame(width: (proxy.size.width - 42) / 2)
-//                        .aspectRatio(9 / 11, contentMode: .fill)
-//                        .containerRelativeFrame(.horizontal) { length, _ in
-//                            (length - 42) / 2
-//                        }
                 }
             }
             

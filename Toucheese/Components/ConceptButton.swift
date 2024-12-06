@@ -33,16 +33,19 @@ struct ConceptButton: View {
                         .resizable()
                         .scaledToFit()
                 } placeholder: {
-                    ProgressView()
+                    Rectangle()
+                        .fill(.placeholder)
+                        .overlay {
+                            ProgressView()
+                        }
                 }
+                .aspectRatio(9 / 11, contentMode: .fill)
                 
                 Text(conceptName)
                     .font(.system(size: 12))
                     .padding(.vertical, 4)
             }
-            .frame(maxWidth: .infinity)
-            .aspectRatio(9 / 11, contentMode: .fill)
-            .background(.gray.opacity(0.4))
+            .background(.placeholder)
             .clipShape(.rect(cornerRadius: 20))
         }
         .buttonStyle(PlainButtonStyle())
@@ -50,5 +53,5 @@ struct ConceptButton: View {
 }
 
 #Preview {
-    ConceptView()
+    ConceptButton(conceptImage: "", conceptName: "컨셉 이름")
 }
