@@ -99,10 +99,13 @@ struct OrderView: View {
         }
         .padding()
         .navigationTitle("주문/결제")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
     }
 }
 
 #Preview {
-    OrderView()
+    NavigationStack {
+        OrderView()
+    }
 }
