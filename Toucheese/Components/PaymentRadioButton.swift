@@ -20,7 +20,7 @@ struct PaymentRadioButton: View {
     
     
     init(
-        type: PaymentType = .PG,
+        type: PaymentType = .pg,
         selectedType: Binding<PaymentType>,
         tapAction: (() -> Void)? = nil
         

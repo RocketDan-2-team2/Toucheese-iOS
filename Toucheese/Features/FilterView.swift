@@ -23,7 +23,7 @@ struct FilterView: View {
                     Image(systemName: "arrow.clockwise")
                         .font(.system(size: 18))
                         .padding(.horizontal, 20)
-                        .contentShape(Rectangle())
+                        .contentShape(.rect())
                         .onTapGesture {
                             studioViewModel.selectedRegion = []
                             studioViewModel.selectedRating = nil

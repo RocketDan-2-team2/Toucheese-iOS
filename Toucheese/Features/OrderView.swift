@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OrderView: View {
     
-    @State private var selectedPayment: PaymentType = .PG
+    @State private var selectedPayment: PaymentType = .pg
     
     var body: some View {
         VStack(alignment: .leading) {
