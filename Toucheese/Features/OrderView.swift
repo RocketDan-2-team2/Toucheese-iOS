@@ -26,7 +26,7 @@ struct OrderView: View {
                     VStack(alignment: .leading) {
                         Text("강미미")
                         Text("010-9593-3561")
-                        Text("kan0@gmail.com")
+                        Text("\("kan0@gmail.com")")
                     }
                     .padding(.leading, 50)
                 }
