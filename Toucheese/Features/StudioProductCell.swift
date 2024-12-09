@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct StudioProductCell: View {
-    let product: StudioProduct
+    private let product: StudioItem
     
-    init(product: StudioProduct) {
+    init(product: StudioItem) {
         self.product = product
     }
     
     var body: some View {
         HStack(spacing: 8) {
-            AsyncImage(url: URL(string: product.image ?? "")) { image in
+            AsyncImage(url: URL(string: product.image)) { image in
                 image
                     .resizable()
             } placeholder: {
@@ -57,13 +57,12 @@ struct StudioProductCell: View {
 }
 
 #Preview {
-    StudioProductCell(product: .init(
-        id: 0,
-        image: nil,
-        name: "상품 이름",
-        description: "상품 소개\n상품 소개\n상품 소개",
-        reviewCount: 1234,
-        price: 123456,
-        optionList: []
+    StudioProductCell(product: StudioItem(
+        id: 2,
+        name: "응애",
+        description: "응애응애응애",
+        reviewCount: 4,
+        price: 3000,
+        image: ""
     ))
 }
