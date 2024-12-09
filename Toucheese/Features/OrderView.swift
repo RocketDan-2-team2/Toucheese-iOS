@@ -10,6 +10,7 @@ import SwiftUI
 struct OrderView: View {
     
     @State private var selectedPayment: PaymentType = .pg
+    let user: UserEntity = .init(name: "강미미", phone: "010-1111-1111", email: "kang@gmail.com")
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -24,9 +25,9 @@ struct OrderView: View {
                         Text("이메일")
                     }
                     VStack(alignment: .leading) {
-                        Text("강미미")
-                        Text("010-9593-3561")
-                        Text("kan0@gmail.com")
+                        Text("\(user.name)")
+                        Text("\(user.phone)")
+                        Text("\(user.email)")
                             .tint(.black)
                     }
                     .padding(.leading, 50)
@@ -56,12 +57,17 @@ struct OrderView: View {
                         HStack {
                             VStack(alignment: .leading) {
                                 Text("증명 사진")
-                                Text("보정 사진 추가")
+                                ForEach(0..<3) { _ in
+                                    Text("보정 사진 추가")
+                                }
+                                
                                 Text("예약 날짜")
                             }
                             VStack(alignment: .trailing) {
                                 Text("75,000원")
-                                Text("30,000원")
+                                ForEach(0..<3) { _ in
+                                    Text("30,000원")
+                                }
                                 Text("2024-12-05 오후 2시")
                             }
                         }
@@ -94,7 +100,7 @@ struct OrderView: View {
                     .fill(.yellow)
                     .frame(height: 40)
                     .overlay {
-                        Text("결제하기 (₩\(200000)")
+                        Text("결제하기 (₩\(200000))")
                             .fontWeight(.bold)
                     }
             }
