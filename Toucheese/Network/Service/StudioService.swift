@@ -201,22 +201,42 @@ extension MockStudioService: StudioService {
                     address: "서울 강남구 봉은사로2길 24 3층 301호\n",
                     studioDescription: "저희 공운스튜디오는 주차장을 따로 운영하고 있습니다! 스튜디오 건물 오른 편으로 돌아 골목에 주차 가능합니다"
                 ),
-                categorizedItems: [
+                items: [
                     .init(
-                        itemId: 421,
-                        itemName: "1컷 프로필",
-                        itemDescription: nil,
-                        reviewCounts: 0,
-                        price: 99000,
-                        category: "PROFILE_PHOTO"
+                        itemId: 48,
+                        itemName: "2컨셉",
+                        itemCategory: "PROFILE_PHOTO",
+                        itemDescription: "보정본 기본 6장",
+                        reviewCounts: 1,
+                        price: 280000,
+                        itemImage: "https://i.imgur.com/7sMqf3c.jpeg"
                     ),
                     .init(
-                        itemId: 1,
-                        itemName: "증명사진",
-                        itemDescription: nil,
-                        reviewCounts: 2,
-                        price: 78000,
-                        category: "ID_PHOTO"
+                        itemId: 47,
+                        itemName: "1컨셉",
+                        itemCategory: "PROFILE_PHOTO",
+                        itemDescription: "보정본 기본 3장",
+                        reviewCounts: 1,
+                        price: 200000,
+                        itemImage: "https://i.imgur.com/7sMqf3c.jpeg"
+                    ),
+                    .init(
+                        itemId: 50,
+                        itemName: "1컷 프로필",
+                        itemCategory: "PROFILE_PHOTO",
+                        itemDescription: "보정본 1장 (클로즈업 or 상반신만 가능)",
+                        reviewCounts: 1,
+                        price: 140000,
+                        itemImage: "https://i.imgur.com/7sMqf3c.jpeg"
+                    ),
+                    .init(
+                        itemId: 49,
+                        itemName: "3컨셉",
+                        itemCategory: "PROFILE_PHOTO",
+                        itemDescription: "보정본 기본 10장",
+                        reviewCounts: 1,
+                        price: 380000,
+                        itemImage: "https://i.imgur.com/7sMqf3c.jpeg"
                     )
                 ],
                 reviewImageDtos: nil
@@ -243,7 +263,7 @@ extension MockStudioService: StudioService {
                     address: "서울 강남구 봉은사로2길 24 3층 301호\n",
                     studioDescription: "저희 공운스튜디오는 주차장을 따로 운영하고 있습니다! 스튜디오 건물 오른 편으로 돌아 골목에 주차 가능합니다"
                 ),
-                categorizedItems: nil,
+                items: nil,
                 reviewImageDtos: [
                     .init(reviewId: 1, imageUrl: "https://i.imgur.com/niY3nhv.jpeg"),
                     .init(reviewId: 2, imageUrl: "https://i.imgur.com/niY3nhv.jpeg"),

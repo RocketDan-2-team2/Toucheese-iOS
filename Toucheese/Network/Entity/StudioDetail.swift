@@ -50,17 +50,16 @@ struct StudioItem: Identifiable {
     let id: Int
     /// 상품 이름
     let name: String
-    /// 상품 이미지 URL 문자열
-    let image: String
+    /// 상품 카테고리 (사용하지 않아서 주석처림함)
+//    let category: String
     /// 상품 설명
     let description: String
     /// 상품 리뷰 개수
     let reviewCount: Int
     /// 상품 가격
     let price: Int
-    
-    // MARK: 필요하면 아래 프로퍼티 추가
-//    let category: String
+    /// 상품 이미지 URL 문자열
+    let image: String
 }
 
 /// 스튜디오 리뷰
@@ -84,7 +83,7 @@ struct StudioReview {
 /// [스튜디오 상세 페이지]와 관련된 API용 구조체
 struct StudioDetailEntity: Decodable {
     let studioInfoDto: Info
-    let categorizedItems: [Item]?
+    let items: [Item]?
     let reviewImageDtos: [ReviewImage]?
     
     /// 스튜디오 상세 정보(StudioInfo)로 변환하는 메서드
@@ -94,12 +93,12 @@ struct StudioDetailEntity: Decodable {
     
     /// 스튜디오 상품 리스트(배열)로 변환하는 메서드
     func translateToItems() -> [StudioItem] {
-        self.categorizedItems?.map{ $0.translate() } ?? []
+        self.items?.map{ $0.translate() } ?? []
     }
     
     /// 스튜디오 리뷰 리스트(배열)로 변환하는 메서드
     func translateToReviews() -> [StudioReview] {
-        self.reviewImageDtos?.map { $0.translate() } ?? []
+        self.reviewImageDtos?.map{ $0.translate() } ?? []
     }
     
     struct Info: Decodable {
@@ -112,7 +111,6 @@ struct StudioDetailEntity: Decodable {
         let address: String
         let studioDescription: String?
         
-        // MARK: 여기서, nil 처리를 해주는게 맞을까요?
         func translate() -> StudioInfo {
             .init(
                 id: self.studioId,
@@ -130,22 +128,20 @@ struct StudioDetailEntity: Decodable {
     struct Item: Decodable {
         let itemId: Int
         let itemName: String
+        let itemCategory: String
         let itemDescription: String?
         let reviewCounts: Int
         let price: Int
-        let category: String
-        
-        // MARK: 아이템 이미지를 받으면 추가
-//        let itemImage: String
+        let itemImage: String
         
         func translate() -> StudioItem {
             .init(
                 id: self.itemId,
                 name: self.itemName,
-                image: "",
                 description: self.itemDescription ?? "",
                 reviewCount: self.reviewCounts,
-                price: self.price
+                price: self.price,
+                image: self.itemImage
             )
         }
     }

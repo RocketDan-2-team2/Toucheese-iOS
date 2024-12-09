@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct StudioProductCell: View {
-    let product: StudioItem
+    private let product: StudioItem
     
-//    init(product: StudioProduct) {
-//        self.product = product
-//    }
+    init(product: StudioItem) {
+        self.product = product
+    }
     
     var body: some View {
         HStack(spacing: 8) {
@@ -57,12 +57,12 @@ struct StudioProductCell: View {
 }
 
 #Preview {
-    StudioProductCell(product: .init(
-        id: 0,
-        name: "상품 이름",
-        image: "",
-        description: "상품 소개\n상품 소개\n상품 소개",
-        reviewCount: 1234,
-        price: 123456
+    StudioProductCell(product: StudioItem(
+        id: 2,
+        name: "응애",
+        description: "응애응애응애",
+        reviewCount: 4,
+        price: 3000,
+        image: ""
     ))
 }

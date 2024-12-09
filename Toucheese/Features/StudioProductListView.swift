@@ -9,8 +9,8 @@ import SwiftUI
 import Combine
 
 struct StudioProductListView: View {
-//    let studioService: StudioService = DefaultStudioService()
-    let studioService: MockStudioService = MockStudioService()
+    let studioService: StudioService = DefaultStudioService()
+//    let studioService: MockStudioService = MockStudioService()
     
     let notice: String
     let productList: [StudioItem]

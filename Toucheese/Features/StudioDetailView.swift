@@ -10,8 +10,8 @@ import Combine
 
 struct StudioDetailView: View {
     
-//    let studioService: StudioService = DefaultStudioService()
-    let studioService: StudioService = MockStudioService()
+    let studioService: StudioService = DefaultStudioService()
+//    let studioService: StudioService = MockStudioService()
     
     @State private var tabSelection: Int = 0
     
