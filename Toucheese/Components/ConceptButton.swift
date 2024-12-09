@@ -48,6 +48,7 @@ struct ConceptButton: View {
                             )
                     }
                 }
+                .frame(maxWidth: .infinity)
                 .aspectRatio(9 / 11, contentMode: .fill)
                 
                 Text(conceptName)
