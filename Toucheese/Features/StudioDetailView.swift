@@ -10,8 +10,8 @@ import Combine
 
 struct StudioDetailView: View {
     
-    let studioService: StudioService = DefaultStudioService()
-//    let studioService: StudioService = MockStudioService()
+//    let studioService: StudioService = DefaultStudioService()
+    let studioService: StudioService = MockStudioService()
     
     @State private var tabSelection: Int = 0
     
@@ -25,7 +25,7 @@ struct StudioDetailView: View {
         address: "",
         description: ""
     )
-    @State private var studioItems: [StudioProduct] = []
+    @State private var studioItems: [StudioItem] = []
     @State private var studioReviews: [StudioReview] = []
     @State private var review: ReviewEntity?
     @State private var selectedProduct: StudioProduct?
@@ -62,12 +62,11 @@ struct StudioDetailView: View {
                 Section {
                     switch tabSelection {
                     case 0:
-//                        StudioProductListView(
-//                            notice: studioInfo.description,
-//                            productList: studioItems,
-//                            selectedProduct: $selectedProduct
-//                        )
-                        studioReviewListView
+                        StudioProductListView(
+                            notice: studioInfo.description,
+                            productList: studioItems,
+                            selectedProduct: $selectedProduct
+                        )
                     case 1:
                         studioReviewListView
                     default:
@@ -112,7 +111,7 @@ struct StudioDetailView: View {
             }
         } receiveValue: { studioDetailEntity in
             self.studioInfo = studioDetailEntity.translateToInfo()
-//            self.studioItems = studioDetailEntity.translateToFlatItems()
+            self.studioItems = studioDetailEntity.translateToItems()
         }
         .store(in: &bag)
         

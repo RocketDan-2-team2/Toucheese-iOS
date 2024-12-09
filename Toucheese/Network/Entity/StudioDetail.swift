@@ -45,7 +45,7 @@ struct StudioInfo {
 /// 스튜디오 상품
 ///
 /// [스튜디오 상세 페이지] 상품탭에서 사용할 상품 데이터
-struct StudioItem {
+struct StudioItem: Identifiable {
     /// 상품 ID
     let id: Int
     /// 상품 이름

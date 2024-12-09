@@ -9,10 +9,11 @@ import SwiftUI
 import Combine
 
 struct StudioProductListView: View {
-    let studioService: StudioService = DefaultStudioService()
+//    let studioService: StudioService = DefaultStudioService()
+    let studioService: MockStudioService = MockStudioService()
     
     let notice: String
-    let productList: [StudioProduct]
+    let productList: [StudioItem]
     
     @Binding var selectedProduct: StudioProduct?
     @State private var bag = Set<AnyCancellable>()
