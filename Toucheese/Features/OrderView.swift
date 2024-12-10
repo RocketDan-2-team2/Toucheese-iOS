@@ -7,10 +7,20 @@
 
 import SwiftUI
 
+import Combine
+
 struct OrderView: View {
     
+    private let orderService = DefaultOrderService()
+    @State private var bag = Set<AnyCancellable>()
+    
     @State private var selectedPayment: PaymentType = .pg
-    let user: UserEntity = .init(name: "강미미", phone: "010-1111-1111", email: "kang@gmail.com")
+    
+    let studio: StudioInfo
+    let product: StudioProduct
+    let selectedOptions: [StudioProductOption]
+    let totalPrice: Int
+    let selectedDate: Date
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -24,10 +34,11 @@ struct OrderView: View {
                         Text("연락처")
                         Text("이메일")
                     }
+                    //TODO: 임시
                     VStack(alignment: .leading) {
-                        Text("\(user.name)")
-                        Text("\(user.phone)")
-                        Text("\(user.email)")
+                        Text("강미미")
+                        Text("010-1111-1111")
+                        Text("kang@hanmail.net")
                             .tint(.black)
                     }
                     .padding(.leading, 50)
@@ -42,7 +53,7 @@ struct OrderView: View {
                     .fontWeight(.bold)
                     .padding(.vertical, 5)
                 HStack {
-                    AsyncImage(url: URL(string: "https://i.imgur.com/niY3nhv.jpeg")) { image in
+                    AsyncImage(url: URL(string: product.image ?? "")) { image in
                         image
                             .resizable()
                             .scaledToFit()
@@ -52,23 +63,23 @@ struct OrderView: View {
                         ProgressView()
                     }
                     VStack(alignment: .leading) {
-                        Text("공원스튜디오")
+                        Text("\(studio.name)")
                             .fontWeight(.bold)
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("증명 사진")
-                                ForEach(0..<3) { _ in
-                                    Text("보정 사진 추가")
+                                Text("\(product.name)")
+                                ForEach(selectedOptions) { option in
+                                    Text(option.name)
                                 }
                                 
                                 Text("예약 날짜")
                             }
                             VStack(alignment: .trailing) {
-                                Text("75,000원")
-                                ForEach(0..<3) { _ in
-                                    Text("30,000원")
+                                Text("\(product.price)원")
+                                ForEach(selectedOptions) { option in
+                                    Text("\(option.price)원")
                                 }
-                                Text("2024-12-05 오후 2시")
+                                Text("\(totalPrice)원")
                             }
                         }
                     }
@@ -94,13 +105,13 @@ struct OrderView: View {
             Spacer()
             
             Button {
-                
+                createOrder()
             } label: {
                 Capsule()
                     .fill(.yellow)
                     .frame(height: 40)
                     .overlay {
-                        Text("결제하기 (₩\(200000))")
+                        Text("결제하기 (₩\(totalPrice))")
                             .fontWeight(.bold)
                     }
             }
@@ -111,10 +122,37 @@ struct OrderView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
     }
-}
-
-#Preview {
-    NavigationStack {
-        OrderView()
+    
+    private func createOrder() {
+        
+        var newOptionList: [OptionDTO] = []
+        for option in selectedOptions {
+            let newOption = OptionDTO(optionId: option.id, optionQuantity: 1)
+            newOptionList.append(newOption)
+        }
+        
+        let item = ItemDTO(itemId: product.id, itemQuantity: 1, optionDtoList: newOptionList)
+        
+        let newOrder = OrderEntity(
+            name: "강미미",
+            email: "kang@hanmail.net",
+            phone: "010-1111-1111",
+            studioID: studio.id,
+            orderDateTime: selectedDate,
+            itemDto: [item]
+        )
+        
+        orderService.createOrder(order: newOrder)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Success: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { _ in
+                //TODO: 성공이면 뷰 전환하기
+            }
+            .store(in: &bag)
     }
 }

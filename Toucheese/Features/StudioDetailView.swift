@@ -94,7 +94,7 @@ struct StudioDetailView: View {
             }
         }
         .navigationDestination(item: $selectedProduct) { product in
-            StudioProductDetailView(product: product)
+            StudioProductDetailView(studio: studioInfo, product: product)
         }
         .navigationDestination(item: $review) { review in
             ReviewDetailView(review: review.reviewDto, user: review.userProfileDto)

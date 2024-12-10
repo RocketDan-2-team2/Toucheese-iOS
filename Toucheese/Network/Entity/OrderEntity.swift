@@ -7,13 +7,13 @@
 
 import Foundation
 
-//TODO: API 정보 받으면 바꾸기
 struct OrderEntity: Encodable, Hashable {
     let name: String
     let email: String
     let phone: String
     let studioID: Int
-    let orderDateTime: String
+    let orderDateTime: Date
+    //TODO: 여기 왜 배열인지 물어보기
     let itemDto: [ItemDTO]
 }
 
