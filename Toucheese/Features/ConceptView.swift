@@ -21,10 +21,13 @@ struct ConceptView: View {
                 .font (.title)
             
             ScrollView {
-                LazyVGrid(columns: [GridItem](
-                    repeating: .init(.flexible()),
-                    count: 2
-                )) {
+                LazyVGrid(
+                    columns: [GridItem](
+                        repeating: .init(.flexible()),
+                        count: 2
+                    ),
+                    spacing: 12
+                ) {
                     ForEach(conceptList) { concept in
                         ConceptButton(
                             conceptImage: concept.image ?? "",
