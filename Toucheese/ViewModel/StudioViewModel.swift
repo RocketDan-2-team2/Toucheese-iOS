@@ -21,7 +21,11 @@ class StudioViewModel: ObservableObject {
     @Published private(set) var studioList: [StudioEntity] = []
     
     private var bag = Set<AnyCancellable>()
-
+    
+    private var nextPage = 0
+    private var pageSize = 10
+    private var isLastPage = false
+    
     init() {
         Publishers.CombineLatest3(
             $selectedRegion,
@@ -34,16 +38,42 @@ class StudioViewModel: ObservableObject {
             .store(in: &bag)
     }
     
-    //TODO: 페이지네이션 처리 하기
+    // 처음 스튜디오 리스트 불러올 때, 혹은 필터가 바뀌었을때 사용됨
+    func searchStudio() {
+        setDefaultPage()
+        
+        studioService.searchStudio(
+            conceptID: concept.id,
+            region: self.selectedRegion,
+            popularity: self.selectedRating,
+            price: self.selectedPrice,
+            page: self.nextPage,
+            size: self.pageSize
+        ).sink { event in
+            switch event {
+            case .finished:
+                print("Event: \(event)")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        } receiveValue: { searchResult in
+            self.studioList = searchResult.content
+            self.toNextPage(searchResult: searchResult)
+        }
+        .store(in: &bag)
+    }
     
+    // 처음 스튜디오 리스트 불러올 때, 혹은 필터가 바뀌었을때 사용됨
     func searchStudio(region: [RegionType], rating: RatingType?, price: PriceType?) {
+        setDefaultPage()
+        
         studioService.searchStudio(
             conceptID: concept.id,
             region: region,
             popularity: rating,
             price: price,
-            page: 0,
-            size: 10
+            page: self.nextPage,
+            size: self.pageSize
         ).sink { event in
             switch event {
             case .finished:
@@ -53,15 +83,22 @@ class StudioViewModel: ObservableObject {
             }
         } receiveValue: { searchResult in
             self.studioList = searchResult.content
+            self.toNextPage(searchResult: searchResult)
         }
         .store(in: &bag)
     }
     
+    // 다음 페이지 호출할때 사용됨
     func fetchStudioList() {
-        studioService.getStudioList(
+        if isLastPage { return }
+        
+        studioService.searchStudio(
             conceptID: concept.id,
-            page: 0,
-            size: 10
+            region: self.selectedRegion,
+            popularity: self.selectedRating,
+            price: self.selectedPrice,
+            page: self.nextPage,
+            size: self.pageSize
         ).sink { event in
             switch event {
             case .finished:
@@ -70,8 +107,26 @@ class StudioViewModel: ObservableObject {
                 print(error.localizedDescription)
             }
         } receiveValue: { searchResult in
-            self.studioList = searchResult.content
+            self.studioList += searchResult.content
+            self.toNextPage(searchResult: searchResult)
         }
         .store(in: &bag)
+    }
+    
+    // 다음 페이지로 세팅
+    private func toNextPage(searchResult: StudioSearchResultEntity) {
+        if !searchResult.last {
+            // 페이지 조절
+            nextPage = searchResult.pageable.pageNumber + 1
+        } else {
+            // 마지막 페이지로 설정
+            self.isLastPage = true
+        }
+    }
+    
+    // 페이징 초기화
+    private func setDefaultPage() {
+        self.nextPage = 0
+        self.isLastPage = false
     }
 }

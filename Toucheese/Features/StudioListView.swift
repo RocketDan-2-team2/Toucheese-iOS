@@ -50,8 +50,8 @@ struct StudioListView: View {
                         Color(.systemBackground)
                             .frame(height: 5.0)
                             .onAppear {
-                                print("페이지네이션 처리")
-                                // TODO: 페이지 처리
+                                if studioViewModel.studioList.isEmpty { return }
+                                studioViewModel.fetchStudioList()
                             }
                     }
                     .ignoresSafeArea()
@@ -64,7 +64,7 @@ struct StudioListView: View {
                     }
                 }
                 .refreshable {
-                    studioViewModel.fetchStudioList()
+                    studioViewModel.searchStudio()
                 }
                 .navigationDestination(item: $selectedStudio) { studio in
                     StudioDetailView(studioId: studio.id)
@@ -95,10 +95,10 @@ struct StudioListView: View {
         }
         .onAppear {
             if !studioViewModel.studioList.isEmpty { return }
+            
             studioViewModel.concept = concept
-            studioViewModel.fetchStudioList()
+            studioViewModel.searchStudio()
         }
-    
     }
     
     func hideFilterExtensionView() {
