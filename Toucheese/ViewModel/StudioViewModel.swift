@@ -40,6 +40,9 @@ class StudioViewModel: ObservableObject {
     
     // 처음 스튜디오 리스트 불러올 때, 혹은 필터가 바뀌었을때 사용됨
     func searchStudio() {
+        
+        if !(1...6 ~= concept.id) { return }
+        
         setDefaultPage()
         
         studioService.searchStudio(
@@ -65,6 +68,9 @@ class StudioViewModel: ObservableObject {
     
     // 처음 스튜디오 리스트 불러올 때, 혹은 필터가 바뀌었을때 사용됨
     func searchStudio(region: [RegionType], rating: RatingType?, price: PriceType?) {
+        
+        if !(1...6 ~= concept.id) { return }
+
         setDefaultPage()
         
         studioService.searchStudio(
@@ -90,6 +96,9 @@ class StudioViewModel: ObservableObject {
     
     // 다음 페이지 호출할때 사용됨
     func fetchStudioList() {
+        
+        if !(1...6 ~= concept.id) { return }
+        
         if isLastPage { return }
         
         studioService.searchStudio(
