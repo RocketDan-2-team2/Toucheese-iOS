@@ -21,6 +21,8 @@ extension BaseAPI {
         switch Self.apiType {
         case .studio:
             base += "/studio"
+        case .order:
+            base += "/order"
         }
         
         guard let url = URL(string: base) else {
@@ -38,11 +40,15 @@ extension BaseAPI {
         return .customCodes(Array(200..<500))
     }
     
+    var parameterEncoding: ParameterEncoding {
+        return JSONEncoding.default
+    }
 }
 
 
 enum APIType {
     case studio
+    case order
 }
 
 enum HeaderType {
