@@ -10,8 +10,8 @@ import Combine
 
 struct StudioDetailView: View {
     
-    let studioService: StudioService = DefaultStudioService()
-//    let studioService: StudioService = MockStudioService()
+//    let studioService: StudioService = DefaultStudioService()
+    let studioService: StudioService = MockStudioService()
     
     @State private var tabSelection: Int = 0
     
@@ -46,11 +46,17 @@ struct StudioDetailView: View {
                     }
                 
                 HStack {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 4.0) {
+                        Text(studioInfo.name)
+//                            .font(.headline)
+                            .font(.system(size: 18.0))
+                            .bold()
+                            .padding(.bottom, 8.0)
                         Label(
                             "\(studioInfo.popularity, specifier: "%.1f")",
-                            systemImage: "star"
+                            systemImage: "star.fill"
                         )
+                        
                         Label(studioInfo.dutyDate, systemImage: "clock")
                         Label(studioInfo.address, systemImage: "map")
                     }
@@ -58,6 +64,10 @@ struct StudioDetailView: View {
                     .font(.system(size: 14.0))
                     Spacer()
                 }
+                
+                Rectangle()
+                    .fill(Color(red: 0.9804, green: 0.9804, blue: 0.9804))
+                    .frame(height: 8.0)
                 
                 Section {
                     switch tabSelection {
@@ -73,13 +83,8 @@ struct StudioDetailView: View {
                         Text("아무것도 없음.")
                     }
                 } header: {
-                    VStack {
-                        StudioDetailTab(tabSelection: $tabSelection)
-                    }
-                    .background(
-                        Rectangle()
-                            .fill(.background)
-                    )
+                    StudioDetailTab(tabSelection: $tabSelection)
+                        .padding(16.0)
                 }
             }
         }
@@ -91,6 +96,16 @@ struct StudioDetailView: View {
                     thumbnail: studioInfo.profileImage,
                     title: studioInfo.name
                 )
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                HStack(spacing: 20.0) {
+                    Label("share", systemImage: "square.and.arrow.up")
+                    Label("heart",
+                          // TODO: 유저가 "좋아요" 눌렀는지에 따라 다르게 변경
+                          systemImage: "heart"
+                    )
+                }
             }
         }
         .navigationDestination(item: $selectedProduct) { product in
