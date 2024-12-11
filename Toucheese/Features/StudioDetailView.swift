@@ -13,7 +13,7 @@ struct StudioDetailView: View {
 //    let studioService: StudioService = DefaultStudioService()
     let studioService: StudioService = MockStudioService()
     
-    @State private var tabSelection: Int = 0
+    @State private var tabSelection: StudioDetailTabType = .price
     
     @State private var studioInfo: StudioInfo = .init(
         id: 0,
@@ -48,7 +48,6 @@ struct StudioDetailView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 4.0) {
                         Text(studioInfo.name)
-//                            .font(.headline)
                             .font(.system(size: 18.0))
                             .bold()
                             .padding(.bottom, 8.0)
@@ -71,20 +70,20 @@ struct StudioDetailView: View {
                 
                 Section {
                     switch tabSelection {
-                    case 0:
+                    case .price:
                         StudioProductListView(
                             notice: studioInfo.description,
                             productList: studioItems,
                             selectedProduct: $selectedProduct
                         )
-                    case 1:
+                    case .review:
                         studioReviewListView
-                    default:
-                        Text("아무것도 없음.")
                     }
                 } header: {
-                    StudioDetailTab(tabSelection: $tabSelection)
-                        .padding(16.0)
+                    StudioDetailTabBar(tabSelection: $tabSelection)
+//                        .padding(16.0)
+                        .padding(8.0)
+                        .background(.background)
                 }
             }
         }
