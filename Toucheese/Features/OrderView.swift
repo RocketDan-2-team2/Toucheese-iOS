@@ -111,6 +111,7 @@ struct OrderView: View {
             Spacer()
             
             Button {
+                //TODO: 실패했을 때는?? 아직 생각 안 해봄
                 createOrder()
             } label: {
                 Capsule()
