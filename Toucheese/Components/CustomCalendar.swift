@@ -19,14 +19,16 @@ struct CustomCalendar: View {
     init(selectedDate: Binding<Date>, calendar: Foundation.Calendar = Calendar.current) {
         self._selectedDate = selectedDate
         self.calendar = calendar
-        
-        weekdaySymbols = calendar.shortWeekdaySymbols
+        self.weekdaySymbols = calendar.shortWeekdaySymbols
     }
     
     var body: some View {
         VStack {
             headerView
             calendarGridView
+        }
+        .onAppear {
+            month = selectedDate
         }
     }
     
