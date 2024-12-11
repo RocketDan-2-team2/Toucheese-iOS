@@ -166,8 +166,8 @@ struct OrderView: View {
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
-            } receiveValue: { val in
-                isSuccessOrder = val
+            } receiveValue: { result in
+                isSuccessOrder = result
             }
             .store(in: &bag)
     }
