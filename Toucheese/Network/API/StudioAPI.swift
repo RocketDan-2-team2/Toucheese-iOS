@@ -15,6 +15,7 @@ enum StudioAPI {
     case studioDetailReview(studioID: Int)
     case productDetail(itemID: Int)
     case reviewDetail(reviewID: Int)
+    case studioHours(studioID: Int)
 }
 
 extension StudioAPI: BaseAPI {
@@ -35,19 +36,22 @@ extension StudioAPI: BaseAPI {
             "/item/\(itemID)/details"
         case .reviewDetail(let reviewID):
             "/review/\(reviewID)/details"
+        case .studioHours(let studioID):
+            "/\(studioID)/date"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .concept, .studioDetailProduct, .studioDetailReview, .productDetail, .reviewDetail: .get
-        case .search : .post
+        case .concept, .studioDetailProduct, .studioDetailReview, .productDetail, .reviewDetail, .studioHours:
+                .get
+        case .search: .post
         }
     }
     
     var task: Moya.Task {
         switch self {
-        case .concept, .studioDetailProduct, .studioDetailReview, .productDetail, .reviewDetail:
+        case .concept, .studioDetailProduct, .studioDetailReview, .productDetail, .reviewDetail, .studioHours:
                 .requestPlain
         case .search(_, let parameters):
                 .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
