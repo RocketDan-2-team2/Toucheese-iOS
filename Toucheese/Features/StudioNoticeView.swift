@@ -15,25 +15,20 @@ struct StudioNoticeView: View {
     var body: some View {
         HStack(alignment: .top) {
             Image(systemName: "megaphone.fill")
-                .resizable()
-                .frame(width: 16, height: 14)
-                .foregroundStyle(.orange)
             
             Text(notice)
-                .font(.system(size: 14))
                 .lineLimit(isExpanded ? nil : 2)
             
             Spacer()
             
-            Image(systemName: isExpanded ? "arrowtriangle.up.fill" : "arrowtriangle.down.fill")
+            Image(systemName: isExpanded ? "arrowtriangle.up" : "arrowtriangle.down")
                 .resizable()
-                .foregroundStyle(.gray)
-                .frame(width: 10, height: 6)
+                .frame(width: 14, height: 10)
                 .padding(4)
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(.placeholder.opacity(0.3))
+        .background(Color(uiColor: .lightGray))
         .clipShape(.rect(cornerRadius: 20))
         .onTapGesture {
             isExpanded.toggle()
