@@ -15,12 +15,18 @@ struct OrderView: View {
     @State private var bag = Set<AnyCancellable>()
     
     @State private var selectedPayment: PaymentType = .pg
+    @State private var isSuccessOrder: Bool = false
     
     let studio: StudioInfo
     let product: StudioProduct
     let selectedOptions: [StudioProductOption]
     let totalPrice: Int
     let selectedDate: Date
+    let user: UserEntity = .init(
+        name: "강미미",
+        phone: "010-1234-5678",
+        email: "toucheeseeni@gmail.com"
+    )
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -36,9 +42,9 @@ struct OrderView: View {
                     }
                     //TODO: 임시
                     VStack(alignment: .leading) {
-                        Text("강미미")
-                        Text("010-1111-1111")
-                        Text("kang@hanmail.net")
+                        Text("\(user.name)")
+                        Text("\(user.phone)")
+                        Text("\(user.email)")
                             .tint(.black)
                     }
                     .padding(.leading, 50)
@@ -79,7 +85,8 @@ struct OrderView: View {
                                 ForEach(selectedOptions) { option in
                                     Text("\(option.price)원")
                                 }
-                                Text("\(totalPrice)원")
+                                Text("\(selectedDate)")
+                                    .lineLimit(1)
                             }
                         }
                     }
@@ -121,6 +128,9 @@ struct OrderView: View {
         .navigationTitle("주문/결제")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
+        .navigationDestination(isPresented: $isSuccessOrder, destination: {
+            OrderSuccessView()
+        })
     }
     
     private func createOrder() {
@@ -133,13 +143,17 @@ struct OrderView: View {
         
         let item = ItemDTO(itemId: product.id, itemQuantity: 1, optionDtoList: newOptionList)
         
+        //TODO: 재웅님이 어떻게 넘겨주냐에 따라 달라질 듯 !
+        guard let timeZone = TimeZone(abbreviation: "KST") else { return }
+        let dateString = ISO8601DateFormatter.string(from: selectedDate, timeZone: timeZone, formatOptions: [.withFullDate, .withTime, .withColonSeparatorInTime])
+        
         let newOrder = OrderEntity(
-            name: "강미미",
-            email: "kang@hanmail.net",
-            phone: "010-1111-1111",
-            studioID: studio.id,
-            orderDateTime: selectedDate,
-            itemDto: [item]
+            name: "\(user.name)",
+            email: "\(user.email)",
+            phone: "\(user.phone)",
+            studioId: studio.id,
+            orderDateTime: dateString,
+            itemDtos: [item]
         )
         
         orderService.createOrder(order: newOrder)
@@ -150,8 +164,8 @@ struct OrderView: View {
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
-            } receiveValue: { _ in
-                //TODO: 성공이면 뷰 전환하기
+            } receiveValue: { val in
+                isSuccessOrder = val
             }
             .store(in: &bag)
     }
