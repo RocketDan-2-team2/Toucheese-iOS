@@ -13,7 +13,6 @@ struct OrderEntity: Encodable, Hashable {
     let phone: String
     let studioId: Int
     let orderDateTime: String
-    //TODO: 여기 왜 배열인지 물어보기
     let itemDtos: [ItemDTO]
 }
 

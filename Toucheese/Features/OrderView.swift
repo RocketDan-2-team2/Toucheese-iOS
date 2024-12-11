@@ -40,7 +40,6 @@ struct OrderView: View {
                         Text("연락처")
                         Text("이메일")
                     }
-                    //TODO: 임시
                     VStack(alignment: .leading) {
                         Text("\(user.name)")
                         Text("\(user.phone)")
@@ -135,6 +134,10 @@ struct OrderView: View {
     
     private func createOrder() {
         
+        //TODO: 재웅님이 어떻게 넘겨주냐에 따라 달라질 듯 !
+        guard let timeZone = TimeZone(abbreviation: "KST") else { return }
+        let dateString = ISO8601DateFormatter.string(from: selectedDate, timeZone: timeZone, formatOptions: [.withFullDate, .withTime, .withColonSeparatorInTime])
+        
         var newOptionList: [OptionDTO] = []
         for option in selectedOptions {
             let newOption = OptionDTO(optionId: option.id, optionQuantity: 1)
@@ -142,11 +145,6 @@ struct OrderView: View {
         }
         
         let item = ItemDTO(itemId: product.id, itemQuantity: 1, optionDtoList: newOptionList)
-        
-        //TODO: 재웅님이 어떻게 넘겨주냐에 따라 달라질 듯 !
-        guard let timeZone = TimeZone(abbreviation: "KST") else { return }
-        let dateString = ISO8601DateFormatter.string(from: selectedDate, timeZone: timeZone, formatOptions: [.withFullDate, .withTime, .withColonSeparatorInTime])
-        
         let newOrder = OrderEntity(
             name: "\(user.name)",
             email: "\(user.email)",
