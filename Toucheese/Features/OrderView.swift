@@ -41,9 +41,9 @@ struct OrderView: View {
                         Text("이메일")
                     }
                     VStack(alignment: .leading) {
-                        Text("\(user.name)")
-                        Text("\(user.phone)")
-                        Text("\(user.email)")
+                        Text(user.name)
+                        Text(user.phone)
+                        Text(user.email)
                             .tint(.black)
                     }
                     .padding(.leading, 50)
@@ -147,9 +147,9 @@ struct OrderView: View {
         
         let item = ItemDTO(itemId: product.id, itemQuantity: 1, orderRequestOptionDtos: newOptionList)
         let newOrder = OrderEntity(
-            name: "\(user.name)",
-            email: "\(user.email)",
-            phone: "\(user.phone)",
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
             studioId: studio.id,
             orderDateTime: dateString,
             orderRequestItemDtos: [item]

@@ -39,10 +39,6 @@ extension BaseAPI {
     var validationType: ValidationType {
         return .customCodes(Array(200..<500))
     }
-    
-    var parameterEncoding: ParameterEncoding {
-        return JSONEncoding.default
-    }
 }
 
 
