@@ -16,29 +16,31 @@ struct ConceptView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Text("터치즈 로고")
-                .font(.title)
+                .font (.title)
             
-            Spacer()
-            
-            LazyVGrid(columns: [GridItem](
-                repeating: .init(.flexible()),
-                count: 2
-            )) {
-                ForEach(conceptList) { concept in
-                    ConceptButton(
-                        conceptImage: concept.image ?? "",
-                        conceptName: concept.name
-                    ) {
-                        selectedConcept = concept
+            ScrollView {
+                LazyVGrid(
+                    columns: [GridItem](
+                        repeating: .init(.flexible()),
+                        count: 2
+                    ),
+                    spacing: 12
+                ) {
+                    ForEach(conceptList) { concept in
+                        ConceptButton(
+                            conceptImage: concept.image ?? "",
+                            conceptName: concept.name
+                        ) {
+                            selectedConcept = concept
+                        }
                     }
                 }
+                .padding()
             }
-            
-            Spacer()
+            .scrollIndicators(.hidden)
         }
-        .padding()
         .toolbar(.hidden, for: .navigationBar)
         .navigationDestination(item: $selectedConcept) { concept in
             StudioListView(concept: concept)

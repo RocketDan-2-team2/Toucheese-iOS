@@ -12,53 +12,45 @@ struct ConceptButton: View {
     let conceptImage: String
     let conceptName: String
     
-    let tapAction: (() -> Void)?
-    
-    init(
-        conceptImage: String,
-        conceptName: String,
-        tapAction: (() -> Void)? = nil
-    ) {
-        self.conceptImage = conceptImage
-        self.conceptName = conceptName
-        self.tapAction = tapAction
-    }
+    var tapAction: (() -> Void)?
     
     var body: some View {
         Button {
             tapAction?()
         } label: {
-            VStack(spacing: 0) {
+            VStack(spacing: 2) {
                 AsyncImage(url: URL(string: conceptImage)) { phase in
                     switch phase {
                     case .success(let image):
                         image
                             .resizable()
-                            .scaledToFit()
+                            .scaledToFill()
                     default:
-                        Rectangle()
-                            .fill(.clear)
+                        Color.clear
                             .skeleton(
                                 with: true,
                                 appearance: .gradient(
                                     color: Color(uiColor: .lightGray).opacity(0.5),
-                                    background: .clear
+                                    background: Color(uiColor: .lightGray).opacity(0.3)
                                 ),
                                 shape: .rectangle
                             )
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .aspectRatio(9 / 11, contentMode: .fill)
+                .aspectRatio(9 / 11, contentMode: .fit)
+                .clipShape(.rect(cornerRadius: 20))
+                .shadow(
+                    color: .black.opacity(0.1),
+                    radius: 8,
+                    y: 2
+                )
                 
                 Text(conceptName)
-                    .font(.system(size: 12))
+                    .font(.system(size: 14, weight: .semibold))
                     .padding(.vertical, 4)
             }
-            .background(.placeholder.opacity(0.5))
-            .clipShape(.rect(cornerRadius: 20))
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
     }
 }
 
