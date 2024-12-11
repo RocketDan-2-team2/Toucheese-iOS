@@ -21,6 +21,8 @@ extension BaseAPI {
         switch Self.apiType {
         case .studio:
             base += "/studio"
+        case .order:
+            base += "/order"
         }
         
         guard let url = URL(string: base) else {
@@ -37,12 +39,12 @@ extension BaseAPI {
     var validationType: ValidationType {
         return .customCodes(Array(200..<500))
     }
-    
 }
 
 
 enum APIType {
     case studio
+    case order
 }
 
 enum HeaderType {

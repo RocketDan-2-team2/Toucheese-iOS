@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct StudioProductDetailView: View {
+    let studio: StudioInfo
     @State private var product: StudioProduct
     
     // MARK: 캘린더 API에 따라 달라질 예정. 현재 임시 값
@@ -34,8 +35,9 @@ struct StudioProductDetailView: View {
             $0 + $1.price * $1.count
         }
     }
-    
-    init(product: StudioProduct) {
+
+    init(studio: StudioInfo, product: StudioProduct) {
+        self.studio = studio
         self.product = product
         self.selectedDate = selectedDate
     }
@@ -110,17 +112,18 @@ struct StudioProductDetailView: View {
                     }
                 }
                 
-                Button {
-                    
-                } label: {
+                NavigationLink(destination: {
+                    //TODO: Date 임시
+                    OrderView(studio: studio, product: product, totalPrice: totalPrice, selectedDate: selectedDate)
+                }, label: {
                     Capsule()
                         .fill(.yellow)
                         .frame(height: 40)
                         .overlay {
                             Text("주문하기 (₩\(totalPrice))")
+                                .tint(.black)
                         }
-                }
-                .buttonStyle(.plain)
+                })
             }
             .padding(.horizontal, 36)
         }
@@ -159,5 +162,7 @@ struct StudioProductDetailView: View {
 }
 
 #Preview {
-    StudioProductDetailView(product: .mockData[0])
+    NavigationStack {
+        StudioProductDetailView(studio: .mockData(), product: .mockData[0])
+    }
 }
