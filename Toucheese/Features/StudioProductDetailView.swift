@@ -35,10 +35,6 @@ struct StudioProductDetailView: View {
             $0 + $1.price * $1.count
         }
     }
-    
-    private var selectedOptions: [StudioProductOption] {
-        product.optionList.filter { $0.count > 0 }
-    }
 
     init(studio: StudioInfo, product: StudioProduct) {
         self.studio = studio
@@ -118,7 +114,7 @@ struct StudioProductDetailView: View {
                 
                 NavigationLink(destination: {
                     //TODO: Date 임시
-                    OrderView(studio: studio, product: product, selectedOptions: selectedOptions, totalPrice: totalPrice, selectedDate: selectedDate)
+                    OrderView(studio: studio, product: product, totalPrice: totalPrice, selectedDate: selectedDate)
                 }, label: {
                     Capsule()
                         .fill(.yellow)

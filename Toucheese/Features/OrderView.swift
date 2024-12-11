@@ -19,7 +19,6 @@ struct OrderView: View {
     
     let studio: StudioInfo
     let product: StudioProduct
-    let selectedOptions: [StudioProductOption]
     let totalPrice: Int
     let selectedDate: Date
     let user: UserEntity = .init(
@@ -27,6 +26,10 @@ struct OrderView: View {
         phone: "010-1234-5678",
         email: "toucheeseeni@gmail.com"
     )
+    
+    private var selectedOptions: [StudioProductOption] {
+        product.optionList.filter { $0.count > 0 }
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
