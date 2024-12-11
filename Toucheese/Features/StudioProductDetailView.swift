@@ -98,7 +98,7 @@ struct StudioProductDetailView: View {
                         .bold()
                     
                     HStack {
-                        Text(calculatedDateNTime)
+                        Text(selectedDate.formatted())
                         
                         Spacer()
                         
@@ -147,7 +147,6 @@ struct StudioProductDetailView: View {
                     
                     BookingTimePicker(
                         selectedDate: $selectedDate,
-                        selectedTime: $selectedTime,
                         openedHoursArr: []
                     )
                 }
