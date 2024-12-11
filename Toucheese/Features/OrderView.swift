@@ -199,7 +199,7 @@ struct OrderView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarRole(.editor)
                 .navigationDestination(isPresented: $isSuccessOrder, destination: {
-                    OrderSuccessView()
+                    OrderSuccessView(studio: studio, product: product, totalPrice: totalPrice, selectedDate: selectedDate, selectedOptions: selectedOptions)
                 })
             }
     }
