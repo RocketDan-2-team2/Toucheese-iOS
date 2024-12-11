@@ -142,13 +142,13 @@ struct OrderView: View {
         guard let timeZone = TimeZone(abbreviation: "KST") else { return }
         let dateString = ISO8601DateFormatter.string(from: selectedDate, timeZone: timeZone, formatOptions: [.withFullDate, .withTime, .withColonSeparatorInTime])
         
-        var newOptionList: [OptionDTO] = []
+        var newOptionList: [OptionRequestEntity] = []
         for option in selectedOptions {
-            let newOption = OptionDTO(optionId: option.id, optionQuantity: 1)
+            let newOption = OptionRequestEntity(optionId: option.id, optionQuantity: 1)
             newOptionList.append(newOption)
         }
         
-        let item = ItemDTO(itemId: product.id, itemQuantity: 1, orderRequestOptionDtos: newOptionList)
+        let item = ItemRequestEntity(itemId: product.id, itemQuantity: 1, orderRequestOptionDtos: newOptionList)
         let newOrder = OrderEntity(
             name: user.name,
             email: user.email,
