@@ -25,6 +25,7 @@ protocol StudioService {
     func getStudioReviews(studioID: Int) -> AnyPublisher<StudioDetailEntity, Error>
     func getStudioProductDetail(productID: Int) -> AnyPublisher<StudioProductEntity, Error>
     func getReviewDetail(reviewID: Int) -> AnyPublisher<ReviewEntity, Error>
+    func getStudioHours(studioID: Int) -> AnyPublisher<[StudioHoursEntity], Error>
 }
 
 
@@ -81,6 +82,10 @@ extension DefaultStudioService: StudioService {
     
     func getReviewDetail(reviewID: Int) -> AnyPublisher<ReviewEntity, any Error> {
         requestObjectWithNetworkError(.reviewDetail(reviewID: reviewID))
+    }
+    
+    func getStudioHours(studioID: Int) -> AnyPublisher<[StudioHoursEntity], any Error> {
+        requestObjectWithNetworkError(.studioHours(studioID: studioID))
     }
     
 }
@@ -317,6 +322,14 @@ extension MockStudioService: StudioService {
             )
             
             promise(.success(studioProduct))
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getStudioHours(studioID: Int) -> AnyPublisher<[StudioHoursEntity], any Error> {
+        return Future { promise in
+            let hours: [StudioHoursEntity] = StudioHoursEntity.mockData
+            promise(.success(hours))
         }
         .eraseToAnyPublisher()
     }
