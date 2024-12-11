@@ -51,7 +51,7 @@ struct StudioListView: View {
                             .frame(height: 5.0)
                             .onAppear {
                                 if studioViewModel.studioList.isEmpty { return }
-                                studioViewModel.fetchStudioList()
+                                studioViewModel.searchStudio()
                             }
                     }
                     .ignoresSafeArea()
@@ -64,6 +64,7 @@ struct StudioListView: View {
                     }
                 }
                 .refreshable {
+                    studioViewModel.setDefaultPage()
                     studioViewModel.searchStudio()
                 }
                 .navigationDestination(item: $selectedStudio) { studio in

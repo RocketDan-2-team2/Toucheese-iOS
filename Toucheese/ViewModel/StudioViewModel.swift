@@ -14,90 +14,35 @@ class StudioViewModel: ObservableObject {
     let studioService: StudioService = DefaultStudioService()
     
     @Published var concept: ConceptEntity = ConceptEntity(id: 0, name: "init", image: nil)
-    @Published var selectedRegion: [RegionType] = []
-    @Published var selectedRating: RatingType?
-    @Published var selectedPrice: PriceType?
+    @Published var selectedRegion: [RegionType] = [] {
+        didSet {
+            setDefaultPage()
+            searchStudio()
+        }
+    }
+    @Published var selectedRating: RatingType? {
+        didSet {
+            setDefaultPage()
+            searchStudio()
+        }
+    }
+    @Published var selectedPrice: PriceType? {
+        didSet {
+            setDefaultPage()
+            searchStudio()
+        }
+    }
     
     @Published private(set) var studioList: [StudioEntity] = []
     
     private var bag = Set<AnyCancellable>()
     
     private var nextPage = 0
-    private var pageSize = 10
+    private let pageSize = 10
     private var isLastPage = false
-    
-    init() {
-        Publishers.CombineLatest3(
-            $selectedRegion,
-            $selectedRating,
-            $selectedPrice
-        )
-            .sink { [weak self] region, rating, price in
-                self?.searchStudio(region: region, rating: rating, price: price)
-            }
-            .store(in: &bag)
-    }
     
     // 처음 스튜디오 리스트 불러올 때, 혹은 필터가 바뀌었을때 사용됨
     func searchStudio() {
-        
-        if !(1...6 ~= concept.id) { return }
-        
-        setDefaultPage()
-        
-        studioService.searchStudio(
-            conceptID: concept.id,
-            region: self.selectedRegion,
-            popularity: self.selectedRating,
-            price: self.selectedPrice,
-            page: self.nextPage,
-            size: self.pageSize
-        ).sink { event in
-            switch event {
-            case .finished:
-                print("Event: \(event)")
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        } receiveValue: { searchResult in
-            self.studioList = searchResult.content
-            self.toNextPage(searchResult: searchResult)
-        }
-        .store(in: &bag)
-    }
-    
-    // 처음 스튜디오 리스트 불러올 때, 혹은 필터가 바뀌었을때 사용됨
-    func searchStudio(region: [RegionType], rating: RatingType?, price: PriceType?) {
-        
-        if !(1...6 ~= concept.id) { return }
-
-        setDefaultPage()
-        
-        studioService.searchStudio(
-            conceptID: concept.id,
-            region: region,
-            popularity: rating,
-            price: price,
-            page: self.nextPage,
-            size: self.pageSize
-        ).sink { event in
-            switch event {
-            case .finished:
-                print("Event: \(event)")
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        } receiveValue: { searchResult in
-            self.studioList = searchResult.content
-            self.toNextPage(searchResult: searchResult)
-        }
-        .store(in: &bag)
-    }
-    
-    // 다음 페이지 호출할때 사용됨
-    func fetchStudioList() {
-        
-        if !(1...6 ~= concept.id) { return }
         
         if isLastPage { return }
         
@@ -115,9 +60,9 @@ class StudioViewModel: ObservableObject {
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        } receiveValue: { searchResult in
-            self.studioList += searchResult.content
-            self.toNextPage(searchResult: searchResult)
+        } receiveValue: { [weak self] searchResult in
+            self?.studioList += searchResult.content
+            self?.toNextPage(searchResult: searchResult)
         }
         .store(in: &bag)
     }
@@ -134,8 +79,9 @@ class StudioViewModel: ObservableObject {
     }
     
     // 페이징 초기화
-    private func setDefaultPage() {
+    func setDefaultPage() {
         self.nextPage = 0
+        self.studioList.removeAll()
         self.isLastPage = false
     }
 }
