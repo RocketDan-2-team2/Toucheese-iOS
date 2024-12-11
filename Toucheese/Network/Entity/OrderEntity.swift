@@ -13,13 +13,13 @@ struct OrderEntity: Encodable, Hashable {
     let phone: String
     let studioId: Int
     let orderDateTime: String
-    let itemDtos: [ItemDTO]
+    let orderRequestItemDtos: [ItemDTO]
 }
 
 struct ItemDTO: Encodable, Hashable {
     let itemId: Int
     let itemQuantity: Int
-    let optionDtoList: [OptionDTO]
+    let orderRequestOptionDtos: [OptionDTO]
 }
 
 struct OptionDTO: Encodable, Hashable {

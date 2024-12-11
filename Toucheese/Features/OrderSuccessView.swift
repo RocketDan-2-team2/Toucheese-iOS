@@ -36,6 +36,7 @@ struct OrderSuccessView: View {
             })
             .padding(.bottom, 80)
         }
+        .toolbar(.hidden)
     }
 }
 

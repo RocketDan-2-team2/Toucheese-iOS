@@ -145,14 +145,14 @@ struct OrderView: View {
             newOptionList.append(newOption)
         }
         
-        let item = ItemDTO(itemId: product.id, itemQuantity: 1, optionDtoList: newOptionList)
+        let item = ItemDTO(itemId: product.id, itemQuantity: 1, orderRequestOptionDtos: newOptionList)
         let newOrder = OrderEntity(
             name: "\(user.name)",
             email: "\(user.email)",
             phone: "\(user.phone)",
             studioId: studio.id,
             orderDateTime: dateString,
-            itemDtos: [item]
+            orderRequestItemDtos: [item]
         )
         
         orderService.createOrder(order: newOrder)
