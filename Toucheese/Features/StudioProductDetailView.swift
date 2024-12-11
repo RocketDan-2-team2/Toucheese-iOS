@@ -118,7 +118,7 @@ struct StudioProductDetailView: View {
                 
                 NavigationLink(destination: {
                     //TODO: Date 임시
-                    OrderView(studio: studio, product: product, selectedOptions: selectedOptions, totalPrice: totalPrice, selectedDate: Date())
+                    OrderView(studio: studio, product: product, selectedOptions: selectedOptions, totalPrice: totalPrice, selectedDate: selectedDate)
                 }, label: {
                     Capsule()
                         .fill(.yellow)

@@ -33,7 +33,15 @@ extension OrderAPI: BaseAPI {
     var task: Moya.Task {
         switch self {
         case .create(let order):
-                .requestCustomJSONEncodable(order, encoder: JSONEncoder())
+            do {
+                let jsonData = try JSONEncoder().encode(order)
+                if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    print("Encoded JSON: \(jsonString)")
+                }
+            } catch {
+                print("Failed to encode order: \(error)")
+            }
+            return .requestCustomJSONEncodable(order, encoder: JSONEncoder())
         }
     }
     

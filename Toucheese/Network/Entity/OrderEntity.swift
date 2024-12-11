@@ -11,10 +11,10 @@ struct OrderEntity: Encodable, Hashable {
     let name: String
     let email: String
     let phone: String
-    let studioID: Int
-    let orderDateTime: Date
+    let studioId: Int
+    let orderDateTime: String
     //TODO: 여기 왜 배열인지 물어보기
-    let itemDto: [ItemDTO]
+    let itemDtos: [ItemDTO]
 }
 
 struct ItemDTO: Encodable, Hashable {
