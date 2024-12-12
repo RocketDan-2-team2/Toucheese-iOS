@@ -11,9 +11,8 @@ import Combine
 struct StudioDetailView: View {
     
     let studioService: StudioService = DefaultStudioService()
-//    let studioService: StudioService = MockStudioService()
     
-    @State private var tabSelection: Int = 0
+    @State private var tabSelection: StudioDetailTabType = .price
     
     @State private var studioInfo: StudioInfo = .init(
         id: 0,
@@ -32,10 +31,16 @@ struct StudioDetailView: View {
     
     @State private var bag = Set<AnyCancellable>()
     
+    @State private var onLoading: Bool = true
+    
     let studioId: Int
     let gridItems: [GridItem] = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]
+    
+    init(studioId: Int) {
+        self.studioId = studioId
+    }
     
     var body: some View {
         ScrollView {
@@ -45,45 +50,86 @@ struct StudioDetailView: View {
                         length * 0.3
                     }
                 
-                HStack {
-                    VStack(alignment: .leading) {
-                        Label(
-                            "\(studioInfo.popularity, specifier: "%.1f")",
-                            systemImage: "star"
-                        )
-                        Label(studioInfo.dutyDate, systemImage: "clock")
-                        Label(studioInfo.address, systemImage: "map")
+                VStack(alignment: .leading, spacing: 4.0) {
+                    HStack {
+                        Text(studioInfo.name)
+                            .font(.system(size: 18.0))
+                            .bold()
+                        Spacer()
                     }
-                    .padding(20.0)
-                    .font(.system(size: 14.0))
-                    Spacer()
+                    .skeleton(
+                        with: onLoading,
+                        size: CGSize(width: .infinity, height: 22.0),
+                        appearance: .gradient(
+                            color: Color(uiColor: .lightGray).opacity(0.5),
+                            background: Color(uiColor: .lightGray).opacity(0.3)
+                        ),
+                        shape: .rectangle
+                    )
+                    .padding(.bottom, 8.0)
+                    
+                    Label(
+                        "\(studioInfo.popularity, specifier: "%.1f")",
+                        systemImage: "star.fill"
+                    )
+                    .skeleton(
+                        with: onLoading,
+                        size: CGSize(width: 130.0, height: 16.0),
+                        appearance: .gradient(
+                            color: Color(uiColor: .lightGray).opacity(0.5),
+                            background: Color(uiColor: .lightGray).opacity(0.3)
+                        ),
+                        shape: .rectangle
+                    )
+                    
+                    Label(studioInfo.dutyDate, systemImage: "clock")
+                        .skeleton(
+                            with: onLoading,
+                            size: CGSize(width: .infinity, height: 16.0),
+                            appearance: .gradient(
+                                color: Color(uiColor: .lightGray).opacity(0.5),
+                                background: Color(uiColor: .lightGray).opacity(0.3)
+                            ),
+                            shape: .rectangle
+                        )
+                    
+                    Label(studioInfo.address, systemImage: "map")
+                        .skeleton(
+                            with: onLoading,
+                            size: CGSize(width: .infinity, height: 16.0),
+                            appearance: .gradient(
+                                color: Color(uiColor: .lightGray).opacity(0.5),
+                                background: Color(uiColor: .lightGray).opacity(0.3)
+                            ),
+                            shape: .rectangle
+                        )
                 }
+                .padding(20.0)
+                .font(.system(size: 14.0))
+                
+                Rectangle()
+                    .fill(Color(red: 250 / 255, green: 250 / 255, blue: 250 / 255))
+                    .frame(height: 8.0)
                 
                 Section {
                     switch tabSelection {
-                    case 0:
+                    case .price:
                         StudioProductListView(
                             notice: studioInfo.description,
                             productList: studioItems,
                             selectedProduct: $selectedProduct
                         )
-                    case 1:
+                    case .review:
                         studioReviewListView
-                    default:
-                        Text("아무것도 없음.")
                     }
                 } header: {
-                    VStack {
-                        StudioDetailTab(tabSelection: $tabSelection)
-                    }
-                    .background(
-                        Rectangle()
-                            .fill(.background)
-                    )
+                    StudioDetailTabBar(tabSelection: $tabSelection)
+                        .padding(8.0)
+                        .background(.background)
                 }
             }
         }
-        .onAppear{ fetchStudioDetail() }
+        .task { fetchStudioDetail() }
         .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -91,6 +137,16 @@ struct StudioDetailView: View {
                     thumbnail: studioInfo.profileImage,
                     title: studioInfo.name
                 )
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                HStack(spacing: 20.0) {
+                    Label("share", systemImage: "square.and.arrow.up")
+                    Label("heart",
+                          // TODO: 유저가 "좋아요" 눌렀는지에 따라 다르게 변경
+                          systemImage: "heart"
+                    )
+                }
             }
         }
         .navigationDestination(item: $selectedProduct) { product in
@@ -112,6 +168,7 @@ struct StudioDetailView: View {
         } receiveValue: { studioDetailEntity in
             self.studioInfo = studioDetailEntity.translateToInfo()
             self.studioItems = studioDetailEntity.translateToItems()
+            self.onLoading = false
         }
         .store(in: &bag)
         

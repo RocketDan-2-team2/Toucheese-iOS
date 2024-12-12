@@ -16,7 +16,7 @@ struct ThumbnailNavigationView: View {
         
         HStack(spacing: 10) {
             CachedAsyncImage(url: thumbnail)
-                .frame(width: 45, height: 45)
+                .frame(width: 32, height: 32)
                 .clipShape(.circle)
                 .overlay {
                     Circle()

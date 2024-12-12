@@ -17,7 +17,7 @@ struct StudioCarouselView: View {
     
     init(urls: [String]) {
         if urls.isEmpty {
-            self.urls = ["https://i.imgur.com/niY3nhv.jpeg"]
+            self.urls = [""]
         } else {
             self.urls = urls
         }
@@ -29,18 +29,27 @@ struct StudioCarouselView: View {
                 ForEach(urls.indices, id: \.self) { index in
                     Color(.systemBackground)
                         .overlay {
-//                            CachedAsyncImage(url: urls[index])
-//                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            AsyncImage(url: URL(string: urls[index])) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                            } placeholder: {
-                                ProgressView()
+                            AsyncImage(url: URL(string: urls[index])) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .brightness(-0.5)
+                                default:
+                                    Color.clear
+                                        .skeleton(
+                                            with: true,
+                                            appearance: .gradient(
+                                                color: Color(uiColor: .lightGray).opacity(0.5),
+                                                background: Color(uiColor: .lightGray).opacity(0.3)
+                                            ),
+                                            shape: .rectangle
+                                        )
+                                }
                             }
-                                
                         }
-                        .brightness(-0.5)
+                        .clipped()
                         .id(index + 1)
                         .containerRelativeFrame(.horizontal)
                 }
@@ -52,7 +61,8 @@ struct StudioCarouselView: View {
         .scrollTargetBehavior(.viewAligned)
         .overlay {
             pageIndicator
-                .padding(10.0)
+                .padding(.bottom, 10.5)
+                .padding(.trailing, 17.5)
         }
     }
     
@@ -63,7 +73,7 @@ struct StudioCarouselView: View {
                 Spacer()
                 if let pageId {
                     Text("\(pageId) / \(urls.count)")
-                        .padding(.horizontal, 20.0)
+                        .padding(.horizontal, 8.0)
                         .padding(.vertical, 2.0)
                         .foregroundStyle(.background)
                         .background {
