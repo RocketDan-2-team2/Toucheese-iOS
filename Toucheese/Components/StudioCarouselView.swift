@@ -17,7 +17,7 @@ struct StudioCarouselView: View {
     
     init(urls: [String]) {
         if urls.isEmpty {
-            self.urls = ["https://i.imgur.com/niY3nhv.jpeg"]
+            self.urls = [""]
         } else {
             self.urls = urls
         }
@@ -29,20 +29,27 @@ struct StudioCarouselView: View {
                 ForEach(urls.indices, id: \.self) { index in
                     Color(.systemBackground)
                         .overlay {
-//                            CachedAsyncImage(url: urls[index])
-//                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            AsyncImage(url: URL(string: urls[index])) { image in
-                                image
-                                    .resizable()
-//                                    .scaledToFit()
-                                    .scaledToFill()
-                            } placeholder: {
-                                ProgressView()
+                            AsyncImage(url: URL(string: urls[index])) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .brightness(-0.5)
+                                default:
+                                    Color.clear
+                                        .skeleton(
+                                            with: true,
+                                            appearance: .gradient(
+                                                color: Color(uiColor: .lightGray).opacity(0.5),
+                                                background: Color(uiColor: .lightGray).opacity(0.3)
+                                            ),
+                                            shape: .rectangle
+                                        )
+                                }
                             }
-                                
                         }
                         .clipped()
-                        .brightness(-0.5)
                         .id(index + 1)
                         .containerRelativeFrame(.horizontal)
                 }

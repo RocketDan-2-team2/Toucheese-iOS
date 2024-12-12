@@ -32,10 +32,16 @@ struct StudioDetailView: View {
     
     @State private var bag = Set<AnyCancellable>()
     
+    @State private var onLoading: Bool = true
+    
     let studioId: Int
     let gridItems: [GridItem] = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]
+    
+    init(studioId: Int) {
+        self.studioId = studioId
+    }
     
     var body: some View {
         ScrollView {
@@ -45,24 +51,62 @@ struct StudioDetailView: View {
                         length * 0.3
                     }
                 
-                HStack {
-                    VStack(alignment: .leading, spacing: 4.0) {
+                VStack(alignment: .leading, spacing: 4.0) {
+                    HStack {
                         Text(studioInfo.name)
                             .font(.system(size: 18.0))
                             .bold()
-                            .padding(.bottom, 8.0)
-                        Label(
-                            "\(studioInfo.popularity, specifier: "%.1f")",
-                            systemImage: "star.fill"
-                        )
-                        
-                        Label(studioInfo.dutyDate, systemImage: "clock")
-                        Label(studioInfo.address, systemImage: "map")
+                        Spacer()
                     }
-                    .padding(20.0)
-                    .font(.system(size: 14.0))
-                    Spacer()
+                    .skeleton(
+                        with: onLoading,
+                        size: CGSize(width: .infinity, height: 22.0),
+                        appearance: .gradient(
+                            color: Color(uiColor: .lightGray).opacity(0.5),
+                            background: Color(uiColor: .lightGray).opacity(0.3)
+                        ),
+                        shape: .rectangle
+                    )
+                    .padding(.bottom, 8.0)
+                    
+                    Label(
+                        "\(studioInfo.popularity, specifier: "%.1f")",
+                        systemImage: "star.fill"
+                    )
+                    .skeleton(
+                        with: onLoading,
+                        size: CGSize(width: 130.0, height: 16.0),
+                        appearance: .gradient(
+                            color: Color(uiColor: .lightGray).opacity(0.5),
+                            background: Color(uiColor: .lightGray).opacity(0.3)
+                        ),
+                        shape: .rectangle
+                    )
+                    
+                    Label(studioInfo.dutyDate, systemImage: "clock")
+                        .skeleton(
+                            with: onLoading,
+                            size: CGSize(width: .infinity, height: 16.0),
+                            appearance: .gradient(
+                                color: Color(uiColor: .lightGray).opacity(0.5),
+                                background: Color(uiColor: .lightGray).opacity(0.3)
+                            ),
+                            shape: .rectangle
+                        )
+                    
+                    Label(studioInfo.address, systemImage: "map")
+                        .skeleton(
+                            with: onLoading,
+                            size: CGSize(width: .infinity, height: 16.0),
+                            appearance: .gradient(
+                                color: Color(uiColor: .lightGray).opacity(0.5),
+                                background: Color(uiColor: .lightGray).opacity(0.3)
+                            ),
+                            shape: .rectangle
+                        )
                 }
+                .padding(20.0)
+                .font(.system(size: 14.0))
                 
                 Rectangle()
                     .fill(Color(red: 0.9804, green: 0.9804, blue: 0.9804))
@@ -81,13 +125,12 @@ struct StudioDetailView: View {
                     }
                 } header: {
                     StudioDetailTabBar(tabSelection: $tabSelection)
-//                        .padding(16.0)
                         .padding(8.0)
                         .background(.background)
                 }
             }
         }
-        .onAppear{ fetchStudioDetail() }
+        .task { fetchStudioDetail() }
         .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -126,6 +169,7 @@ struct StudioDetailView: View {
         } receiveValue: { studioDetailEntity in
             self.studioInfo = studioDetailEntity.translateToInfo()
             self.studioItems = studioDetailEntity.translateToItems()
+            self.onLoading = false
         }
         .store(in: &bag)
         
