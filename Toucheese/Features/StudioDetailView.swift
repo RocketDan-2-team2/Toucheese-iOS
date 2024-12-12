@@ -10,8 +10,7 @@ import Combine
 
 struct StudioDetailView: View {
     
-//    let studioService: StudioService = DefaultStudioService()
-    let studioService: StudioService = MockStudioService()
+    let studioService: StudioService = DefaultStudioService()
     
     @State private var tabSelection: StudioDetailTabType = .price
     
@@ -109,7 +108,7 @@ struct StudioDetailView: View {
                 .font(.system(size: 14.0))
                 
                 Rectangle()
-                    .fill(Color(red: 0.9804, green: 0.9804, blue: 0.9804))
+                    .fill(Color(red: 250 / 255, green: 250 / 255, blue: 250 / 255))
                     .frame(height: 8.0)
                 
                 Section {
