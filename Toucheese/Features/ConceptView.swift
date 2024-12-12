@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ConceptView: View {
+    
+    @EnvironmentObject private var navigationManger: NavigationManager
+    
     @State private var conceptList: [ConceptEntity]
-    @State private var selectedConcept: ConceptEntity?
     
     init(conceptList: [ConceptEntity]) {
         self.conceptList = conceptList
@@ -33,7 +35,9 @@ struct ConceptView: View {
                             conceptImage: concept.image ?? "",
                             conceptName: concept.name
                         ) {
-                            selectedConcept = concept
+                            navigationManger.path.append(
+                                .studioListView(concept: concept)
+                            )
                         }
                     }
                 }
@@ -42,9 +46,6 @@ struct ConceptView: View {
             .scrollIndicators(.hidden)
         }
         .toolbar(.hidden, for: .navigationBar)
-        .navigationDestination(item: $selectedConcept) { concept in
-            StudioListView(concept: concept)
-        }
     }
 }
 

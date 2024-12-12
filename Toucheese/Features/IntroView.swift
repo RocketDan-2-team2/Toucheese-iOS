@@ -9,16 +9,15 @@ import SwiftUI
 import Combine
 
 struct IntroView: View {
+    
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     let studioService: StudioService = DefaultStudioService()
     
-    @State private var conceptList: [ConceptEntity]?
     @State private var bag = Set<AnyCancellable>()
     
     var body: some View {
         Spacer()
-            .navigationDestination(item: $conceptList) { conceptList in
-                ConceptView(conceptList: conceptList)
-            }
             .task {
                 await fetchConceptList()
             }
@@ -42,7 +41,9 @@ struct IntroView: View {
                     print(error.localizedDescription)
                 }
             } receiveValue: { conceptList in
-                self.conceptList = conceptList
+                navigationManager.path.append(
+                    .conceptView(conceptList: conceptList)
+                )
             }
             .store(in: &bag)
     }

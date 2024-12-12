@@ -9,6 +9,8 @@ import SwiftUI
 
 struct OrderSuccessView: View {
     
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     let studio: StudioInfo
     let product: StudioProduct
     let totalPrice: Int
@@ -99,7 +101,7 @@ struct OrderSuccessView: View {
             
             HStack {
                 Button(action: {
-                    
+                    navigationManager.path.removeAll()
                 }, label: {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(.gray02)
@@ -112,6 +114,7 @@ struct OrderSuccessView: View {
                         }
                 })
                 Button(action: {
+                    //TODO: 예약 확인 페이지로 네비게이션
                     
                 }, label: {
                     RoundedRectangle(cornerRadius: 8)
