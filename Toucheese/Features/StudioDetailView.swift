@@ -207,7 +207,12 @@ struct StudioDetailView: View {
                                     print(error.localizedDescription)
                                 }
                             } receiveValue: { review in
-                                navigationManager.path.append(.reviewDetailView(review: review.reviewDto, user: review.userProfileDto))
+                                navigationManager.path.append(
+                                    .reviewDetailView(
+                                        review: review.reviewDto,
+                                        user: review.userProfileDto
+                                    )
+                                )
                             }
                             .store(in: &bag)
                     }
