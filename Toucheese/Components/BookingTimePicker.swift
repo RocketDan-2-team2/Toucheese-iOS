@@ -9,29 +9,61 @@ import SwiftUI
 
 struct BookingTimePicker: View {
     @Binding var selectedDate: Date
-    @Binding var selectedTime: Int
     
     @State var openedHoursArr: [[Int]] = Array(repeating: [10,11,14,15,16,17,20,21,22], count: 31)
     
-    private let tempOHArr = Array(repeating: [10,11,12,13,14,15,16,17,20,21,22], count: 31)
+    @State private var selectedTime: Int = 0
+    @State private var selectedButton: Int = 0
+    
+    @State private var isFirstInit: Bool = true
     
     private let gridRow = Array(repeating: GridItem(.adaptive(minimum: .infinity, maximum: .infinity)), count: 4)
     
-    @State private var selectedButton: Int?
+//      TODO: 임시값, 서버 통신시 변수 삭제 필.
+    private let tempOHArr = [[7,8,9,10,11,12,13,14,15,16,17,20,21,22],[],
+                             [10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14,],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],
+                             [10,11,12,13,14,15,16,17,20,21,22]]
     
-    ///이차원 배열로 시간을 받기위해 인덱스로 사용하려고 만들어진 일자 변수
-    ///처음에 selectedDate가 binding으로 현재 Date() 인스턴스를 받는다고 가정해서 언래핑함.
+    private var calculatedTime: Int {
+        let df = DateFormatter()
+        df.dateFormat = "HH"
+        df.timeZone = TimeZone.autoupdatingCurrent
+        let dateString = df.string(from: selectedDate)
+        return Int(dateString)!
+    }
+    //이차원 배열로 시간을 받기위해 인덱스로 사용하려고 만들어진 일자 변수.
+    //처음에 selectedDate가 binding으로 현재 Date() 인스턴스를 받는다고 가정해서 언래핑함.
+    //인덱스로 쓸거라서 마지막에 -1 함.
     private var calculatedDate: Int {
         let df = DateFormatter()
         df.dateFormat = "d"
+        df.timeZone = TimeZone.autoupdatingCurrent
         let temp = df.string(from: selectedDate)
         return Int(temp)! - 1
+    }
+//        TODO: tempOHArr는 나중에 전부 통신을 통해 받는 값으로 수정해줘야함.
+    private var buttonIndex: Int {
+        if let index = tempOHArr.firstIndex(of: [calculatedTime]) {
+            return index
+        } else {
+            if tempOHArr.isEmpty {
+                return 0
+            } else {
+                var maxNumIdx = 0
+                for i in 0..<tempOHArr[calculatedDate].count {
+                    if tempOHArr[calculatedDate][i] <= calculatedTime {
+                        maxNumIdx = i
+                    } else { break }
+                }
+                return maxNumIdx
+            }
+        }
     }
     
     var body: some View {
         VStack {
             CustomCalendar(selectedDate: $selectedDate)
-            
+                
 //            MARK: 하단 시간 선택 버튼
             VStack {
                 VStack {
@@ -42,10 +74,10 @@ struct BookingTimePicker: View {
                     }
                     .padding(.leading, 10)
                     
-                    TimeButtonGrid(columnsArr: gridRow,
-                                   timeArr: tempOHArr[calculatedDate], //openedHoursArr[calculatedDate],
-                                   selectedTime: $selectedTime,
+                    TimeButtonGrid(selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
+                                   columnsArr: gridRow,
+                                   timeArr: tempOHArr[calculatedDate],
                                    isAM: true)
                 }
                 .padding(.vertical)
@@ -58,31 +90,64 @@ struct BookingTimePicker: View {
                     }
                     .padding(.leading, 10)
                     
-                    TimeButtonGrid(columnsArr: gridRow,
-                                   timeArr: tempOHArr[calculatedDate], //openedHoursArr[calculatedDate],
-                                   selectedTime: $selectedTime,
+                    TimeButtonGrid(selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
+                                   columnsArr: gridRow,
+                                   timeArr: tempOHArr[calculatedDate],
                                    isAM: false)
                 }
             }
             .padding(.horizontal)
+            .onChange(of: selectedTime, { _, newValue in
+                updateSelectedDateWithTime(time: newValue)
+            })
+        }
+        .onChange(of: selectedDate) { oldValue, newValue in
+            if tempOHArr[calculatedDate].isEmpty == false {
+                let df = DateFormatter()
+                df.dateFormat = "yyyy-MM-dd"
+                let oldDate = df.string(from: oldValue)
+                let newDate = df.string(from: newValue)
+                
+                if oldDate != newDate {
+                    selectedButton = 0
+                    selectedTime = tempOHArr[calculatedDate][0]
+                }
+                
+                updateSelectedDateWithTime(time: selectedTime)
+                
+            } else {
+                selectedTime = 0
+            }
         }
         .onAppear {
-            print(openedHoursArr)
+            selectedTime = calculatedTime
+            selectedButton = buttonIndex
+        }
+    }
+    
+    private func updateSelectedDateWithTime(time: Int) {
+        var component = Calendar.current.dateComponents([.year, .month, .day], from: selectedDate)
+        component.hour = time
+        component.minute = 0
+        component.second = 0
+        
+        if let updatedDate = Calendar.current.date(from: component), updatedDate != selectedDate {
+            selectedDate = updatedDate
         }
     }
 }
 
 #Preview {
-    BookingTimePicker(selectedDate: .constant(Date()), selectedTime: .constant(10), openedHoursArr: [[1,2,3,4],[9,10,11,13,14,15],[]])
+    BookingTimePicker(selectedDate: .constant(Date()), openedHoursArr: [[1,2,3,4],[9,10,11,13,14,15],[]])
 }
 
 struct TimeButtonGrid: View {
+    @Binding var selectedTime: Int
+    @Binding var selectedButton: Int
+    
     let columnsArr: [GridItem]
     let timeArr: [Int]
-    
-    @Binding var selectedTime: Int
-    @Binding var selectedButton: Int?
     
     let isAM: Bool
     

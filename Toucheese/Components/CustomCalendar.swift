@@ -11,12 +11,24 @@ struct CustomCalendar: View {
     @Binding var selectedDate: Date
     
     @State private var month: Date = Date()
-    @State var offset: CGSize = CGSize()
+    @State private var offset: CGSize = CGSize()
+
+    private var calendar = Calendar(identifier: .gregorian)
+    private var weekdaySymbols: [String] = []
+    
+    init(selectedDate: Binding<Date>, calendar: Foundation.Calendar = Calendar.current) {
+        self._selectedDate = selectedDate
+        self.calendar = calendar
+        self.weekdaySymbols = calendar.shortWeekdaySymbols
+    }
     
     var body: some View {
         VStack {
             headerView
             calendarGridView
+        }
+        .onAppear {
+            month = selectedDate
         }
     }
     
@@ -44,11 +56,27 @@ struct CustomCalendar: View {
             .padding(.bottom)
             
             HStack {
-                ForEach(Self.weekdaySymbols, id: \.self) { symbol in
-                    Text(symbol)
-                        .font(.subheadline)
-                        .bold()
-                        .frame(maxWidth: .infinity)
+                ForEach(weekdaySymbols, id: \.self) { symbol in
+//                    TODO: Sun과 Sat은 절대 다수이나 전체 국가는 아니므로 다른 언어로(혹은 다른 스펠링으로) 나오게 될 경우에는 어떻게 처리할 지 고려해봐야함.(단순히 모든 locale의 경우를 다 때려박는거 말고)
+                    if symbol == "Sun" {
+                        Text(symbol)
+                            .foregroundStyle(Color.red)
+                            .font(.subheadline)
+                            .bold()
+                            .frame(maxWidth: .infinity)
+                    } else if symbol == "Sat" {
+                        Text(symbol)
+                            .foregroundStyle(Color.blue)
+                            .font(.subheadline)
+                            .bold()
+                            .frame(maxWidth: .infinity)
+                    } else {
+                        Text(symbol)
+                            .font(.subheadline)
+                            .bold()
+                            .frame(maxWidth: .infinity)
+                    }
+                    
                 }
             }
             Divider()
@@ -78,7 +106,7 @@ struct CustomCalendar: View {
                             }
                             .overlay {
                                 Circle()
-                                    .stroke(selectedDate == date ? .yellow : .clear,
+                                    .stroke(selectedDate.isSameDay(as: date) ? .yellow : .clear,
                                             lineWidth: 4)
                             }
                     }
@@ -144,8 +172,15 @@ extension CustomCalendar {
         formatter.dateFormat = "yyyy년 MM월"
         return formatter
     }()
-    
-    static let weekdaySymbols = Calendar.current.shortWeekdaySymbols
+}
+
+extension Date {
+    func isSameDay(as otherDate: Date) -> Bool {
+        let calendar = Calendar.current
+        let components1 = calendar.dateComponents([.year, .month, .day], from: self)
+        let components2 = calendar.dateComponents([.year, .month, .day], from: otherDate)
+        return components1 == components2
+    }
 }
 
 #Preview {
