@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct StudioProductDetailView: View {
     let studio: StudioInfo
@@ -35,6 +36,8 @@ struct StudioProductDetailView: View {
             $0 + $1.price * $1.count
         }
     }
+    
+    let studioService: StudioService = DefaultStudioService()
 
     init(studio: StudioInfo, product: StudioProduct) {
         self.studio = studio
@@ -93,23 +96,20 @@ struct StudioProductDetailView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("희망 날짜")
-                        .font(.headline)
-                        .bold()
-                    
                     HStack {
-                        Text(selectedDate.formatted())
-                        
+                        Text("희망 날짜")
+                            .font(.headline)
+                            .bold()
+
                         Spacer()
                         
-                        Button("날짜 선택") {
-                            showCalendar = true
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .foregroundStyle(.primary)
-                        .clipShape(.capsule)
-                        .tint(.yellow)
+                        Text(selectedDate.formatted())
                     }
+                    .padding(.bottom, 10)
+                    
+                    BookingTimePicker(
+                        selectedDate: $selectedDate,
+                        openedHoursArr: [])
                 }
                 
                 NavigationLink(destination: {
@@ -126,36 +126,6 @@ struct StudioProductDetailView: View {
                 })
             }
             .padding(.horizontal, 36)
-        }
-        .overlay {
-            if showCalendar {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        showCalendar = false
-                    }
-                
-                VStack {
-                    HStack {
-                        Spacer()
-                        
-                        Button("닫기") {
-                            showCalendar = false
-                        }
-                        .tint(.yellow)
-                    }
-                    
-                    BookingTimePicker(
-                        selectedDate: $selectedDate,
-                        openedHoursArr: []
-                    )
-                }
-                .padding()
-                .background(.background)
-                .clipShape(.rect(cornerRadius: 20))
-                .shadow(radius: 4, x: 1, y: 4)
-                .padding(.horizontal)
-            }
         }
     }
 }

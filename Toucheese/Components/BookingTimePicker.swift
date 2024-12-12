@@ -97,7 +97,6 @@ struct BookingTimePicker: View {
                                    isAM: false)
                 }
             }
-            .padding(.horizontal)
             .onChange(of: selectedTime, { _, newValue in
                 updateSelectedDateWithTime(time: newValue)
             })
@@ -167,7 +166,7 @@ struct TimeButtonGrid: View {
                         let tempNum: Int = filteredTimes[idx] <= 12 ? filteredTimes[idx] : filteredTimes[idx] - 12
                         Text("\(tempNum):00")
                             .foregroundStyle(.black)
-                            .padding(EdgeInsets(top: 2, leading: 10, bottom: 2, trailing: 10))
+                            .padding(2)
                             .frame(maxWidth: .infinity)
                             .background(Capsule().fill(buttonYellow))
                             .overlay {
@@ -175,6 +174,7 @@ struct TimeButtonGrid: View {
                                     .stroke(selectedButton == idx + offset ? .yellow : buttonYellow, lineWidth: 5)
                             }
                     }
+                    .padding(2)
                 }
             }
         }
