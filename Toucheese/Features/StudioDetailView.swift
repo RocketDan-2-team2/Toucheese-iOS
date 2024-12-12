@@ -59,12 +59,12 @@ struct StudioDetailView: View {
                     }
                     .skeleton(
                         with: onLoading,
-                        size: CGSize(width: .infinity, height: 22.0),
                         appearance: .gradient(
                             color: Color(uiColor: .lightGray).opacity(0.5),
                             background: Color(uiColor: .lightGray).opacity(0.3)
                         ),
-                        shape: .rectangle
+                        shape: .rectangle,
+                        scales: [0: 0.75]
                     )
                     .padding(.bottom, 8.0)
                     
@@ -74,34 +74,34 @@ struct StudioDetailView: View {
                     )
                     .skeleton(
                         with: onLoading,
-                        size: CGSize(width: 130.0, height: 16.0),
                         appearance: .gradient(
                             color: Color(uiColor: .lightGray).opacity(0.5),
                             background: Color(uiColor: .lightGray).opacity(0.3)
                         ),
-                        shape: .rectangle
+                        shape: .rectangle,
+                        scales: [0: 0.4]
                     )
                     
                     Label(studioInfo.dutyDate, systemImage: "clock")
                         .skeleton(
                             with: onLoading,
-                            size: CGSize(width: .infinity, height: 16.0),
                             appearance: .gradient(
                                 color: Color(uiColor: .lightGray).opacity(0.5),
                                 background: Color(uiColor: .lightGray).opacity(0.3)
                             ),
-                            shape: .rectangle
+                            shape: .rectangle,
+                            scales: [0: 0.7]
                         )
                     
                     Label(studioInfo.address, systemImage: "map")
                         .skeleton(
                             with: onLoading,
-                            size: CGSize(width: .infinity, height: 16.0),
                             appearance: .gradient(
                                 color: Color(uiColor: .lightGray).opacity(0.5),
                                 background: Color(uiColor: .lightGray).opacity(0.3)
                             ),
-                            shape: .rectangle
+                            shape: .rectangle,
+                            scales: [0: 1.0]
                         )
                 }
                 .padding(20.0)
