@@ -31,6 +31,14 @@ struct OrderView: View {
         product.optionList.filter { $0.count > 0 }
     }
     
+    private var selectedDateString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM월 dd일(E) a h시"
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        return formatter.string(from: selectedDate)
+    }
+    
     var body: some View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
@@ -73,8 +81,7 @@ struct OrderView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("\(studio.name)")
                                 .font(.system(size: 16, weight: .bold))
-                            //TODO: 날짜 어떻게 넘어오는지 확인하고 고치기
-                            Text("12월 24일(화) 오후 02:00")
+                            Text(selectedDateString)
                                 .font(.system(size: 16, weight: .medium))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -232,16 +239,17 @@ struct OrderView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarRole(.editor)
                 .navigationDestination(isPresented: $isSuccessOrder, destination: {
-                    OrderSuccessView(studio: studio, product: product, totalPrice: totalPrice, selectedDate: selectedDate, selectedOptions: selectedOptions)
+                    OrderSuccessView(studio: studio, product: product, totalPrice: totalPrice, selectedDate: selectedDateString, selectedOptions: selectedOptions)
                 })
             }
     }
     
     private func createOrder() {
         
-        //TODO: 재웅님이 어떻게 넘겨주냐에 따라 달라질 듯 !
         guard let timeZone = TimeZone(abbreviation: "KST") else { return }
-        let dateString = ISO8601DateFormatter.string(from: selectedDate, timeZone: timeZone, formatOptions: [.withFullDate, .withTime, .withColonSeparatorInTime])
+        let dateString = ISO8601DateFormatter.string(from: selectedDate,
+                                                     timeZone: timeZone,
+                                                     formatOptions: [.withFullDate, .withTime, .withColonSeparatorInTime])
         
         var newOptionList: [OptionRequestEntity] = []
         for option in selectedOptions {

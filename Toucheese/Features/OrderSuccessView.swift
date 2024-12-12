@@ -12,7 +12,7 @@ struct OrderSuccessView: View {
     let studio: StudioInfo
     let product: StudioProduct
     let totalPrice: Int
-    let selectedDate: Date
+    let selectedDate: String
     let selectedOptions: [StudioProductOption]
     
     var body: some View {
@@ -31,8 +31,7 @@ struct OrderSuccessView: View {
                 Text("\(studio.name)")
                     .font(.system(size: 16, weight: .bold))
                     .padding(.bottom, 8)
-                //TODO: 날짜 받으면 바꾸기
-                Text("12월 24일(화) 오후 02:00")
+                Text(selectedDate)
                     .font(.system(size: 16, weight: .bold))
                     .foregroundStyle(.blue)
                 Rectangle()
