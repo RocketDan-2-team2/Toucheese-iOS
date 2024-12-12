@@ -42,7 +42,7 @@ struct BookingTimePicker: View {
         return Int(temp)! - 1
     }
 //        TODO: tempOHArr는 나중에 전부 통신을 통해 받는 값으로 수정해줘야함.
-    private var buttonIdx: Int {
+    private var buttonIndex: Int {
         if let index = tempOHArr.firstIndex(of: [calculatedTime]) {
             return index
         } else {
@@ -64,7 +64,6 @@ struct BookingTimePicker: View {
         VStack {
             CustomCalendar(selectedDate: $selectedDate)
                 
-            
 //            MARK: 하단 시간 선택 버튼
             VStack {
                 VStack {
@@ -98,7 +97,6 @@ struct BookingTimePicker: View {
                                    isAM: false)
                 }
             }
-//      TODO: selectedDate바껴도 어짜피 시간 바뀌는건 똑같으니까 selectedDate바뀔땐 그냥 단순히 selectedTime만 바꿔주고 실질적인 처리는 selectedTime에서 최종적으로 selectedDate를 업데이트 하자.
             .padding(.horizontal)
             .onChange(of: selectedTime, { _, newValue in
                 updateSelectedDateWithTime(time: newValue)
@@ -115,10 +113,6 @@ struct BookingTimePicker: View {
                     selectedButton = 0
                     selectedTime = tempOHArr[calculatedDate][0]
                 }
-                
-                
-                print("셀렉티드타임",selectedTime)
-                print("계산된 날짜", calculatedDate)
                 
                 updateSelectedDateWithTime(time: selectedTime)
                 
