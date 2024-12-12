@@ -20,7 +20,7 @@ struct OrderSuccessView: View {
             
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 40))
-                .foregroundStyle(.yellow)
+                .foregroundStyle(.primary06)
                 .padding(.top, 220)
                 .padding(.bottom, 13)
             Text("예약이 접수되었습니다!")
@@ -30,6 +30,7 @@ struct OrderSuccessView: View {
             VStack(spacing: 0) {
                 Text("\(studio.name)")
                     .font(.system(size: 16, weight: .bold))
+                    .padding(.bottom, 8)
                 //TODO: 날짜 받으면 바꾸기
                 Text("12월 24일(화) 오후 02:00")
                     .font(.system(size: 16, weight: .bold))
@@ -54,8 +55,17 @@ struct OrderSuccessView: View {
                                 Text("\(product.name)")
                                     .font(.system(size: 14, weight: .semibold))
                                 ForEach(selectedOptions) { option in
-                                    Text("-\(option.name)")
-                                        .font(.system(size: 12, weight: .regular))
+                                    
+                                    HStack(alignment: .center, spacing: 2) {
+                                        Image(.turnRight)
+                                            .resizable()    
+                                            .scaledToFit()
+                                            .frame(width: 16, height: 16)
+                                        Text("\(option.name)")
+                                            .font(.system(size: 12, weight: .regular))
+                                            .foregroundStyle(.gray06)
+                                    }
+                                    .padding(.bottom, 4)
                                 }
                             }
                             Spacer()
@@ -80,7 +90,11 @@ struct OrderSuccessView: View {
                 }
             }
             .padding()
-            .background(.gray, in: RoundedRectangle(cornerRadius: 8))
+            .background(.gray01, in: RoundedRectangle(cornerRadius: 8))
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.gray02)
+            }
             
             Spacer()
             
@@ -89,7 +103,7 @@ struct OrderSuccessView: View {
                     
                 }, label: {
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(.gray)
+                        .fill(.gray02)
                         .frame(height: 48)
                         .overlay {
                             Text("홈화면 가기")
@@ -102,7 +116,7 @@ struct OrderSuccessView: View {
                     
                 }, label: {
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(.yellow)
+                        .fill(.primary06)
                         .frame(height: 48)
                         .overlay {
                             Text("예약내역 보기")
@@ -114,6 +128,7 @@ struct OrderSuccessView: View {
             }
             .padding(.bottom, 8)
         }
+        .foregroundStyle(.gray09)
         .padding(.horizontal, 16)
         .toolbar(.hidden)
     }

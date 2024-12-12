@@ -107,20 +107,32 @@ struct OrderView: View {
                                 ProgressView()
                             }
                             VStack(alignment: .leading, spacing: 0) {
-                                Text("\(studio.name)")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundStyle(.gray06)
-                                    .padding(.bottom, 8)
+                                HStack(alignment: .center, spacing: 2) {
+                                    Image(.homeFilled)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 12, height: 12)
+                                    Text("\(studio.name)")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundStyle(.gray06)
+                                }
+                                .padding(.bottom, 8)
                                 HStack {
                                     VStack(alignment: .leading, spacing: 0) {
                                         Text("\(product.name)")
                                             .font(.system(size: 14, weight: .semibold))
                                             .padding(.bottom, 6)
                                         ForEach(selectedOptions) { option in
-                                            Text("-\(option.name)")
-                                                .font(.system(size: 12, weight: .regular))
-                                                .foregroundStyle(.gray06)
-                                                .padding(.bottom, 4)
+                                            HStack(alignment: .center, spacing: 2) {
+                                                Image(.turnRight)
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 16, height: 16)
+                                                Text("\(option.name)")
+                                                    .font(.system(size: 12, weight: .regular))
+                                                    .foregroundStyle(.gray06)
+                                            }
+                                            .padding(.bottom, 4)
                                         }
                                     }
                                     Spacer()
