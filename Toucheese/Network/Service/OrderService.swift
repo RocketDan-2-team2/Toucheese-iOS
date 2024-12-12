@@ -24,3 +24,16 @@ extension DefaultOrderService: OrderService {
 
 }
 
+final class MockOrderService: BaseService<OrderAPI> { }
+
+extension MockOrderService: OrderService {
+    
+    func createOrder(order: OrderEntity) -> AnyPublisher<Bool, any Error> {
+        return Future<Bool, any Error> { promise in
+            let success: Bool = true
+            promise(.success(success))
+        }
+        .eraseToAnyPublisher()
+    }
+
+}
