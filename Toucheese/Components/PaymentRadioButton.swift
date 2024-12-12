@@ -37,11 +37,12 @@ struct PaymentRadioButton: View {
         } label: {
             HStack(alignment: .center, spacing: 8) {
                 Circle()
-                    .strokeBorder(isSelected ? .yellow : .gray, lineWidth: isSelected ? 4 : 1)
+                    .strokeBorder(isSelected ? .primary06 : .gray04, lineWidth: isSelected ? 4 : 1)
                     .frame(width: 16, height: 16)
                 
                 Text(type.title)
                     .font(.system(size: 16))
+                    .foregroundStyle(.gray07)
                     .fontWeight(isSelected ? .bold : .medium)
             }
             .font(.system(size: 14))
