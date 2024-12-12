@@ -55,6 +55,7 @@ struct OrderView: View {
                                     .tint(.black)
                             }
                             .font(.system(size: 14, weight: .regular))
+                            .foregroundStyle(.gray07)
                             .padding(.leading, 30)
                         }
                     }
@@ -63,7 +64,7 @@ struct OrderView: View {
                         Rectangle()
                             .frame(height: 8)
                             .frame(maxWidth: .infinity)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.gray02)
                             .padding(.horizontal, -16)
                         Text("예약 정보")
                             .font(.system(size: 16, weight: .bold))
@@ -78,14 +79,19 @@ struct OrderView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(.gray, in: RoundedRectangle(cornerRadius: 8))
+                        .background(.gray01, in: RoundedRectangle(cornerRadius: 8))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(.gray02)
+                        }
+                        
                     }
                     
                     VStack(alignment: .leading, spacing: 0) {
                         Rectangle()
                             .frame(height: 8)
                             .frame(maxWidth: .infinity)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.gray02)
                             .padding(.horizontal, -16)
                         Text("주문 상품")
                             .font(.system(size: 16, weight: .bold))
@@ -103,22 +109,30 @@ struct OrderView: View {
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("\(studio.name)")
                                     .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(.gray06)
+                                    .padding(.bottom, 8)
                                 HStack {
-                                    VStack(alignment: .leading) {
+                                    VStack(alignment: .leading, spacing: 0) {
                                         Text("\(product.name)")
                                             .font(.system(size: 14, weight: .semibold))
+                                            .padding(.bottom, 6)
                                         ForEach(selectedOptions) { option in
                                             Text("-\(option.name)")
                                                 .font(.system(size: 12, weight: .regular))
+                                                .foregroundStyle(.gray06)
+                                                .padding(.bottom, 4)
                                         }
                                     }
                                     Spacer()
                                     VStack(alignment: .trailing) {
                                         Text("\(product.price)원")
                                             .font(.system(size: 14, weight: .semibold))
+                                            .padding(.bottom, 6)
                                         ForEach(selectedOptions) { option in
                                             Text("+\(option.price)원")
                                                 .font(.system(size: 12, weight: .regular))
+                                                .foregroundStyle(.gray06)
+                                                .padding(.bottom, 4)
                                         }
                                     }
                                 }
@@ -132,14 +146,18 @@ struct OrderView: View {
                             .padding(.leading, 16)
                         }
                         .padding()
-                        .background(.gray, in: RoundedRectangle(cornerRadius: 8))
+                        .background(.gray01, in: RoundedRectangle(cornerRadius: 8))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(.gray02)
+                        }
                     }
                     
                     VStack(alignment: .leading, spacing: 0) {
                         Rectangle()
                             .frame(height: 8)
                             .frame(maxWidth: .infinity)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.gray02)
                             .padding(.horizontal, -16)
                         Text("결제수단")
                             .font(.system(size: 16, weight: .bold))
@@ -154,7 +172,7 @@ struct OrderView: View {
                         Rectangle()
                             .frame(height: 8)
                             .frame(maxWidth: .infinity)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.gray02)
                             .padding(.horizontal, -16)
                         Text("결제 정보")
                             .font(.system(size: 16, weight: .bold))
@@ -163,6 +181,7 @@ struct OrderView: View {
                             VStack(alignment: .leading, spacing: 16) {
                                 Text("주문 금액")
                                     .font(.system(size: 14, weight: .medium))
+                                    .foregroundStyle(.gray06)
                                 Text("총 결제 금액")
                                     .font(.system(size: 16, weight: .bold))
                             }
@@ -170,6 +189,7 @@ struct OrderView: View {
                             VStack(alignment: .trailing, spacing: 16) {
                                 Text("\(totalPrice)원")
                                     .font(.system(size: 14, weight: .medium))
+                                    .foregroundStyle(.gray06)
                                 Text("\(totalPrice)원")
                                     .font(.system(size: 16, weight: .bold))
                             }
@@ -180,9 +200,9 @@ struct OrderView: View {
                         //TODO: 실패했을 때는?? 아직 생각 안 해봄
                         createOrder()
                     } label: {
-                        Capsule()
-                            .fill(.yellow)
-                            .frame(height: 40)
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(.primary06)
+                            .frame(height: 48)
                             .overlay {
                                 Text("결제하기 (₩\(totalPrice))")
                                     .font(.system(size: 16, weight: .bold))
@@ -193,6 +213,7 @@ struct OrderView: View {
                     .padding(.top, 21)
                     
                 }
+                .foregroundStyle(.gray09)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .navigationTitle("주문/결제")
