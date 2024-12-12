@@ -10,10 +10,11 @@ import Combine
 
 struct StudioDetailView: View {
     
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     let studioService: StudioService = DefaultStudioService()
     
     @State private var tabSelection: StudioDetailTabType = .price
-    
     @State private var studioInfo: StudioInfo = .init(
         id: 0,
         name: "",
@@ -26,7 +27,6 @@ struct StudioDetailView: View {
     )
     @State private var studioItems: [StudioItem] = []
     @State private var studioReviews: [StudioReview] = []
-    @State private var review: ReviewEntity?
     @State private var selectedProduct: StudioProduct?
     
     @State private var bag = Set<AnyCancellable>()
@@ -130,6 +130,15 @@ struct StudioDetailView: View {
             }
         }
         .task { fetchStudioDetail() }
+        .onChange(of: selectedProduct) {
+            guard let selectedProduct else { return }
+            navigationManager.path.append(
+                .studioProductDetailView(
+                    studio: studioInfo,
+                    product: selectedProduct
+                )
+            )
+        }
         .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -148,12 +157,6 @@ struct StudioDetailView: View {
                     )
                 }
             }
-        }
-        .navigationDestination(item: $selectedProduct) { product in
-            StudioProductDetailView(studio: studioInfo, product: product)
-        }
-        .navigationDestination(item: $review) { review in
-            ReviewDetailView(review: review.reviewDto, user: review.userProfileDto)
         }
     }
     
@@ -204,7 +207,7 @@ struct StudioDetailView: View {
                                     print(error.localizedDescription)
                                 }
                             } receiveValue: { review in
-                                self.review = review
+                                navigationManager.path.append(.reviewDetailView(review: review.reviewDto, user: review.userProfileDto))
                             }
                             .store(in: &bag)
                     }

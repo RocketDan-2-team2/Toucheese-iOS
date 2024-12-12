@@ -9,7 +9,7 @@ import SwiftUI
 
 import Combine
 
-class StudioViewModel: ObservableObject {
+final class StudioViewModel: ObservableObject {
     
     let studioService: StudioService = DefaultStudioService()
     

@@ -10,7 +10,7 @@ import Foundation
 /// 스튜디오 상세 정보
 ///
 /// [스튜디오 상세 페이지] 스튜디오 상세 정보로 사용할 데이터
-struct StudioInfo {
+struct StudioInfo: Hashable {
     /// 스튜디오 ID
     let id: Int
     /// 스튜디오 이름

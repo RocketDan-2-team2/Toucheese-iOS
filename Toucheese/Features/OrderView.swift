@@ -11,6 +11,8 @@ import Combine
 
 struct OrderView: View {
     
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     private let orderService = DefaultOrderService()
     @State private var bag = Set<AnyCancellable>()
     
@@ -238,9 +240,6 @@ struct OrderView: View {
                 .navigationTitle("주문/결제")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarRole(.editor)
-                .navigationDestination(isPresented: $isSuccessOrder, destination: {
-                    OrderSuccessView(studio: studio, product: product, totalPrice: totalPrice, selectedDate: selectedDateString, selectedOptions: selectedOptions)
-                })
             }
     }
     
@@ -277,6 +276,18 @@ struct OrderView: View {
                 }
             } receiveValue: { result in
                 isSuccessOrder = result
+                
+                if isSuccessOrder {
+                    navigationManager.path.append(
+                        .orderSuccessView(
+                            studio: studio,
+                            product: product,
+                            totalPrice: totalPrice,
+                            selectedDate: selectedDateString,
+                            selectedOptions: selectedOptions
+                        )
+                    )
+                }
             }
             .store(in: &bag)
     }
