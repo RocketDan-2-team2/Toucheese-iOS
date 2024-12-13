@@ -128,7 +128,7 @@ struct StudioDetailEntity: Decodable {
     struct Item: Decodable {
         let itemId: Int
         let itemName: String
-        let itemCategory: String
+        let itemCategory: String?
         let itemDescription: String?
         let reviewCounts: Int
         let price: Int
