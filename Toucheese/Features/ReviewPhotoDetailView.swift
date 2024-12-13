@@ -9,12 +9,10 @@ import SwiftUI
 
 struct ReviewPhotoDetailView: View {
     
-    let imageList: [String]
-
-    @Binding var selectedPhotoIndex: Int
-    @Binding var isShowDetailImages: Bool
+    @EnvironmentObject private var navigationManager: NavigationManager
     
-    @State var offset: CGFloat = 0
+    let imageList: [String]
+    @Binding var selectedPhotoIndex: Int
 
     var body: some View {
         
@@ -26,7 +24,7 @@ struct ReviewPhotoDetailView: View {
                     .font(.system(size: 20))
                     .padding()
                     .onTapGesture {
-                        isShowDetailImages = false
+                        navigationManager.dismiss()
                     }
             }
             .padding(.top, 60)
@@ -65,7 +63,7 @@ struct ReviewPhotoDetailView: View {
         .background {
             Color(.black)
                 .onTapGesture {
-                    isShowDetailImages = false
+                    navigationManager.dismiss()
                 }
         }
         .ignoresSafeArea()

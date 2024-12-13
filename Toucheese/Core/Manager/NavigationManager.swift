@@ -9,6 +9,9 @@ import SwiftUI
 
 final class NavigationManager: ObservableObject {
     @Published var path: [ViewType] = []
+    @Published var fullScreenCover: FullScreenCoverType?
+    
+    //MARK: - View
     
     @ViewBuilder
     func build(_ view: ViewType) -> some View {
@@ -52,4 +55,23 @@ final class NavigationManager: ObservableObject {
     func popToRoot() {
         path.removeLast(path.count - 1)
     }
+    
+    //MARK: - FullScreenCover
+    
+    @ViewBuilder
+    func build(_ fullScreenCover: FullScreenCoverType) -> some View {
+        switch fullScreenCover {
+        case let .reviewPhotoDetailView(imageList, selectedPhotoIndex):
+            ReviewPhotoDetailView(imageList: imageList, selectedPhotoIndex: selectedPhotoIndex)
+        }
+    }
+    
+    func present(fullScreenCover: FullScreenCoverType) {
+        self.fullScreenCover = fullScreenCover
+    }
+    
+    func dismiss() {
+        fullScreenCover = nil
+    }
+    
 }
