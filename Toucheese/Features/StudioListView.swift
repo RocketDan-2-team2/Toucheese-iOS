@@ -45,7 +45,7 @@ struct StudioListView: View {
                             )
                             .onTapGesture {
                                 let selectedStudio = studioViewModel.studioList[index]
-                                navigationManager.path.append(
+                                navigationManager.push(
                                     .studioDetailView(studioId: selectedStudio.id)
                                 )
                             }

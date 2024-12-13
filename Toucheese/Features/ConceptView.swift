@@ -35,7 +35,7 @@ struct ConceptView: View {
                             conceptImage: concept.image ?? "",
                             conceptName: concept.name
                         ) {
-                            navigationManger.path.append(
+                            navigationManger.push(
                                 .studioListView(concept: concept)
                             )
                         }

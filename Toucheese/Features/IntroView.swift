@@ -41,7 +41,7 @@ struct IntroView: View {
                     print(error.localizedDescription)
                 }
             } receiveValue: { conceptList in
-                navigationManager.path.append(
+                navigationManager.push(
                     .conceptView(conceptList: conceptList)
                 )
             }
