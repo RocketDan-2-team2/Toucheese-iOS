@@ -19,6 +19,8 @@ struct OrderView: View {
     @State private var selectedPayment: PaymentType = .pg
     @State private var isSuccessOrder: Bool = false
     
+    @State private var isShowAlert = false
+    
     let studio: StudioInfo
     let product: StudioProduct
     let totalPrice: Int
@@ -218,8 +220,9 @@ struct OrderView: View {
                     }
                 
                     Button {
-                        // TODO: 실패했을 때는?? 아직 생각 안 해봄
                         createOrder()
+                        
+                        if !isSuccessOrder { isShowAlert = true }
                     } label: {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(.primary06)
@@ -234,12 +237,20 @@ struct OrderView: View {
                     .padding(.top, 21)
                     
                 }
-                .foregroundStyle(.gray09)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .navigationTitle("주문/결제")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbarRole(.editor)
+            }
+            .foregroundStyle(.gray09)
+            .navigationTitle("주문/결제")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarRole(.editor)
+        //TODO: 임시
+            .alert("결제 요청이 실패했습니다.", isPresented: $isShowAlert) {
+                Button("확인") {
+                    
+                }
+            } message: {
+                Text("다시 시도해주세요.")
             }
     }
     
@@ -287,6 +298,8 @@ struct OrderView: View {
                             selectedOptions: selectedOptions
                         )
                     )
+                } else {
+                    isShowAlert = true
                 }
             }
             .store(in: &bag)
