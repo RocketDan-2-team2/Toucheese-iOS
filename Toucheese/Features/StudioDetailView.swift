@@ -130,14 +130,15 @@ struct StudioDetailView: View {
             }
         }
         .task { fetchStudioDetail() }
-//        .onChange(of: selectedProduct) {
-//            navigationManager.push(
-//                .studioProductDetailView(
-//                    studio: studioInfo,
-//                    product: selectedProduct
-//                )
-//            )
-//        }
+        .onChange(of: selectedProduct) {
+            guard let selectedProduct else { return }
+            navigationManager.push(
+                .studioProductDetailView(
+                    studio: studioInfo,
+                    product: selectedProduct
+                )
+            )
+        }
         .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
