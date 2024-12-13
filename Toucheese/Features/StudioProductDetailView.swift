@@ -116,7 +116,7 @@ struct StudioProductDetailView: View {
                 
                 Button(
                     action: {
-                        navigationManager.path.append(
+                        navigationManager.push(
                             .orderView(
                                 studio: studio,
                                 product: product,

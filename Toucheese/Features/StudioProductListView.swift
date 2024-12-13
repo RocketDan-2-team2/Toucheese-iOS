@@ -39,6 +39,7 @@ struct StudioProductListView: View {
                                 }
                             } receiveValue: { product in
                                 selectedProduct = product.translate()
+                                
                             }
                             .store(in: &bag)
                     } label: {

@@ -130,15 +130,14 @@ struct StudioDetailView: View {
             }
         }
         .task { fetchStudioDetail() }
-        .onChange(of: selectedProduct) {
-            guard let selectedProduct else { return }
-            navigationManager.path.append(
-                .studioProductDetailView(
-                    studio: studioInfo,
-                    product: selectedProduct
-                )
-            )
-        }
+//        .onChange(of: selectedProduct) {
+//            navigationManager.push(
+//                .studioProductDetailView(
+//                    studio: studioInfo,
+//                    product: selectedProduct
+//                )
+//            )
+//        }
         .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -207,7 +206,7 @@ struct StudioDetailView: View {
                                     print(error.localizedDescription)
                                 }
                             } receiveValue: { review in
-                                navigationManager.path.append(
+                                navigationManager.push(
                                     .reviewDetailView(
                                         review: review.reviewDto,
                                         user: review.userProfileDto

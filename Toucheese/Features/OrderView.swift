@@ -218,7 +218,7 @@ struct OrderView: View {
                     }
                 
                     Button {
-                        //TODO: 실패했을 때는?? 아직 생각 안 해봄
+                        // TODO: 실패했을 때는?? 아직 생각 안 해봄
                         createOrder()
                     } label: {
                         RoundedRectangle(cornerRadius: 8)
@@ -278,7 +278,7 @@ struct OrderView: View {
                 isSuccessOrder = result
                 
                 if isSuccessOrder {
-                    navigationManager.path.append(
+                    navigationManager.push(
                         .orderSuccessView(
                             studio: studio,
                             product: product,
