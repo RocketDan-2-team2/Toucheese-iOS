@@ -68,3 +68,7 @@ struct FilterDuplicatedButton<T: FilterProtocol>: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
+
+#Preview {
+    FilterDuplicatedButton(type: PriceType.first, selectedType: .constant([]))
+}

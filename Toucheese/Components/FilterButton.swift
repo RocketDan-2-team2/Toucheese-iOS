@@ -42,3 +42,7 @@ struct FilterButton: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
+
+#Preview {
+    FilterButton(filterName: "지역", isSelected: true)
+}

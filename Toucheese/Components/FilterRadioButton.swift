@@ -49,3 +49,7 @@ struct FilterRadioButton<T: FilterProtocol>: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
+
+#Preview {
+    FilterRadioButton(type: PriceType.first, selectedType: .constant(.second))
+}
