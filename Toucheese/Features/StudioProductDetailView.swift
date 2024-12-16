@@ -6,32 +6,28 @@
 //
 
 import SwiftUI
+import Combine
 
 struct StudioProductDetailView: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
     let studio: StudioInfo
+    
+//    @Binding var openedHours: [[Int]]
+    let hoursRawData: [StudioHoursEntity]
+    
     @State private var product: StudioProduct
     
-    // MARK: 캘린더 API에 따라 달라질 예정. 현재 임시 값
     @State private var selectedDate: Date = .now
-    @State private var selectedTime: Int = 1
-    // ========================================
+    
+    @State private var bag = Set<AnyCancellable>()
     
     @State private var showCalendar: Bool = false
+        
+    @State private var studioHours: [[Int]] = Array(repeating: [], count: 31)
     
-    private var calculatedDateNTime: String {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy/MM/dd"
-        let tempDate = df.string(from: selectedDate)
-        let tempAMPM = selectedTime > 11 ? "PM" : "AM"
-        let tempTime = selectedTime > 12 ? selectedTime - 12 : selectedTime
-        
-        let result = tempDate + " \(tempAMPM) \(tempTime):00"
-        
-        return result
-    }
+    let studioService: StudioService = DefaultStudioService()
     
     var totalPrice: Int {
         product.optionList.reduce(product.price) {
@@ -39,12 +35,12 @@ struct StudioProductDetailView: View {
         }
     }
     
-    let studioService: StudioService = DefaultStudioService()
-
-    init(studio: StudioInfo, product: StudioProduct) {
+    
+     
+    init(studio: StudioInfo, product: StudioProduct, hoursRawData: [StudioHoursEntity]) {
         self.studio = studio
         self.product = product
-        self.selectedDate = selectedDate
+        self.hoursRawData = hoursRawData
     }
     
     var body: some View {
@@ -111,12 +107,22 @@ struct StudioProductDetailView: View {
                     
                     BookingTimePicker(
                         selectedDate: $selectedDate,
-                        openedHoursArr: [])
+                        hoursRawData: hoursRawData)
+                    .onChange(of: selectedDate) { oldValue, newValue in
+//                        TODO: 달이 바뀌면 openedHoursArr를 가져오는 fetchStudioHours 메서드 실행하기
+                        let calendar = Calendar.current
+                        if calendar.component(.month, from: oldValue) != calendar.component(.month, from: newValue) {
+                            fetchStudioHours(month: newValue)
+                        }
+                    }
+                    .task {
+                        fetchStudioHours(month: selectedDate)
+                    }
                 }
                 
                 Button(
                     action: {
-                        navigationManager.push(
+                        navigationManager.path.append(
                             .orderView(
                                 studio: studio,
                                 product: product,
@@ -138,10 +144,78 @@ struct StudioProductDetailView: View {
             .padding(.horizontal, 36)
         }
     }
+    
+    private func fetchStudioHours(month: Date) {
+        
+        let calendar = Calendar.current
+        guard let range = calendar.range(of: .day, in: .month, for: month) else { return }
+        let numberOfDays = range.count
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: month)) else { return }
+        
+        var result: [[Int]] = Array(repeating: [], count: numberOfDays)
+        
+        let dayOfWeekMapping: [String: Int] = [
+            "SUNDAY": 1,
+            "MONDAY": 2,
+            "TUESDAY": 3,
+            "WEDnesday": 4,
+            "THursday": 5,
+            "FRIDAY": 6,
+            "SATURDAY": 7
+        ]
+        
+        studioService.getStudioHours(studioID: studio.id)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Event: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { datas in
+                for data in datas {
+                    guard let weekday = dayOfWeekMapping[data.dayOfWeek] else { continue }
+                    print("weekdays",weekday)
+                    
+                    if data.holiday {
+                        continue
+                    }
+                    
+                    let timeFormatter = DateFormatter()
+                    timeFormatter.dateFormat = "HH:mm"
+                    
+                    guard
+                        let openTime = timeFormatter.date(from: data.openTime),
+                        let closeTime = timeFormatter.date(from: data.closeTime)
+                    else { continue }
+                    
+                    print("onoffTimes", openTime, closeTime)
+                    
+                    let openHour = calendar.component(.hour, from: openTime)
+                    let closeHour = calendar.component(.hour, from: closeTime)
+                    
+                    print("openHour, closeHour", openHour, closeHour)
+                    
+                    for day in 1...numberOfDays {
+                        guard
+                            let currentDate = calendar.date(byAdding: .day, value: day - 1, to: startOfMonth),
+                            calendar.component(.weekday, from: currentDate) == weekday
+                        else { print("guard문에서 실패함"); continue }
+                        
+                        let index = day - 1
+                        result[index] = Array(openHour..<closeHour)
+                    }
+                }
+                studioHours = result
+                print(result)
+            }
+            .store(in: &bag)
+
+    }
 }
 
 #Preview {
     NavigationStack {
-        StudioProductDetailView(studio: .mockData(), product: .mockData[0])
+//        StudioProductDetailView(studio: .mockData(), product: .mockData[0], openedHours: <#Binding<[[Int]]>#>)
     }
 }

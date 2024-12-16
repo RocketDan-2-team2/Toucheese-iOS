@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct StudioHoursEntity: Decodable, Identifiable {
+struct StudioHoursEntity: Decodable, Identifiable, Hashable {
     let id: Int
     let wekkOfMonth: Int?
     let dayOfWeek: String

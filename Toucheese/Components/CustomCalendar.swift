@@ -9,15 +9,16 @@ import SwiftUI
 
 struct CustomCalendar: View {
     @Binding var selectedDate: Date
+    @Binding var month: Date
     
-    @State private var month: Date = Date()
     @State private var offset: CGSize = CGSize()
 
     private var calendar = Calendar(identifier: .gregorian)
     private var weekdaySymbols: [String] = []
     
-    init(selectedDate: Binding<Date>, calendar: Foundation.Calendar = Calendar.current) {
+    init(selectedDate: Binding<Date>, month: Binding<Date>, calendar: Foundation.Calendar = Calendar.current) {
         self._selectedDate = selectedDate
+        self._month = month
         self.calendar = calendar
         self.weekdaySymbols = calendar.shortWeekdaySymbols
     }
@@ -27,9 +28,9 @@ struct CustomCalendar: View {
             headerView
             calendarGridView
         }
-        .onAppear {
-            month = selectedDate
-        }
+//        .onAppear {
+//            month = selectedDate
+//        }
     }
     
     // MARK: - 헤더 뷰
@@ -160,6 +161,8 @@ private extension CustomCalendar {
         let calendar = Calendar.current
         if let newMonth = calendar.date(byAdding: .month, value: value, to: month) {
             self.month = newMonth
+            let newDate = calendar.date(from: calendar.dateComponents([.year, .month], from: month))
+            self.selectedDate = newDate!
         }
     }
 }
@@ -183,8 +186,8 @@ extension Date {
     }
 }
 
-#Preview {
-    let october2024 = Calendar.current.date(from: DateComponents(year: 2024, month: 11))!
-    
-    CustomCalendar(selectedDate: .constant(Date()))
-}
+//#Preview {
+//    let october2024 = Calendar.current.date(from: DateComponents(year: 2024, month: 11))!
+//
+//    CustomCalendar(selectedDate: .constant(Date()))
+//}
