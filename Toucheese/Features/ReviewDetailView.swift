@@ -9,12 +9,14 @@ import SwiftUI
 import Combine
 
 struct ReviewDetailView: View {
+    
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     private let studioService: StudioService = DefaultStudioService()
     
     @State private var review: Review
     @State private var user: UserProfile
     
-    @State private var isShowDetailImages: Bool = false
     @State private var selectedImageIndex: Int = 0
     
     @State private var bag = Set<AnyCancellable>()
@@ -36,7 +38,13 @@ struct ReviewDetailView: View {
                             .padding(.horizontal, (geometry.size.width * 0.1))
                             .onTapGesture {
                                 selectedImageIndex = index
-                                isShowDetailImages = true
+                                navigationManager.present(
+                                    fullScreenCover:
+                                            .reviewPhotoDetailView(
+                                                imageList: review.imageUrl,
+                                                selectedPhotoIndex: $selectedImageIndex
+                                            )
+                                )
                             }
                         }
                     }
@@ -60,12 +68,6 @@ struct ReviewDetailView: View {
             ToolbarItem(placement: .topBarLeading) {
                 ThumbnailNavigationView(thumbnail: "\(user.profileImg)", title: "\(user.name)")
             }
-        }
-        .fullScreenCover(isPresented: $isShowDetailImages) {
-            ReviewPhotoDetailView(imageList: review.imageUrl, selectedPhotoIndex: $selectedImageIndex, isShowDetailImages: $isShowDetailImages)
-        }
-        .transaction { transaction in
-            transaction.disablesAnimations = true
         }
     }
 }

@@ -9,11 +9,13 @@ import SwiftUI
 import Combine
 
 struct StudioListView: View {
+    
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     let concept: ConceptEntity
     
     @StateObject private var studioViewModel: StudioViewModel = StudioViewModel()
     @State private var selectedFilterType: FilterType?
-    @State private var selectedStudio: StudioEntity?
     
     private var isHidden: Bool {
         selectedFilterType == nil
@@ -42,8 +44,10 @@ struct StudioListView: View {
                                 portfolios: studioViewModel.studioList[index].portfolios
                             )
                             .onTapGesture {
-                                print("셀 누름")
-                                selectedStudio = studioViewModel.studioList[index]
+                                let selectedStudio = studioViewModel.studioList[index]
+                                navigationManager.push(
+                                    .studioDetailView(studioId: selectedStudio.id)
+                                )
                             }
                         }
                         
@@ -66,9 +70,6 @@ struct StudioListView: View {
                 .refreshable {
                     studioViewModel.setDefaultPage()
                     studioViewModel.searchStudio()
-                }
-                .navigationDestination(item: $selectedStudio) { studio in
-                    StudioDetailView(studioId: studio.id)
                 }
                 
                 VStack {

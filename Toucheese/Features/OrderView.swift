@@ -11,11 +11,15 @@ import Combine
 
 struct OrderView: View {
     
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     private let orderService = DefaultOrderService()
     @State private var bag = Set<AnyCancellable>()
     
     @State private var selectedPayment: PaymentType = .pg
     @State private var isSuccessOrder: Bool = false
+    
+    @State private var isShowAlert = false
     
     let studio: StudioInfo
     let product: StudioProduct
@@ -216,14 +220,13 @@ struct OrderView: View {
                     }
                 
                     Button {
-                        //TODO: 실패했을 때는?? 아직 생각 안 해봄
                         createOrder()
                     } label: {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(.primary06)
                             .frame(height: 48)
                             .overlay {
-                                Text("결제하기 (₩\(totalPrice))")
+                                Text("\(totalPrice)원 결제하기")
                                     .font(.system(size: 16, weight: .bold))
                             }
                     }
@@ -232,15 +235,20 @@ struct OrderView: View {
                     .padding(.top, 21)
                     
                 }
-                .foregroundStyle(.gray09)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .navigationTitle("주문/결제")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbarRole(.editor)
-                .navigationDestination(isPresented: $isSuccessOrder, destination: {
-                    OrderSuccessView(studio: studio, product: product, totalPrice: totalPrice, selectedDate: selectedDateString, selectedOptions: selectedOptions)
-                })
+            }
+            .foregroundStyle(.gray09)
+            .navigationTitle("주문/결제")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarRole(.editor)
+        //TODO: 임시
+            .alert("결제 요청이 실패했습니다.", isPresented: $isShowAlert) {
+                Button("확인") {
+                    
+                }
+            } message: {
+                Text("다시 시도해주세요.")
             }
     }
     
@@ -274,9 +282,24 @@ struct OrderView: View {
                     print("Success: \(event)")
                 case .failure(let error):
                     print(error.localizedDescription)
+                    isShowAlert = true
                 }
             } receiveValue: { result in
                 isSuccessOrder = result
+                
+                if isSuccessOrder {
+                    navigationManager.push(
+                        .orderSuccessView(
+                            studio: studio,
+                            product: product,
+                            totalPrice: totalPrice,
+                            selectedDate: selectedDateString,
+                            selectedOptions: selectedOptions
+                        )
+                    )
+                } else {
+                    isShowAlert = true
+                }
             }
             .store(in: &bag)
     }

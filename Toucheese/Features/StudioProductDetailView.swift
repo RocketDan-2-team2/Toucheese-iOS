@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct StudioProductDetailView: View {
+    
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     let studio: StudioInfo
     @State private var product: StudioProduct
     
@@ -111,10 +114,18 @@ struct StudioProductDetailView: View {
                         openedHoursArr: [])
                 }
                 
-                NavigationLink(destination: {
-                    //TODO: Date 임시
-                    OrderView(studio: studio, product: product, totalPrice: totalPrice, selectedDate: selectedDate)
-                }, label: {
+                Button(
+                    action: {
+                        navigationManager.push(
+                            .orderView(
+                                studio: studio,
+                                product: product,
+                                totalPrice: totalPrice,
+                                selectedDate: selectedDate
+                            )
+                        )
+                    },
+                    label: {
                     Capsule()
                         .fill(.yellow)
                         .frame(height: 40)
