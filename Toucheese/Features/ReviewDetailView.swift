@@ -69,8 +69,5 @@ struct ReviewDetailView: View {
                 ThumbnailNavigationView(thumbnail: "\(user.profileImg)", title: "\(user.name)")
             }
         }
-        .transaction { transaction in
-            transaction.disablesAnimations = true
-        }
     }
 }
