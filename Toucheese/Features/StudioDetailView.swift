@@ -34,7 +34,6 @@ struct StudioDetailView: View {
     
     @State private var onLoading: Bool = true
     
-//    @State private var openedHours: [[Int]] = []
     @State private var hoursRawData: [StudioHoursEntity] = []
     
     let studioId: Int

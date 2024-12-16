@@ -28,9 +28,6 @@ struct CustomCalendar: View {
             headerView
             calendarGridView
         }
-//        .onAppear {
-//            month = selectedDate
-//        }
     }
     
     // MARK: - 헤더 뷰

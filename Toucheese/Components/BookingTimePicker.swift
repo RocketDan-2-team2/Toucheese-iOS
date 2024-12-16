@@ -9,7 +9,6 @@ import SwiftUI
 
 struct BookingTimePicker: View {
     @Binding var selectedDate: Date
-    //    TODO: openedHoursArr 연산 프로퍼티로 수정하기
     let hoursRawData: [StudioHoursEntity]
     
     @State private var selectedTime: Int = 0
@@ -28,7 +27,6 @@ struct BookingTimePicker: View {
     }
     
     private var openedHoursArr: [[Int]] {
-//        let month = Calendar.current.component(.month, from: month)
         return convertDataToHours(datas: hoursRawData, month: month)
     }
     

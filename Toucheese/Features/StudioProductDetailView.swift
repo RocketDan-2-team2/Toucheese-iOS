@@ -14,7 +14,6 @@ struct StudioProductDetailView: View {
     
     let studio: StudioInfo
     
-//    @Binding var openedHours: [[Int]]
     let hoursRawData: [StudioHoursEntity]
     
     @State private var product: StudioProduct
@@ -109,7 +108,6 @@ struct StudioProductDetailView: View {
                         selectedDate: $selectedDate,
                         hoursRawData: hoursRawData)
                     .onChange(of: selectedDate) { oldValue, newValue in
-//                        TODO: 달이 바뀌면 openedHoursArr를 가져오는 fetchStudioHours 메서드 실행하기
                         let calendar = Calendar.current
                         if calendar.component(.month, from: oldValue) != calendar.component(.month, from: newValue) {
                             fetchStudioHours(month: newValue)
