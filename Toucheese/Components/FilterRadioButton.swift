@@ -35,21 +35,43 @@ struct FilterRadioButton<T: FilterProtocol>: View {
             selectedType = type
             filterAction?()
         } label: {
-            VStack(alignment: .center) {
+            HStack {
+                selectionButton(isSelected: self.isSelected)
+                    .frame(width: 18.0, height: 18.0)
+                
                 if let type {
-                    Text("\(type.title)")
+                    Text(type.title)
+                        .bold(isSelected)
                 } else {
                     Text("전체")
+                        .bold(isSelected)
                 }
-                    
-                Image(systemName: isSelected ? "circle.fill" : "circle")
             }
-            .font(.system(size: 14))
+            .font(.system(size: 14.0))
         }
         .buttonStyle(PlainButtonStyle())
+    }
+    
+    @ViewBuilder
+    func selectionButton(isSelected: Bool) -> some View {
+        if isSelected {
+            ZStack {
+                Circle()
+                    .fill(Color.primary06)
+                Circle()
+                    .fill(.background)
+                    .frame(width: 8.0, height: 8.0)
+            }
+        } else {
+            Circle()
+                .strokeBorder(Color.gray04, lineWidth: 1.0)
+        }
     }
 }
 
 #Preview {
-    FilterRadioButton(type: PriceType.first, selectedType: .constant(.second))
+    FilterRadioButton(selectedType: .constant(PriceType.first))
+    FilterRadioButton(type: PriceType.first, selectedType: .constant(.first))
+    FilterRadioButton(type: PriceType.second, selectedType: .constant(.first))
+    FilterRadioButton(type: PriceType.third, selectedType: .constant(.first))
 }
