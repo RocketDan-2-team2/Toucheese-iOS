@@ -19,7 +19,7 @@ struct FilterView: View {
     var body: some View {
         VStack {
             HStack {
-                FilterButton(buttonType: .representation(hasFiltered: false))
+                FilterButton(buttonType: .representation(hadFiltered: false))
                 ForEach(FilterType.allCases, id: \.self) { filter in
                     FilterButton(buttonType: .filterType(title: filter.title))
                 }
