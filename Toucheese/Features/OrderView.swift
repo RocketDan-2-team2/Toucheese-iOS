@@ -221,8 +221,6 @@ struct OrderView: View {
                 
                     Button {
                         createOrder()
-                        
-                        if !isSuccessOrder { isShowAlert = true }
                     } label: {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(.primary06)
@@ -284,6 +282,7 @@ struct OrderView: View {
                     print("Success: \(event)")
                 case .failure(let error):
                     print(error.localizedDescription)
+                    isShowAlert = true
                 }
             } receiveValue: { result in
                 isSuccessOrder = result
