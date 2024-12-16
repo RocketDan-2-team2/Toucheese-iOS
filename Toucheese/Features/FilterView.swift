@@ -19,31 +19,13 @@ struct FilterView: View {
     var body: some View {
         VStack {
             HStack {
-                if isChanged {
-                    Image(systemName: "arrow.clockwise")
-                        .font(.system(size: 18))
-                        .padding(.horizontal, 20)
-                        .contentShape(.rect())
-                        .onTapGesture {
-                            studioViewModel.selectedRegion = []
-                            studioViewModel.selectedRating = nil
-                            studioViewModel.selectedPrice = nil
-                            selectedFilterType = nil
-                        }
-                }
+                FilterButton(buttonType: .representation(hasFiltered: false))
                 ForEach(FilterType.allCases, id: \.self) { filter in
-                    FilterButton(filterName: "\(filter.title)", isSelected: selectedFilterType == filter) {
-                        if selectedFilterType == nil || selectedFilterType != filter {
-                            selectedFilterType = filter
-                        } else {
-                            selectedFilterType = nil
-                        }
-                    }
+                    FilterButton(buttonType: .filterType(title: filter.title))
                 }
             }
         }
         .frame(maxWidth: .infinity)
-//        .border(.black)
     }
 }
 
