@@ -138,7 +138,7 @@ struct StudioDetailView: View {
         }
         .onChange(of: selectedProduct) {
             guard let selectedProduct else { return }
-            navigationManager.path.append(
+            navigationManager.push(
                 .studioProductDetailView(
                     studio: studioInfo,
                     product: selectedProduct,
@@ -214,7 +214,7 @@ struct StudioDetailView: View {
                                     print(error.localizedDescription)
                                 }
                             } receiveValue: { review in
-                                navigationManager.path.append(.reviewDetailView(review: review.reviewDto, user: review.userProfileDto))
+                                navigationManager.push(.reviewDetailView(review: review.reviewDto, user: review.userProfileDto))
                             }
                             .store(in: &bag)
                     }
