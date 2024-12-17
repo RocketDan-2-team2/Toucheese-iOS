@@ -22,8 +22,8 @@ final class NavigationManager: ObservableObject {
             StudioListView(concept: concept)
         case let .studioDetailView(studioId):
             StudioDetailView(studioId: studioId)
-        case let .studioProductDetailView(studio, product):
-            StudioProductDetailView(studio: studio, product: product)
+        case let .studioProductDetailView(studio, product, hoursRawData):
+            StudioProductDetailView(studio: studio, product: product, hoursRawData: hoursRawData)
         case let .reviewDetailView(review, user):
             ReviewDetailView(review: review, user: user)
         case let .orderView(studio, product, totalPrice, selectedDate):

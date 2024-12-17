@@ -15,6 +15,7 @@ struct StudioDetailView: View {
     let studioService: StudioService = DefaultStudioService()
     
     @State private var tabSelection: StudioDetailTabType = .price
+    
     @State private var studioInfo: StudioInfo = .init(
         id: 0,
         name: "",
@@ -32,6 +33,8 @@ struct StudioDetailView: View {
     @State private var bag = Set<AnyCancellable>()
     
     @State private var onLoading: Bool = true
+    
+    @State private var hoursRawData: [StudioHoursEntity] = []
     
     let studioId: Int
     let gridItems: [GridItem] = [
@@ -129,13 +132,17 @@ struct StudioDetailView: View {
                 }
             }
         }
-        .task { fetchStudioDetail() }
+        .task {
+            fetchStudioDetail()
+            fetchStudioHours()
+        }
         .onChange(of: selectedProduct) {
             guard let selectedProduct else { return }
             navigationManager.push(
                 .studioProductDetailView(
                     studio: studioInfo,
-                    product: selectedProduct
+                    product: selectedProduct,
+                    hoursRawData: hoursRawData
                 )
             )
         }
@@ -207,18 +214,29 @@ struct StudioDetailView: View {
                                     print(error.localizedDescription)
                                 }
                             } receiveValue: { review in
-                                navigationManager.push(
-                                    .reviewDetailView(
-                                        review: review.reviewDto,
-                                        user: review.userProfileDto
-                                    )
-                                )
+                                navigationManager.push(.reviewDetailView(review: review.reviewDto, user: review.userProfileDto))
                             }
                             .store(in: &bag)
                     }
             }
         }
         .padding(5.0)
+    }
+    
+    private func fetchStudioHours() {
+        studioService.getStudioHours(studioID: studioId)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Event: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { data in
+                hoursRawData = data
+            }
+            .store(in: &bag)
+
     }
 }
 

@@ -12,7 +12,7 @@ enum ViewType: Hashable {
     case studioListView(concept: ConceptEntity)
     
     case studioDetailView(studioId: Int)
-    case studioProductDetailView(studio: StudioInfo, product: StudioProduct)
+    case studioProductDetailView(studio: StudioInfo, product: StudioProduct, hoursRawData: [StudioHoursEntity])
     case reviewDetailView(review: Review, user: UserProfile)
     
     case orderView(studio: StudioInfo, product: StudioProduct, totalPrice: Int, selectedDate: Date)

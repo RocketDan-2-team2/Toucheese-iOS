@@ -9,8 +9,7 @@ import SwiftUI
 
 struct BookingTimePicker: View {
     @Binding var selectedDate: Date
-    
-    @State var openedHoursArr: [[Int]] = Array(repeating: [10,11,14,15,16,17,20,21,22], count: 31)
+    let hoursRawData: [StudioHoursEntity]
     
     @State private var selectedTime: Int = 0
     @State private var selectedButton: Int = 0
@@ -19,11 +18,6 @@ struct BookingTimePicker: View {
     
     private let gridRow = Array(repeating: GridItem(.adaptive(minimum: .infinity, maximum: .infinity)), count: 4)
     
-//      TODO: 임시값, 서버 통신시 변수 삭제 필.
-    private let tempOHArr = [[7,8,9,10,11,12,13,14,15,16,17,20,21,22],[],
-                             [10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14,],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],[10,11,12,13,14,15,16,17,20,21,22],[10,11,12,13,14],
-                             [10,11,12,13,14,15,16,17,20,21,22]]
-    
     private var calculatedTime: Int {
         let df = DateFormatter()
         df.dateFormat = "HH"
@@ -31,6 +25,11 @@ struct BookingTimePicker: View {
         let dateString = df.string(from: selectedDate)
         return Int(dateString)!
     }
+    
+    private var openedHoursArr: [[Int]] {
+        return convertDataToHours(datas: hoursRawData, month: month)
+    }
+    
     //이차원 배열로 시간을 받기위해 인덱스로 사용하려고 만들어진 일자 변수.
     //처음에 selectedDate가 binding으로 현재 Date() 인스턴스를 받는다고 가정해서 언래핑함.
     //인덱스로 쓸거라서 마지막에 -1 함.
@@ -41,17 +40,17 @@ struct BookingTimePicker: View {
         let temp = df.string(from: selectedDate)
         return Int(temp)! - 1
     }
-//        TODO: tempOHArr는 나중에 전부 통신을 통해 받는 값으로 수정해줘야함.
+    
     private var buttonIndex: Int {
-        if let index = tempOHArr.firstIndex(of: [calculatedTime]) {
+        if let index = openedHoursArr.firstIndex(of: [calculatedTime]) {
             return index
         } else {
-            if tempOHArr.isEmpty {
+            if openedHoursArr.isEmpty {
                 return 0
             } else {
                 var maxNumIdx = 0
-                for i in 0..<tempOHArr[calculatedDate].count {
-                    if tempOHArr[calculatedDate][i] <= calculatedTime {
+                for i in 0..<openedHoursArr[calculatedDate].count {
+                    if openedHoursArr[calculatedDate][i] <= calculatedTime {
                         maxNumIdx = i
                     } else { break }
                 }
@@ -60,11 +59,16 @@ struct BookingTimePicker: View {
         }
     }
     
+    @State private var month = Date()
+    
     var body: some View {
         VStack {
-            CustomCalendar(selectedDate: $selectedDate)
-                
-//            MARK: 하단 시간 선택 버튼
+            CustomCalendar(selectedDate: $selectedDate, month: $month)
+                .onChange(of: month) { oldValue, newValue in
+                    print("newValue:", newValue)
+                }
+            
+            //            MARK: 하단 시간 선택 버튼
             VStack {
                 VStack {
                     HStack {
@@ -77,7 +81,7 @@ struct BookingTimePicker: View {
                     TimeButtonGrid(selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
                                    columnsArr: gridRow,
-                                   timeArr: tempOHArr[calculatedDate],
+                                   timeArr: openedHoursArr[calculatedDate],
                                    isAM: true)
                 }
                 .padding(.vertical)
@@ -93,7 +97,7 @@ struct BookingTimePicker: View {
                     TimeButtonGrid(selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
                                    columnsArr: gridRow,
-                                   timeArr: tempOHArr[calculatedDate],
+                                   timeArr: openedHoursArr[calculatedDate],
                                    isAM: false)
                 }
             }
@@ -102,7 +106,7 @@ struct BookingTimePicker: View {
             })
         }
         .onChange(of: selectedDate) { oldValue, newValue in
-            if tempOHArr[calculatedDate].isEmpty == false {
+            if openedHoursArr[calculatedDate].isEmpty == false {
                 let df = DateFormatter()
                 df.dateFormat = "yyyy-MM-dd"
                 let oldDate = df.string(from: oldValue)
@@ -110,7 +114,7 @@ struct BookingTimePicker: View {
                 
                 if oldDate != newDate {
                     selectedButton = 0
-                    selectedTime = tempOHArr[calculatedDate][0]
+                    selectedTime = openedHoursArr[calculatedDate][0]
                 }
                 
                 updateSelectedDateWithTime(time: selectedTime)
@@ -135,11 +139,70 @@ struct BookingTimePicker: View {
             selectedDate = updatedDate
         }
     }
+    
+    private func convertDataToHours(datas: [StudioHoursEntity], month: Date) -> [[Int]] {
+        let calendar = Calendar.current
+        guard let range = calendar.range(of: .day, in: .month, for: month) else { return [] }
+        let numberOfDays = range.count
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: month)) else { return [] }
+        
+        var result: [[Int]] = Array(repeating: [], count: numberOfDays)
+        
+        let dayOfWeekMapping: [String: Int] = [
+            "SUNDAY": 1,
+            "MONDAY": 2,
+            "TUESDAY": 3,
+            "WEDNESDAY": 4,
+            "THURSDAY": 5,
+            "FRIDAY": 6,
+            "SATURDAY": 7
+        ]
+        
+        for data in datas {
+            print("start convert data")
+            guard let weekday = dayOfWeekMapping[data.dayOfWeek] else { continue }
+            print("weekdays",weekday)
+            
+            if data.holiday {
+                continue
+            }
+            print("not holiday")
+            
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "HH:mm:ss"
+            
+            guard
+                let openTime = timeFormatter.date(from: data.openTime),
+                let closeTime = timeFormatter.date(from: data.closeTime)
+            else { print("onoffTimes 형식이 잘못되었습다");continue }
+            
+            print("onoffTimes", openTime, closeTime)
+            
+            let openHour = calendar.component(.hour, from: openTime)
+            let closeHour = calendar.component(.hour, from: closeTime)
+            
+            print("openHour, closeHour", openHour, closeHour)
+            
+            for day in 0..<numberOfDays {
+                guard
+                    let currentDate = calendar.date(byAdding: .day, value: day, to: startOfMonth)
+                else { print("currentDate 계산 guard문에서 실패함"); continue }
+                
+                guard calendar.component(.weekday, from: currentDate) == weekday else { print("요일 체크 계산 guard문에서 실패함"); continue }
+                
+                let index = day
+                result[index] = Array(openHour..<closeHour)
+            }
+        }
+        print("openedHours",result)
+        return result
+        
+    }
 }
 
-#Preview {
-    BookingTimePicker(selectedDate: .constant(Date()), openedHoursArr: [[1,2,3,4],[9,10,11,13,14,15],[]])
-}
+//#Preview {
+//    BookingTimePicker(selectedDate: .constant(Date()), openedHoursArr: [[1,2,3,4],[9,10,11,13,14,15],[]])
+//}
 
 struct TimeButtonGrid: View {
     @Binding var selectedTime: Int
@@ -185,7 +248,7 @@ struct TimeButtonGrid: View {
     private var filteredTimes: [Int] {
         isAM ? timeArr.filter { $0 < 12 } : timeArr.filter { $0 >= 12 }
     }
-
+    
     private var offset: Int {
         isAM ? 0 : timeArr.filter { $0 < 12 }.count
     }
