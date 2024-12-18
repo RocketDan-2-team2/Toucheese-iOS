@@ -7,6 +7,7 @@
 
 import SwiftUI
 import KakaoSDKCommon
+import KakaoSDKAuth
 
 @main
 struct ToucheeseApp: App {
@@ -28,6 +29,11 @@ struct ToucheeseApp: App {
                     }
                     .transaction { transaction in
                         transaction.disablesAnimations = true
+                    }
+                    .onOpenURL { url in
+                        if AuthApi.isKakaoTalkLoginUrl(url) {
+                            _ = AuthController.handleOpenUrl(url: url)
+                        }
                     }
             }
             .environmentObject(navigationManager)
