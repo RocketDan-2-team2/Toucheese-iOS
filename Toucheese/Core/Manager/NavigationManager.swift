@@ -8,7 +8,7 @@
 import SwiftUI
 
 final class NavigationManager: ObservableObject {
-    var selectedTab: TabViewType = .home
+    @Published var selectedTab: TabViewType = .home
     
     @Published var homePath: [ViewType] = []
     @Published var reservationPath: [ViewType] = []
@@ -45,6 +45,11 @@ final class NavigationManager: ObservableObject {
                 selectedDate: selectedDate,
                 selectedOptions: selectedOptions
             )
+            
+        case .reservationListView:
+            ReservationListView()
+        case let .reservationDetailView(reservationStateType):
+            ReservationDetailView(reservationStateType: reservationStateType)
         }
     }
     

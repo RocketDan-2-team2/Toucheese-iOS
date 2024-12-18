@@ -8,6 +8,9 @@
 import Foundation
 
 enum ViewType: Hashable {
+    
+    //MARK: - Home Tab
+    
     case conceptView(conceptList: [ConceptEntity])
     case studioListView(concept: ConceptEntity)
     
@@ -17,4 +20,9 @@ enum ViewType: Hashable {
     
     case orderView(studio: StudioInfo, product: StudioProduct, totalPrice: Int, selectedDate: Date)
     case orderSuccessView(studio: StudioInfo, product: StudioProduct, totalPrice: Int, selectedDate: String, selectedOptions: [StudioProductOption])
+    
+    //MARK: - Reservation Tab
+
+    case reservationListView
+    case reservationDetailView(reservationStateType: ReservationStateType)
 }

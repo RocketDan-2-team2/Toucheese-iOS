@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ReservationCell: View {
     
+    @EnvironmentObject private var navigationManager: NavigationManager
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
@@ -65,7 +67,8 @@ struct ReservationCell: View {
             .padding(.horizontal, 16)
             
             Button(action: {
-                
+                //TODO: 예약 상세 보기
+                navigationManager.push(.reservationDetailView(reservationStateType: .waiting))
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary01)
@@ -88,7 +91,6 @@ struct ReservationCell: View {
                 
         }
         .padding(.horizontal, 16)
-        .padding(.bottom, 16)
     }
 }
 
