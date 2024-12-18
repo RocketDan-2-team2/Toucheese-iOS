@@ -30,13 +30,13 @@ struct ToucheeseApp: App {
                     .transaction { transaction in
                         transaction.disablesAnimations = true
                     }
-                    .onOpenURL { url in
-                        if AuthApi.isKakaoTalkLoginUrl(url) {
-                            _ = AuthController.handleOpenUrl(url: url)
-                        }
-                    }
             }
             .environmentObject(navigationManager)
+            .onOpenURL { url in
+                if AuthApi.isKakaoTalkLoginUrl(url) {
+                    _ = AuthController.handleOpenUrl(url: url)
+                }
+            }
         }
     }
 }
