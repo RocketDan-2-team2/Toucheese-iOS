@@ -12,27 +12,35 @@ struct StudioListView: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
-    let concept: ConceptEntity
-    
     @StateObject private var studioViewModel: StudioViewModel = StudioViewModel()
-    @State private var selectedFilterType: FilterType?
     
-    private var isHidden: Bool {
-        selectedFilterType == nil
-    }
+    let concept: ConceptEntity
     
     var body: some View {
         VStack(spacing: 0.0) {
-            FilterView(studioViewModel: studioViewModel, selectedFilterType: $selectedFilterType)
-            .padding(.bottom, 10.0)
-            .background {
-                Color(.systemBackground)
-                    .onTapGesture {
-                        hideFilterExtensionView()
-                    }
-            }
             
-            ZStack {
+            // Filter
+            HStack {
+                FilterButton(buttonType: .representation(hadFiltered: false))
+                ForEach(FilterType.allCases, id: \.self) { filter in
+                    FilterButton(buttonType: .filterType(title: filter.title))
+                }
+                Spacer()
+            }
+            .padding(.horizontal, 16.0)
+            .padding(.vertical, 8.0)
+            
+            if studioViewModel.studioList.isEmpty {
+                VStack(spacing: 8.0) {
+                    Spacer()
+                    Text("조건에 맞는 스튜디오가 없습니다!")
+                        .font(.system(size: 20.0))
+                    Text("필터를 재설정해주세요.")
+                        .font(.system(size: 14.0))
+                        .foregroundStyle(.gray06)
+                    Spacer()
+                }
+            } else {
                 ScrollView {
                     LazyVStack {
                         ForEach(studioViewModel.studioList.indices, id: \.self) { index in
@@ -51,6 +59,7 @@ struct StudioListView: View {
                             }
                         }
                         
+                        // Pagination 처리를 위한 Color
                         Color(.systemBackground)
                             .frame(height: 5.0)
                             .onAppear {
@@ -59,39 +68,10 @@ struct StudioListView: View {
                             }
                     }
                     .ignoresSafeArea()
-                    .background {
-                        // 배경 눌러서 필터 뷰 올리기
-                        Color(.systemBackground)
-                            .onTapGesture {
-                                hideFilterExtensionView()
-                            }
-                    }
                 }
                 .refreshable {
                     studioViewModel.setDefaultPage()
                     studioViewModel.searchStudio()
-                }
-                
-                VStack {
-                    FilterExpansionView(
-                        studioViewModel: studioViewModel,
-                        selectedFilterType: $selectedFilterType
-                    )
-                    .opacity(isHidden ? 0 : 1)
-                    .background(isHidden ? .orange.opacity(0) : .yellow)
-                    
-                    Spacer()
-                }
-            }
-            .navigationTitle("검색")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Label("장바구니", systemImage: "cart")
-                        .onTapGesture {
-                            print("장바구니로 이동")
-                            hideFilterExtensionView()
-                        }
                 }
             }
         }
@@ -101,13 +81,18 @@ struct StudioListView: View {
             studioViewModel.concept = concept
             studioViewModel.searchStudio()
         }
+        .navigationTitle("검색")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Label("장바구니", systemImage: "cart")
+                    .onTapGesture {
+                        // TODO: 장바구니 네비게이션 처리
+                        print("장바구니로 이동")
+                    }
+            }
+        }
     }
-    
-    func hideFilterExtensionView() {
-        print("배경 터치")
-        selectedFilterType = nil
-    }
-
 }
 
 #Preview {
