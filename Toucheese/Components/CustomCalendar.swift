@@ -77,7 +77,6 @@ struct CustomCalendar: View {
                     
                 }
             }
-            Divider()
         }
     }
     
@@ -95,17 +94,13 @@ struct CustomCalendar: View {
                     } else {
                         let date = getDate(for: index - firstWeekday)
                         let day = index - firstWeekday + 1
+                        var color = checkWeekdayColor(for: day)
                         
-                        CellView(day: day)
-                            .foregroundStyle(Color(UIColor.label))
+                        CellView(day: day, color: color)
                             .padding(.vertical)
-                            .onTapGesture {
-                                selectedDate = date
-                            }
-                            .overlay {
-                                Circle()
-                                    .stroke(selectedDate.isSameDay(as: date) ? .yellow : .clear,
-                                            lineWidth: 4)
+                            .background {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .fill(selectedDate.isSameDay(as: date) ? .yellow : Color.gray01)
                             }
                     }
                 }
@@ -116,14 +111,19 @@ struct CustomCalendar: View {
 
 // MARK: - 일자 셀 뷰
 private struct CellView: View {
-    var day: Int
+    let day: Int
+//    TODO: 컬러 받아주기
+    let color: Color
     
     var body: some View {
-        VStack {
-            RoundedRectangle(cornerRadius: 5)
-                .opacity(0)
-                .overlay(Text(String(day)))
-        }
+        RoundedRectangle(cornerRadius: 5)
+            .opacity(0)
+            .overlay {
+                Text(String(day))
+                    .foregroundStyle(color)
+                let _ = print("Color:",color)
+            }
+        
     }
 }
 
@@ -160,6 +160,21 @@ private extension CustomCalendar {
             self.month = newMonth
             let newDate = calendar.date(from: calendar.dateComponents([.year, .month], from: month))
             self.selectedDate = newDate!
+        }
+    }
+    
+    func checkWeekdayColor(for day: Int) -> Color {
+//        TODO: selectedDate 변수로 매달의 일요일 정보를 가져오면 되겠다.
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month], from: selectedDate)
+        components.day = day
+        let targetDate = calendar.date(from: components)
+        let weekday = calendar.component(.weekday, from: targetDate!)
+        
+        if weekday == 1 {
+            return Color.red
+        } else {
+            return Color.black
         }
     }
 }

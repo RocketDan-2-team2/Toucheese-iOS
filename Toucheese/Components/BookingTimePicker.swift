@@ -229,14 +229,11 @@ struct TimeButtonGrid: View {
                         let tempNum: Int = filteredTimes[idx] <= 12 ? filteredTimes[idx] : filteredTimes[idx] - 12
                         Text("\(tempNum):00")
                             .foregroundStyle(.black)
-                            .padding(2)
+                            .padding(.vertical)
                             .frame(maxWidth: .infinity)
-                            .background(Capsule().fill(buttonYellow))
-                            .overlay {
-                                Capsule()
-                                    .stroke(selectedButton == idx + offset ? .yellow : buttonYellow, lineWidth: 5)
-                            }
                     }
+                    .clipShape(RoundedRectangle(cornerSize: 5))
+                    .background(selectedButton == idx + offset ? Color.primary06 : Color.white)
                     .padding(2)
                 }
             }
