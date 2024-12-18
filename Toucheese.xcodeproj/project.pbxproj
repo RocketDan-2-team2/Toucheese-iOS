@@ -11,6 +11,7 @@
 		136417B52D12F54B005B0A3E /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 136417B42D12F54B005B0A3E /* KakaoSDKAuth */; };
 		136417B72D12F54B005B0A3E /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 136417B62D12F54B005B0A3E /* KakaoSDKCommon */; };
 		136417B92D12F54B005B0A3E /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 136417B82D12F54B005B0A3E /* KakaoSDKUser */; };
+		136419692D13043D005B0A3E /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 136419682D13043D005B0A3E /* GoogleSignIn */; };
 		136C79682CEC69E7009DEA76 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 136C79672CEC69E7009DEA76 /* CombineMoya */; };
 		136C796A2CEC69E7009DEA76 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 136C79692CEC69E7009DEA76 /* Moya */; };
 /* End PBXBuildFile section */
@@ -51,6 +52,7 @@
 				136C79682CEC69E7009DEA76 /* CombineMoya in Frameworks */,
 				136417B72D12F54B005B0A3E /* KakaoSDKCommon in Frameworks */,
 				136417B52D12F54B005B0A3E /* KakaoSDKAuth in Frameworks */,
+				136419692D13043D005B0A3E /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +101,7 @@
 				136417B42D12F54B005B0A3E /* KakaoSDKAuth */,
 				136417B62D12F54B005B0A3E /* KakaoSDKCommon */,
 				136417B82D12F54B005B0A3E /* KakaoSDKUser */,
+				136419682D13043D005B0A3E /* GoogleSignIn */,
 			);
 			productName = Toucheese;
 			productReference = 1317A4732CE5CE9B007264C7 /* Toucheese.app */;
@@ -132,6 +135,7 @@
 				136C79662CEC69E7009DEA76 /* XCRemoteSwiftPackageReference "Moya" */,
 				1333B3232D02B9F9002FB7BA /* XCRemoteSwiftPackageReference "SkeletonUI" */,
 				136417B32D12F54B005B0A3E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				136419672D13043D005B0A3E /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1317A4742CE5CE9B007264C7 /* Products */;
@@ -399,6 +403,14 @@
 				minimumVersion = 2.23.0;
 			};
 		};
+		136419672D13043D005B0A3E /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		136C79662CEC69E7009DEA76 /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya";
@@ -429,6 +441,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 136417B32D12F54B005B0A3E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKUser;
+		};
+		136419682D13043D005B0A3E /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 136419672D13043D005B0A3E /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
 		};
 		136C79672CEC69E7009DEA76 /* CombineMoya */ = {
 			isa = XCSwiftPackageProductDependency;
