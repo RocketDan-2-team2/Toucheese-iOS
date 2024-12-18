@@ -34,7 +34,7 @@ struct ReviewPhotoDetailView: View {
                     HStack {
                         ForEach(imageList.indices, id: \.self) { index in
                             CachedAsyncImage(url: imageList[index])
-                            .frame(width: UIScreen.main.bounds.width,height: 500)
+                            .frame(width: UIScreen.main.bounds.width, height: 500)
                             .id(index)
                         }
                     }

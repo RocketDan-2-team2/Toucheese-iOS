@@ -29,29 +29,32 @@ struct ReviewDetailView: View {
     var body: some View {
         VStack {
             GeometryReader { geometry in
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: -90) {
-                        ForEach(review.imageUrl.indices, id: \.self) { index in
-                            CachedAsyncImage(url: review.imageUrl[index])
-                            .frame(width: geometry.size.width * 0.8, height: 350)
-                            .padding(.top, 50)
-                            .padding(.horizontal, (geometry.size.width * 0.1))
-                            .onTapGesture {
-                                selectedImageIndex = index
-                                navigationManager.present(
-                                    fullScreenCover:
-                                            .reviewPhotoDetailView(
-                                                imageList: review.imageUrl,
-                                                selectedPhotoIndex: $selectedImageIndex
-                                            )
-                                )
+                ScrollViewReader { proxy in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(review.imageUrl.indices, id: \.self) { index in
+                                    Spacer(minLength: -20)
+                                CachedAsyncImage(url: review.imageUrl[index])
+                                    .frame(width: geometry.size.width * 0.8, height: 500)
+                                    .padding(.top, 50)
+                                    .padding(.horizontal, geometry.size.width * 0.1)
+                                    .onTapGesture {
+                                        selectedImageIndex = index
+                                        navigationManager.present(
+                                            fullScreenCover:
+                                                    .reviewPhotoDetailView(
+                                                        imageList: review.imageUrl,
+                                                        selectedPhotoIndex: $selectedImageIndex
+                                                    )
+                                        )
+                                    }
+                                    Spacer(minLength: -20)
                             }
                         }
+                        .scrollTargetLayout()
                     }
-                    .scrollTargetLayout()
                 }
                 .scrollTargetBehavior(.viewAligned)
-                
             }
             
             Text("""
