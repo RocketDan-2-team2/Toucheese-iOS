@@ -8,6 +8,7 @@
 import SwiftUI
 import KakaoSDKCommon
 import KakaoSDKAuth
+import GoogleSignIn
 
 @main
 struct ToucheeseApp: App {
@@ -35,6 +36,8 @@ struct ToucheeseApp: App {
             .onOpenURL { url in
                 if AuthApi.isKakaoTalkLoginUrl(url) {
                     _ = AuthController.handleOpenUrl(url: url)
+                } else {
+                    GIDSignIn.sharedInstance.handle(url)
                 }
             }
         }
