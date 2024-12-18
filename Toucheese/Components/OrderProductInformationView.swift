@@ -15,16 +15,33 @@ struct OrderProductInformationView: View {
     let totalPrice: Int
     
     var body: some View {
-        HStack {
-            AsyncImage(url: URL(string: product.image ?? "")) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 52, height: 68)
-            } placeholder: {
-                //TODO: 스켈레톤 처리하기
-                ProgressView()
+        HStack(spacing: 0) {
+            AsyncImage(url: URL(string: product.image ?? "")) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                default:
+                    Rectangle()
+                        .fill(.clear)
+                        .skeleton(
+                            with: true,
+                            appearance: .gradient(
+                                color: Color(uiColor: .lightGray).opacity(0.5),
+                                background: .clear
+                            ),
+                            shape: .rectangle
+                        )
+                }
             }
+            .frame(width: 52, height: 68)
+            .clipShape(.rect(cornerRadius: 8))
+            .background {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(.placeholder.opacity(0.3))
+            }
+            
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .center, spacing: 2) {
                     Image(.homeFilled)

@@ -91,11 +91,12 @@ struct ReservationDetailView: View {
         .navigationTitle("예약 상세 보기")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 
 #Preview {
     NavigationStack {
-        ReservationDetailView(reservationStateType: .waiting)
+        ReservationDetailView(reservationStateType: .confirm)
     }
 }
