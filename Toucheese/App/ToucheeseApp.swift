@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import KakaoSDKCommon
 
 @main
 struct ToucheeseApp: App {
     @StateObject private var navigationManager = NavigationManager()
+    
+    init() {
+        KakaoSDK.initSDK(appKey: ToucheeseEnv.kakaoAppKey)
+    }
     
     var body: some Scene {
         WindowGroup {
