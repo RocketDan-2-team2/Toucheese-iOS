@@ -16,7 +16,7 @@
 		</dict>
 	</array>
 	<key>GIDClientID</key>
-	<string></string>
+	<string>$(GOOGLE_CLIENT_ID)</string>
 	<key>KAKAO_APP_KEY</key>
 	<string>$(KAKAO_APP_KEY)</string>
 	<key>NSAppTransportSecurity</key>
