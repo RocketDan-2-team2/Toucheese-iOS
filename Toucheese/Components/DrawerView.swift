@@ -63,8 +63,8 @@ struct DrawerView<Content: View, DrawerContent: View>: View {
     
     init(
         isShowingDrawer: Binding<Bool>,
-        drawerWidthRate: CGFloat = 1.0,
-        drawerMaxRate: CGFloat = 0.05,
+        drawerWidthRate: CGFloat = 0.8,
+        drawerMaxRate: CGFloat = 0.08,
         standardRate: CGFloat = 0.5,
         @ViewBuilder content: () -> Content,
         @ViewBuilder drawerContent: () -> DrawerContent
