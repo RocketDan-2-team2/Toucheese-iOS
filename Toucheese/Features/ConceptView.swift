@@ -28,7 +28,7 @@ struct ConceptView: View {
                         repeating: .init(.flexible()),
                         count: 2
                     ),
-                    spacing: 12
+                    spacing: 16
                 ) {
                     ForEach(conceptList) { concept in
                         ConceptButton(
@@ -41,7 +41,7 @@ struct ConceptView: View {
                         }
                     }
                 }
-                .padding()
+                .padding(10)
             }
             .scrollIndicators(.hidden)
         }
