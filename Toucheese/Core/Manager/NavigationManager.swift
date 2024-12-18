@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-final class NavigationManager: ObservableObject {
-    @Published var selectedTab: TabViewType = .home
+final class NavigationManager: ObservableObject {   
+    var selectedTab: TabViewType = .home
     
     @Published var homePath: [ViewType] = []
     @Published var reservationPath: [ViewType] = []

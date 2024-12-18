@@ -23,13 +23,14 @@ struct ToucheeseTabView: View {
             .tabItem { Label("홈", systemImage: "house") }
             .tag(TabViewType.home)
 
+
             NavigationStack(path: $navigationManager.reservationPath) {
                 ReservationListView()
                     .navigationDestination(for: ViewType.self) { view in
                         navigationManager.build(view)
                     }
             }
-            .tabItem { Label("예약일정", systemImage: "calendar") }
+            .tabItem { Label("예약일정", systemImage: "calendar") } 
             .tag(TabViewType.reservation)
         }
         .environmentObject(navigationManager)
