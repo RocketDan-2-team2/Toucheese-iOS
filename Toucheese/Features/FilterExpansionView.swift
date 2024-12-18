@@ -11,6 +11,8 @@ struct FilterExpansionView: View {
     
     @ObservedObject var studioViewModel: StudioViewModel
     
+    @Binding var isShowingDrawer: Bool
+    
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
@@ -26,6 +28,9 @@ struct FilterExpansionView: View {
                     Spacer()
                     Image(systemName: "xmark")
                         .bold()
+                        .onTapGesture {
+                            isShowingDrawer = false
+                        }
                 }
                 
                 VStack(alignment: .leading) {
@@ -133,6 +138,7 @@ struct FilterExpansionView: View {
                         )
                         .onTapGesture {
                             studioViewModel.searchStudio()
+                            isShowingDrawer = false
                         }
                 }
             }
@@ -142,5 +148,8 @@ struct FilterExpansionView: View {
 }
 
 #Preview {
-    FilterExpansionView(studioViewModel: StudioViewModel())
+    FilterExpansionView(
+        studioViewModel: StudioViewModel(),
+        isShowingDrawer: .constant(true)
+    )
 }

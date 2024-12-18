@@ -196,5 +196,10 @@ struct DrawerView<Content: View, DrawerContent: View>: View {
 }
 
 #Preview {
-    FilterView(studioViewModel: StudioViewModel(), selectedFilterType: .constant(.price))
+    DrawerView(isShowingDrawer: .constant(true)) {
+        Color.black
+    } drawerContent: {
+        Color.red
+    }
+
 }

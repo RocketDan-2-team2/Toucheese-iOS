@@ -10,70 +10,25 @@ import Combine
 
 struct StudioListView: View {
     
-    @EnvironmentObject private var navigationManager: NavigationManager
-    
     @StateObject private var studioViewModel: StudioViewModel = StudioViewModel()
+    
+    @State private var isShowingDrawer: Bool = false
     
     let concept: ConceptEntity
     
     var body: some View {
-        VStack(spacing: 0.0) {
-            
-            // Filter
+        DrawerView(isShowingDrawer: $isShowingDrawer) {
             HStack {
-                FilterButton(buttonType: .representation(hadFiltered: false))
-                ForEach(FilterType.allCases, id: \.self) { filter in
-                    FilterButton(buttonType: .filterType(title: filter.title))
-                }
-                Spacer()
+                StudioListBodyView(
+                    studioViewModel: studioViewModel,
+                    isShowingDrawer: $isShowingDrawer
+                )
             }
-            .padding(.horizontal, 16.0)
-            .padding(.vertical, 8.0)
-            
-            if studioViewModel.studioList.isEmpty {
-                VStack(spacing: 8.0) {
-                    Spacer()
-                    Text("조건에 맞는 스튜디오가 없습니다!")
-                        .font(.system(size: 20.0))
-                    Text("필터를 재설정해주세요.")
-                        .font(.system(size: 14.0))
-                        .foregroundStyle(.gray06)
-                    Spacer()
-                }
-            } else {
-                ScrollView {
-                    LazyVStack {
-                        ForEach(studioViewModel.studioList.indices, id: \.self) { index in
-                            StudioListCell(
-                                order: index + 1,
-                                profileImage: studioViewModel.studioList[index].profileImage ?? "",
-                                name: studioViewModel.studioList[index].name,
-                                popularity: studioViewModel.studioList[index].popularity ?? 0.0,
-                                portfolios: studioViewModel.studioList[index].portfolios
-                            )
-                            .onTapGesture {
-                                let selectedStudio = studioViewModel.studioList[index]
-                                navigationManager.push(
-                                    .studioDetailView(studioId: selectedStudio.id)
-                                )
-                            }
-                        }
-                        
-                        // Pagination 처리를 위한 Color
-                        Color(.systemBackground)
-                            .frame(height: 5.0)
-                            .onAppear {
-                                if studioViewModel.studioList.isEmpty { return }
-                                studioViewModel.searchStudio()
-                            }
-                    }
-                    .ignoresSafeArea()
-                }
-                .refreshable {
-                    studioViewModel.setDefaultPage()
-                    studioViewModel.searchStudio()
-                }
-            }
+        } drawerContent: {
+            FilterExpansionView(
+                studioViewModel: studioViewModel,
+                isShowingDrawer: $isShowingDrawer
+            )
         }
         .onAppear {
             if !studioViewModel.studioList.isEmpty { return }
@@ -81,6 +36,8 @@ struct StudioListView: View {
             studioViewModel.concept = concept
             studioViewModel.searchStudio()
         }
+        // FIXME: NavigationStack으로 덮으면, GeometryReader의 Offset이 다 변경되어서 문제가 생김
+        // 커스텀 네비게이션바 사용해야할듯함        
         .navigationTitle("검색")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -96,7 +53,7 @@ struct StudioListView: View {
 }
 
 #Preview {
-    NavigationStack {
-        StudioListView(concept: .init(id: 1, name: "VIBRANT", image: nil))
-    }
+    StudioListView(
+        concept: .init(id: 1, name: "VIBRANT", image: nil)
+    )
 }
