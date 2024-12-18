@@ -120,7 +120,7 @@ struct StudioProductDetailView: View {
                 
                 Button(
                     action: {
-                        navigationManager.path.append(
+                        navigationManager.homePath.append(
                             .orderView(
                                 studio: studio,
                                 product: product,
