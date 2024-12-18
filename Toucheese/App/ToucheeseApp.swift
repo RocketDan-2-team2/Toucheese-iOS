@@ -9,23 +9,10 @@ import SwiftUI
 
 @main
 struct ToucheeseApp: App {
-    @StateObject private var navigationManager = NavigationManager()
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $navigationManager.path) {
-                IntroView()
-                    .navigationDestination(for: ViewType.self) { view in
-                        navigationManager.build(view)
-                    }
-                    .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
-                        navigationManager.build(fullScreenCover)
-                    }
-                    .transaction { transaction in
-                        transaction.disablesAnimations = true
-                    }
-            }
-            .environmentObject(navigationManager)
+            ToucheeseTabView()
         }
     }
 }
