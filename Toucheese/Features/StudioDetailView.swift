@@ -28,7 +28,6 @@ struct StudioDetailView: View {
     )
     @State private var studioItems: [StudioItem] = []
     @State private var studioReviews: [StudioReview] = []
-    @State private var selectedProduct: StudioProduct?
     
     @State private var bag = Set<AnyCancellable>()
     
@@ -117,11 +116,7 @@ struct StudioDetailView: View {
                 Section {
                     switch tabSelection {
                     case .price:
-                        StudioProductListView(
-                            notice: studioInfo.description,
-                            productList: studioItems,
-                            selectedProduct: $selectedProduct
-                        )
+                        studioProductListView
                     case .review:
                         studioReviewListView
                     }
@@ -135,16 +130,6 @@ struct StudioDetailView: View {
         .task {
             fetchStudioDetail()
             fetchStudioHours()
-        }
-        .onChange(of: selectedProduct) {
-            guard let selectedProduct else { return }
-            navigationManager.push(
-                .studioProductDetailView(
-                    studio: studioInfo,
-                    product: selectedProduct,
-                    hoursRawData: hoursRawData
-                )
-            )
         }
         .toolbarRole(.editor)
         .toolbar {
@@ -165,6 +150,89 @@ struct StudioDetailView: View {
                 }
             }
         }
+    }
+    
+    private var studioProductListView: some View {
+        ScrollView {
+            StudioNoticeView(notice: studioInfo.description)
+                .padding(.horizontal)
+            
+            LazyVStack(alignment: .leading) {
+                Text("촬영 상품")
+                    .font(.headline)
+                    .padding(.horizontal)
+                
+                ForEach(studioItems) { product in
+                    Button {
+                        fetchStudioProductDetil(id: product.id)
+                    } label: {
+                        StudioProductCell(product: product)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .padding(.vertical, 8)
+        }
+    }
+    
+    private var studioReviewListView: some View {
+        LazyVGrid(columns: gridItems) {
+            ForEach(studioReviews.indices, id: \.self) { index in
+                Rectangle()
+                    .fill(.placeholder)
+                    .aspectRatio(1, contentMode: .fill)
+                    .overlay {
+                        CachedAsyncImage(url: studioReviews[index].image)
+                    }
+                    .onTapGesture {
+                        fetchReviewDetail(id: studioReviews[index].id)
+                    }
+            }
+        }
+        .padding(5.0)
+    }
+    
+    //MARK: - Network 
+    
+    func fetchStudioProductDetil(id: Int) {
+        studioService.getStudioProductDetail(productID: id)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("ProductDetail: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { studioProduct in
+                navigationManager.push(
+                    .studioProductDetailView(
+                        studio: studioInfo,
+                        product: studioProduct.translate(),
+                        hoursRawData: hoursRawData
+                    )
+                )
+            }
+            .store(in: &bag)
+    }
+    
+    func fetchReviewDetail(id: Int) {
+        studioService.getReviewDetail(reviewID: id)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Event: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { review in
+                navigationManager.push(
+                    .reviewDetailView(
+                        review: review.reviewDto,
+                        user: review.userProfileDto
+                    )
+                )
+            }
+            .store(in: &bag)
     }
     
     func fetchStudioDetail() {
@@ -195,34 +263,6 @@ struct StudioDetailView: View {
         .store(in: &bag)
     }
     
-    private var studioReviewListView: some View {
-        LazyVGrid(columns: gridItems) {
-            ForEach(studioReviews.indices, id: \.self) { index in
-                Rectangle()
-                    .fill(.placeholder)
-                    .aspectRatio(1, contentMode: .fill)
-                    .overlay {
-                        CachedAsyncImage(url: studioReviews[index].image)
-                    }
-                    .onTapGesture {
-                        studioService.getReviewDetail(reviewID: studioReviews[index].id)
-                            .sink { event in
-                                switch event {
-                                case .finished:
-                                    print("Event: \(event)")
-                                case .failure(let error):
-                                    print(error.localizedDescription)
-                                }
-                            } receiveValue: { review in
-                                navigationManager.push(.reviewDetailView(review: review.reviewDto, user: review.userProfileDto))
-                            }
-                            .store(in: &bag)
-                    }
-            }
-        }
-        .padding(5.0)
-    }
-    
     private func fetchStudioHours() {
         studioService.getStudioHours(studioID: studioId)
             .sink { event in
@@ -245,3 +285,4 @@ struct StudioDetailView: View {
         StudioDetailView(studioId: 1)
     }
 }
+
