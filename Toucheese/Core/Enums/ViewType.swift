@@ -25,4 +25,6 @@ enum ViewType: Hashable {
 
     case reservationListView
     case reservationDetailView(reservationStateType: ReservationStateType)
+    case reservationUpdateView
+    
 }

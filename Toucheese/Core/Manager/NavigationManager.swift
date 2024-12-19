@@ -52,6 +52,8 @@ final class NavigationManager: ObservableObject {
             ReservationListView()
         case let .reservationDetailView(reservationStateType):
             ReservationDetailView(reservationStateType: reservationStateType)
+        case .reservationUpdateView:
+            ReservationUpdateView()
         }
     }
     
