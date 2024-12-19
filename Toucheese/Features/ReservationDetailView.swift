@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-//TODO: 처리 중에 대한 구체적인 기획이 필요할 듯... 아예 대기 중으로 통일하는 건 어떨지
-
 struct ReservationDetailView: View {
+    
+    @EnvironmentObject private var navigationManager: NavigationManager
     
     let reservationStateType: ReservationStateType
     
@@ -69,7 +69,9 @@ struct ReservationDetailView: View {
                     if reservationStateType == .waiting {
                         Button(action: {
                             //TODO: 예약 날짜 변경 페이지로 이동
-                            
+                            navigationManager.push(
+                                .reservationUpdateView
+                            )
                         }, label: {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(.primary06)

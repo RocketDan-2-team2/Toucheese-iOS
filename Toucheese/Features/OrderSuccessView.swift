@@ -41,31 +41,28 @@ struct OrderSuccessView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
                 HStack(spacing: 0) {
-                    AsyncImage(url: URL(string: product.image ?? "")) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        default:
-                            Rectangle()
-                                .fill(.clear)
-                                .skeleton(
-                                    with: true,
-                                    appearance: .gradient(
-                                        color: Color(uiColor: .lightGray).opacity(0.5),
-                                        background: .clear
-                                    ),
-                                    shape: .rectangle
-                                )
+                    
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.placeholder.opacity(0.3))
+                        .overlay {
+                            AsyncImage(url: URL(string: product.image ?? "")) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                Color.clear
+                                    .skeleton(
+                                        with: true,
+                                        appearance: .gradient(
+                                            color: Color(uiColor: .lightGray).opacity(0.2)
+                                        ),
+                                        shape: .rectangle
+                                    )
+                            }
                         }
-                    }
-                    .frame(width: 52, height: 68)
-                    .clipShape(.rect(cornerRadius: 8))
-                    .background {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(.placeholder.opacity(0.3))
-                    }
+                        .frame(width: 52, height: 68)
+                        .clipShape(.rect(cornerRadius: 8))
+                    
                     VStack(alignment: .leading, spacing: 0) {
                         HStack {
                             VStack(alignment: .leading) {

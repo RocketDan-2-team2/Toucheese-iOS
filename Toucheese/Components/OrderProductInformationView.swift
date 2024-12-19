@@ -16,31 +16,26 @@ struct OrderProductInformationView: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            AsyncImage(url: URL(string: product.image ?? "")) { phase in
-                switch phase {
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                default:
-                    Rectangle()
-                        .fill(.clear)
-                        .skeleton(
-                            with: true,
-                            appearance: .gradient(
-                                color: Color(uiColor: .lightGray).opacity(0.5),
-                                background: .clear
-                            ),
-                            shape: .rectangle
-                        )
+            RoundedRectangle(cornerRadius: 8)
+                .fill(.placeholder.opacity(0.3))
+                .overlay {
+                    AsyncImage(url: URL(string: product.image ?? "")) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        Color.clear
+                            .skeleton(
+                                with: true,
+                                appearance: .gradient(
+                                    color: Color(uiColor: .lightGray).opacity(0.2)
+                                ),
+                                shape: .rectangle
+                            )
+                    }
                 }
-            }
-            .frame(width: 52, height: 68)
-            .clipShape(.rect(cornerRadius: 8))
-            .background {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(.placeholder.opacity(0.3))
-            }
+                .frame(width: 52, height: 68)
+                .clipShape(.rect(cornerRadius: 8))
             
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .center, spacing: 2) {
@@ -53,6 +48,7 @@ struct OrderProductInformationView: View {
                         .foregroundStyle(.gray06)
                 }
                 .padding(.bottom, 8)
+                
                 HStack {
                     VStack(alignment: .leading, spacing: 0) {
                         Text("\(product.name)")
@@ -71,7 +67,9 @@ struct OrderProductInformationView: View {
                             .padding(.bottom, 4)
                         }
                     }
+                    
                     Spacer()
+                    
                     VStack(alignment: .trailing) {
                         Text("\(product.price)원")
                             .font(.system(size: 14, weight: .semibold))
@@ -84,6 +82,7 @@ struct OrderProductInformationView: View {
                         }
                     }
                 }
+                
                 HStack {
                     Spacer()
                     Text("총 \(totalPrice)원")
