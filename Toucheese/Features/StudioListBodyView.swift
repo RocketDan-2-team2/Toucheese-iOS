@@ -47,7 +47,73 @@ struct StudioListBodyView: View {
             .padding(.horizontal, 16.0)
             .padding(.vertical, 8.0)
             
-            // TODO: 필터 리스트 만들기
+            HStack {
+                ScrollView(.horizontal) {
+                    HStack(spacing: 8.0) {
+                        if let selectedRating = studioViewModel.selectedRating {
+                            HStack(spacing: 4.0) {
+                                Text(selectedRating.title)
+                                
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 14.0))
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.gray05)
+                                    .onTapGesture {
+                                        studioViewModel.selectedRating = nil
+                                    }
+                            }
+                            .toucheeseButtonStyle(
+                                style: .withColor(color: .primary02)
+                            )
+                        }
+                        if let selectedPrice = studioViewModel.selectedPrice {
+                            HStack(spacing: 4.0) {
+                                Text(selectedPrice.title)
+                                
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 14.0))
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.gray05)
+                                    .onTapGesture {
+                                        studioViewModel.selectedPrice = nil
+                                    }
+                            }
+                            .toucheeseButtonStyle(
+                                style: .withColor(color: .primary02)
+                            )
+                        }
+                        
+                        ForEach(studioViewModel.selectedRegion, id: \.self) { region in
+                            HStack(spacing: 4.0) {
+                                Text(region.title)
+                                
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 14.0))
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.gray05)
+                                    .onTapGesture {
+                                        let index = studioViewModel.selectedRegion.firstIndex(where: { $0 == region })!
+                                        studioViewModel.selectedRegion.remove(at: index)
+                                    }
+                            }
+                            .toucheeseButtonStyle(
+                                style: .withColor(color: .primary02)
+                            )
+                        }
+                    }
+                }
+                .scrollIndicators(.hidden)
+                
+                if !(studioViewModel.selectedRegion.isEmpty && studioViewModel.selectedPrice == nil && studioViewModel.selectedRating == nil) {
+                    Text("초기화")
+                        .onTapGesture {
+                            studioViewModel.selectedRegion.removeAll()
+                            studioViewModel.selectedPrice = nil
+                            studioViewModel.selectedRating = nil
+                        }
+                }
+            }
+            .padding(.horizontal, 16.0)
             
             if studioViewModel.studioList.isEmpty {
                 VStack(spacing: 8.0) {
