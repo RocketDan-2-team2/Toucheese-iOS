@@ -119,21 +119,17 @@ struct StudioDetailView: View {
                         if !studioItems.isEmpty {
                             studioProductListView
                         } else {
-                            VStack {
-                                Text("등록된 촬영 상품이 없습니다.")
-                                    .font(.system(size: 20, weight: .medium))
-                                    .padding(.top, 100)
-                            }
+                            Text("등록된 촬영 상품이 없습니다.")
+                                .font(.system(size: 20, weight: .medium))
+                                .padding(.top, 100)
                         }
                     case .review:
                         if !studioReviews.isEmpty {
                             studioReviewListView
                         } else {
-                            VStack {
-                                Text("등록된 리뷰가 없습니다.")
-                                    .font(.system(size: 20, weight: .medium))
-                                    .padding(.top, 100)
-                            }
+                            Text("등록된 리뷰가 없습니다.")
+                                .font(.system(size: 20, weight: .medium))
+                                .padding(.top, 100)
                         }
                     }
                 } header: {
@@ -293,7 +289,7 @@ struct StudioDetailView: View {
                 hoursRawData = data
             }
             .store(in: &bag)
-
+        
     }
 }
 
