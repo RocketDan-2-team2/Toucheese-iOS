@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct ToucheeseApp: App {
+    
     @StateObject private var navigationManager = NavigationManager()
     
     var body: some Scene {
@@ -21,11 +22,8 @@ struct ToucheeseApp: App {
                     .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
                         navigationManager.build(fullScreenCover)
                     }
-                    .transaction { transaction in
-                        transaction.disablesAnimations = true
-                    }
             }
-            .environmentObject(navigationManager)
         }
+        .environmentObject(navigationManager)
     }
 }

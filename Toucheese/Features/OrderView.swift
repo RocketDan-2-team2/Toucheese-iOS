@@ -49,27 +49,12 @@ struct OrderView: View {
                     Text("주문 확인")
                         .font(.system(size: 16, weight: .semibold))
                         .padding(.bottom, -24)
+                    
                     VStack(alignment: .leading, spacing: 0) {
                         Text("주문자 정보")
                             .font(.system(size: 16, weight: .bold))
                             .padding(.vertical, 14)
-                        HStack {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("성함")
-                                Text("연락처")
-                                Text("이메일")
-                            }
-                            .font(.system(size: 14, weight: .medium))
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text(user.name)
-                                Text(user.phone)
-                                Text(user.email)
-                                    .tint(.black)
-                            }
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(.gray07)
-                            .padding(.leading, 30)
-                        }
+                        OrderUserInformationView()
                     }
                     
                     VStack(alignment: .leading, spacing: 0) {
@@ -82,19 +67,10 @@ struct OrderView: View {
                             .font(.system(size: 16, weight: .bold))
                             .padding(.vertical, 14)
                         
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("\(studio.name)")
-                                .font(.system(size: 16, weight: .bold))
-                            Text(selectedDateString)
-                                .font(.system(size: 16, weight: .medium))
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(.gray01, in: RoundedRectangle(cornerRadius: 8))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(.gray02)
-                        }
+                        OrderStudioInformationView(
+                            studio: studio,
+                            selectedDateString: selectedDateString
+                        )
                         
                     }
                     
@@ -107,73 +83,13 @@ struct OrderView: View {
                         Text("주문 상품")
                             .font(.system(size: 16, weight: .bold))
                             .padding(.vertical, 14)
-                        HStack {
-                            AsyncImage(url: URL(string: product.image ?? "")) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 52, height: 68)
-                            } placeholder: {
-                                //TODO: 스켈레톤 처리하기
-                                ProgressView()
-                            }
-                            VStack(alignment: .leading, spacing: 0) {
-                                HStack(alignment: .center, spacing: 2) {
-                                    Image(.homeFilled)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 12, height: 12)
-                                    Text("\(studio.name)")
-                                        .font(.system(size: 12, weight: .medium))
-                                        .foregroundStyle(.gray06)
-                                }
-                                .padding(.bottom, 8)
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 0) {
-                                        Text("\(product.name)")
-                                            .font(.system(size: 14, weight: .semibold))
-                                            .padding(.bottom, 6)
-                                        ForEach(selectedOptions) { option in
-                                            HStack(alignment: .center, spacing: 2) {
-                                                Image(.turnRight)
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 16, height: 16)
-                                                Text("\(option.name)")
-                                                    .font(.system(size: 12, weight: .regular))
-                                                    .foregroundStyle(.gray06)
-                                            }
-                                            .padding(.bottom, 4)
-                                        }
-                                    }
-                                    Spacer()
-                                    VStack(alignment: .trailing) {
-                                        Text("\(product.price)원")
-                                            .font(.system(size: 14, weight: .semibold))
-                                            .padding(.bottom, 6)
-                                        ForEach(selectedOptions) { option in
-                                            Text("+\(option.price)원")
-                                                .font(.system(size: 12, weight: .regular))
-                                                .foregroundStyle(.gray06)
-                                                .padding(.bottom, 4)
-                                        }
-                                    }
-                                }
-                                HStack {
-                                    Spacer()
-                                    Text("총 \(totalPrice)원")
-                                        .font(.system(size: 16, weight: .bold))
-                                        .padding(.top, 8)
-                                }
-                            }
-                            .padding(.leading, 16)
-                        }
-                        .padding()
-                        .background(.gray01, in: RoundedRectangle(cornerRadius: 8))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(.gray02)
-                        }
+                        
+                        OrderProductInformationView(
+                            product: product,
+                            studio: studio,
+                            selectedOptions: selectedOptions,
+                            totalPrice: totalPrice
+                        )
                     }
                     
                     VStack(alignment: .leading, spacing: 0) {
