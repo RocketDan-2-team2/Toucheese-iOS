@@ -9,147 +9,141 @@ import SwiftUI
 
 struct FilterExpansionView: View {
     
-    @ObservedObject var studioViewModel: StudioViewModel
+    @EnvironmentObject private var navigationManager: NavigationManager
     
-    @Binding var isShowingDrawer: Bool
+    @ObservedObject var studioViewModel: StudioViewModel
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
-        ZStack {
-            UnevenRoundedRectangle(topLeadingRadius: 8.0)
-                .fill(.background)
+        VStack(spacing: 16.0) {
+            HStack {
+                Text("필터")
+                    .font(.system(size: 16.0))
+                    .bold()
+                Spacer()
+                Image(systemName: "xmark")
+                    .bold()
+                    .onTapGesture {
+                        navigationManager.dismiss()
+                    }
+            }
             
-            VStack(spacing: 16.0) {
-                HStack {
-                    Text("필터")
-                        .font(.system(size: 16.0))
-                        .bold()
-                    Spacer()
-                    Image(systemName: "xmark")
-                        .bold()
-                        .onTapGesture {
-                            isShowingDrawer = false
-                        }
-                }
+            VStack(alignment: .leading) {
+                Text("지역")
+                    .font(.system(size: 14.0))
+                    .padding(.vertical, 11.5)
                 
-                VStack(alignment: .leading) {
-                    Text("지역")
-                        .font(.system(size: 14.0))
-                        .padding(.vertical, 11.5)
-                    
-                    LazyVGrid(columns: columns, spacing: 16.0) {
-                        // 지역 전체 버튼
+                LazyVGrid(columns: columns, spacing: 16.0) {
+                    // 지역 전체 버튼
+                    HStack {
+                        FilterDuplicatedButton(
+                            type: nil,
+                            selectedType: $studioViewModel.selectedRegion
+                        )
+                        Spacer()
+                    }
+                    // 지역 allCases
+                    ForEach(RegionType.allCases, id: \.self) { region in
                         HStack {
                             FilterDuplicatedButton(
-                                type: nil,
+                                type: region,
                                 selectedType: $studioViewModel.selectedRegion
                             )
                             Spacer()
                         }
-                        // 지역 allCases
-                        ForEach(RegionType.allCases, id: \.self) { region in
-                            HStack {
-                                FilterDuplicatedButton(
-                                    type: region,
-                                    selectedType: $studioViewModel.selectedRegion
-                                )
-                                Spacer()
-                            }
-                        }
                     }
                 }
+            }
+            
+            Divider()
+                .padding(.top, 16.0)
+            
+            VStack(alignment: .leading, spacing: 16.0) {
+                Text("인기")
+                    .font(.system(size: 14.0))
                 
-                Divider()
-                    .padding(.top, 16.0)
-                
-                VStack(alignment: .leading, spacing: 16.0) {
-                    Text("인기")
-                        .font(.system(size: 14.0))
-                    
-                    // 인기 전체 버튼
+                // 인기 전체 버튼
+                HStack {
+                    FilterRadioButton(
+                        type: nil,
+                        selectedType: $studioViewModel.selectedRating
+                    )
+                    Spacer()
+                }
+                // 인기 allCases
+                ForEach(RatingType.allCases, id: \.self) { rating in
                     HStack {
                         FilterRadioButton(
-                            type: nil,
+                            type: rating,
                             selectedType: $studioViewModel.selectedRating
                         )
                         Spacer()
                     }
-                    // 인기 allCases
-                    ForEach(RatingType.allCases, id: \.self) { rating in
-                        HStack {
-                            FilterRadioButton(
-                                type: rating,
-                                selectedType: $studioViewModel.selectedRating
-                            )
-                            Spacer()
-                        }
-                    }
                 }
+            }
+            
+            Divider()
+                .padding(.top, 16.0)
+            
+            VStack(alignment: .leading, spacing: 16.0) {
+                Text("가격")
+                    .font(.system(size: 14.0))
+                    .padding(.vertical, 11.5)
                 
-                Divider()
-                    .padding(.top, 16.0)
-                
-                VStack(alignment: .leading, spacing: 16.0) {
-                    Text("가격")
-                        .font(.system(size: 14.0))
-                        .padding(.vertical, 11.5)
-                    
-                    // 가격 전체 버튼
+                // 가격 전체 버튼
+                HStack {
+                    FilterRadioButton(
+                        type: nil,
+                        selectedType: $studioViewModel.selectedPrice
+                    )
+                    Spacer()
+                }
+                // 가격 allCases
+                ForEach(PriceType.allCases, id: \.self) { price in
                     HStack {
                         FilterRadioButton(
-                            type: nil,
+                            type: price,
                             selectedType: $studioViewModel.selectedPrice
                         )
                         Spacer()
                     }
-                    // 가격 allCases
-                    ForEach(PriceType.allCases, id: \.self) { price in
-                        HStack {
-                            FilterRadioButton(
-                                type: price,
-                                selectedType: $studioViewModel.selectedPrice
-                            )
-                            Spacer()
-                        }
-                    }
-                }
-                
-                Spacer()
-                
-                HStack(spacing: 8.0) {
-                    Text("초기화")
-                        .font(.system(size: 14.0))
-                        .bold()
-                        .toucheeseButtonStyle(
-                            style: .medium,
-                            padding: (vertical: 11.5, horizontal: 21.5)
-                        )
-                        .onTapGesture {
-                            studioViewModel.selectedRegion.removeAll()
-                            studioViewModel.selectedRating = nil
-                            studioViewModel.selectedPrice = nil
-                        }
-                    Text("n개의 스튜디오 보기")
-                        .font(.system(size: 14.0))
-                        .bold()
-                        .toucheeseButtonStyle(
-                            shapeStyle: .fullWidth
-                        )
-                        .onTapGesture {
-                            studioViewModel.searchStudio()
-                            isShowingDrawer = false
-                        }
                 }
             }
-            .padding([.top, .horizontal], 24.0)
+            
+            Spacer()
+            
+            HStack(spacing: 8.0) {
+                Text("초기화")
+                    .font(.system(size: 14.0))
+                    .bold()
+                    .toucheeseButtonStyle(
+                        style: .medium,
+                        padding: (vertical: 11.5, horizontal: 21.5)
+                    )
+                    .onTapGesture {
+                        studioViewModel.selectedRegion.removeAll()
+                        studioViewModel.selectedRating = nil
+                        studioViewModel.selectedPrice = nil
+                    }
+                Text("n개의 스튜디오 보기")
+                    .font(.system(size: 14.0))
+                    .bold()
+                    .toucheeseButtonStyle(
+                        shapeStyle: .fullWidth
+                    )
+                    .onTapGesture {
+                        studioViewModel.searchStudio()
+                        navigationManager.dismiss()
+                    }
+            }
         }
+        .padding([.top, .horizontal], 24.0)
     }
 }
 
 #Preview {
     FilterExpansionView(
-        studioViewModel: StudioViewModel(),
-        isShowingDrawer: .constant(true)
+        studioViewModel: StudioViewModel()
     )
 }

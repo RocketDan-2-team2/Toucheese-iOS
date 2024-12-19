@@ -25,11 +25,21 @@ struct StudioListBodyView: View {
             // Filter
             HStack {
                 FilterButton(buttonType: .representation(hadFiltered: false)) {
-                    isShowingDrawer = true
+                    navigationManager.present(
+                        fullScreenCover:
+                                .filterExpansionView(
+                                    studioViewModel: studioViewModel
+                                )
+                    )
                 }
                 ForEach(FilterType.allCases, id: \.self) { filter in
                     FilterButton(buttonType: .filterType(title: filter.title)) {
-                        isShowingDrawer = true
+                        navigationManager.present(
+                            fullScreenCover:
+                                    .filterExpansionView(
+                                        studioViewModel: studioViewModel
+                                    )
+                        )
                     }
                 }
                 Spacer()

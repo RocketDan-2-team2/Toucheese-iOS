@@ -63,7 +63,7 @@ struct DrawerView<Content: View, DrawerContent: View>: View {
     
     init(
         isShowingDrawer: Binding<Bool>,
-        drawerWidthRate: CGFloat = 0.8,
+        drawerWidthRate: CGFloat = 1.0,
         drawerMaxRate: CGFloat = 0.08,
         standardRate: CGFloat = 0.5,
         @ViewBuilder content: () -> Content,
@@ -81,16 +81,6 @@ struct DrawerView<Content: View, DrawerContent: View>: View {
         ZStack {
             // content
             self.content
-            
-            // 배경을 어둡게 만들기 위한 사각형
-            if isShowingDrawer {
-                Rectangle()
-                    .opacity(0.0001)
-                    .onTapGesture {
-                        print("배경터치")
-                        isShowingDrawer = false
-                    }
-            }
             
             GeometryReader { proxy in
                 
@@ -116,18 +106,23 @@ struct DrawerView<Content: View, DrawerContent: View>: View {
                 // Drawer의 최대 x좌표
                 let maxPositionX = screenWidth - drawerMaxWidth
                 
+                // Drawer 그 자체
                 ZStack(alignment: .leading) {
                     if isSetDrawer {
                         // Drawer Background
                         Rectangle()
                             .fill(.background)
-                            .frame(width: drawerMaxWidth, height: proxy.size.height)
+                            .frame(
+                                width: drawerMaxWidth,
+                                height: proxy.size.height
+                            )
                         
                         // Drawer Content
                         self.drawerContent
                             .frame(width: drawerWidth, height: proxy.size.height)
                     }
                 }
+                
                 // Drawer의 Offset(위치)
                 .offset(currentOffset)
                 
