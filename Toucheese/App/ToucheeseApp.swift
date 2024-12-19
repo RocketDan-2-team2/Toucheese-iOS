@@ -19,6 +19,12 @@ struct ToucheeseApp: App {
                     .navigationDestination(for: ViewType.self) { view in
                         navigationManager.build(view)
                     }
+                    .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
+                        navigationManager.build(fullScreenCover)
+                    }
+                    .transaction { transaction in
+                        transaction.disablesAnimations = true
+                    }
             }
         }
         .environmentObject(navigationManager)
