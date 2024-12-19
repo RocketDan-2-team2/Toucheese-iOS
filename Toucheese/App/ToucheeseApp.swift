@@ -12,6 +12,7 @@ import GoogleSignIn
 
 @main
 struct ToucheeseApp: App {
+    
     @StateObject private var navigationManager = NavigationManager()
     
     init() {
@@ -28,11 +29,7 @@ struct ToucheeseApp: App {
                     .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
                         navigationManager.build(fullScreenCover)
                     }
-                    .transaction { transaction in
-                        transaction.disablesAnimations = true
-                    }
             }
-            .environmentObject(navigationManager)
             .onOpenURL { url in
                 if AuthApi.isKakaoTalkLoginUrl(url) {
                     _ = AuthController.handleOpenUrl(url: url)
@@ -41,5 +38,6 @@ struct ToucheeseApp: App {
                 }
             }
         }
+        .environmentObject(navigationManager)
     }
 }

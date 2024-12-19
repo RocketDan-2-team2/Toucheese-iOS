@@ -40,16 +40,29 @@ struct OrderSuccessView: View {
                     .frame(height: 1)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                HStack {
-                    AsyncImage(url: URL(string: product.image ?? "")) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 52, height: 68)
-                    } placeholder: {
-                        //TODO: 스켈레톤 처리하기
-                        ProgressView()
-                    }
+                HStack(spacing: 0) {
+                    
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.placeholder.opacity(0.3))
+                        .overlay {
+                            AsyncImage(url: URL(string: product.image ?? "")) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                Color.clear
+                                    .skeleton(
+                                        with: true,
+                                        appearance: .gradient(
+                                            color: Color(uiColor: .lightGray).opacity(0.2)
+                                        ),
+                                        shape: .rectangle
+                                    )
+                            }
+                        }
+                        .frame(width: 52, height: 68)
+                        .clipShape(.rect(cornerRadius: 8))
+                    
                     VStack(alignment: .leading, spacing: 0) {
                         HStack {
                             VStack(alignment: .leading) {
