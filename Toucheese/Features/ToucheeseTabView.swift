@@ -14,7 +14,7 @@ struct ToucheeseTabView: View {
     var body: some View {
         
         TabView(selection: $navigationManager.selectedTab) {
-            NavigationStack(path: $navigationManager.homePath) {
+            NavigationStack(/*path: $navigationManager.homePath*/) {
                 IntroView()
                     .navigationDestination(for: ViewType.self) { view in
                         navigationManager.build(view)
@@ -23,7 +23,7 @@ struct ToucheeseTabView: View {
             .tabItem { Label("홈", systemImage: "house") }
             .tag(TabViewType.home)
 
-            NavigationStack(path: $navigationManager.reservationPath) {
+            NavigationStack(/*path: $navigationManager.reservationPath*/) {
                 ReservationListView()
                     .navigationDestination(for: ViewType.self) { view in
                         navigationManager.build(view)

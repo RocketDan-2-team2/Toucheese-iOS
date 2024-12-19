@@ -10,9 +10,17 @@ import SwiftUI
 @main
 struct ToucheeseApp: App {
     
+    @StateObject private var navigationManager = NavigationManager()
+    
     var body: some Scene {
         WindowGroup {
-            ToucheeseTabView()
+            NavigationStack(path: $navigationManager.path) {
+                IntroView()
+                    .navigationDestination(for: ViewType.self) { view in
+                        navigationManager.build(view)
+                    }
+            }
         }
+        .environmentObject(navigationManager)
     }
 }

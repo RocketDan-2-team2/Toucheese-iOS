@@ -10,8 +10,10 @@ import SwiftUI
 final class NavigationManager: ObservableObject {   
     var selectedTab: TabViewType = .home
     
-    @Published var homePath: [ViewType] = []
-    @Published var reservationPath: [ViewType] = []
+//    @Published var homePath: [ViewType] = []
+//    @Published var reservationPath: [ViewType] = []
+    
+    @Published var path: [ViewType] = []
     
     @Published var fullScreenCover: FullScreenCoverType?
     
@@ -54,30 +56,33 @@ final class NavigationManager: ObservableObject {
     }
     
     func push(_ view: ViewType) {
-        switch selectedTab {
-        case .home:
-            homePath.append(view)
-        case .reservation:
-            reservationPath.append(view)
-        }
+//        switch selectedTab {
+//        case .home:
+//            homePath.append(view)
+//        case .reservation:
+//            reservationPath.append(view)
+//        }
+        path.append(view)
     }
     
     func pop(_ depth: Int) {
-        switch selectedTab {
-        case .home:
-            homePath.removeLast(depth)
-        case .reservation:
-            reservationPath.removeLast(depth)
-        }
+//        switch selectedTab {
+//        case .home:
+//            homePath.removeLast(depth)
+//        case .reservation:
+//            reservationPath.removeLast(depth)
+//        }
+        path.removeLast(depth)
     }
     
     func popToRoot() {
-        switch selectedTab {
-        case .home:
-            homePath.removeLast(homePath.count - 1)
-        case .reservation:
-            reservationPath.removeLast(reservationPath.count)
-        }
+//        switch selectedTab {
+//        case .home:
+//            homePath.removeLast(homePath.count - 1)
+//        case .reservation:
+//            reservationPath.removeLast(reservationPath.count)
+//        }
+        path.removeLast(path.count - 1)
     }
     
     //MARK: - FullScreenCover
