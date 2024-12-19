@@ -8,27 +8,41 @@
 import SwiftUI
 
 struct ThumbnailNavigationView: View {
-    @Environment(\.dismiss) private var dismiss
+
     let thumbnail: String
     let title: String
     
     var body: some View {
         
         HStack(spacing: 10) {
-            CachedAsyncImage(url: thumbnail)
+            Circle()
+                .fill(.placeholder)
+                .overlay {
+                    AsyncImage(url: URL(string: thumbnail)) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        Color.clear
+                            .skeleton(
+                                with: true,
+                                appearance: .gradient(
+                                    color: Color(uiColor: .lightGray).opacity(0.2)
+                                ),
+                                shape: .circle
+                            )
+                    }
+                }
                 .frame(width: 32, height: 32)
                 .clipShape(.circle)
-                .overlay {
-                    Circle()
-                        .strokeBorder(.gray)
-                }
             
             Text(title)
-                .font(.headline)
+                .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(.primary)
             
         }
         .padding(.vertical)
+        .padding(.leading, -10)
         
     }
 }
