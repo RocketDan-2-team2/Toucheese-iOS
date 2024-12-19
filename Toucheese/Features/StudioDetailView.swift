@@ -116,9 +116,25 @@ struct StudioDetailView: View {
                 Section {
                     switch tabSelection {
                     case .price:
-                        studioProductListView
+                        if !studioItems.isEmpty {
+                            studioProductListView
+                        } else {
+                            VStack {
+                                Text("등록된 촬영 상품이 없습니다.")
+                                    .font(.system(size: 20, weight: .medium))
+                                    .padding(.top, 100)
+                            }
+                        }
                     case .review:
-                        studioReviewListView
+                        if !studioReviews.isEmpty {
+                            studioReviewListView
+                        } else {
+                            VStack {
+                                Text("등록된 리뷰가 없습니다.")
+                                    .font(.system(size: 20, weight: .medium))
+                                    .padding(.top, 100)
+                            }
+                        }
                     }
                 } header: {
                     StudioDetailTabBar(tabSelection: $tabSelection)
