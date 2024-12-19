@@ -29,4 +29,12 @@ enum ToucheeseEnv {
         return dictionary
     }()
     
+    static var kakaoAppKey: String {
+        guard let appkey = infoDictionary["KAKAO_APP_KEY"] as? String else {
+            fatalError("Kakao App Key not set infoplist for this environment")
+        }
+        
+        return appkey
+    }
+    
 }

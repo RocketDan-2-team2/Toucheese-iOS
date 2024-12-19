@@ -6,11 +6,18 @@
 //
 
 import SwiftUI
+import KakaoSDKCommon
+import KakaoSDKAuth
+import GoogleSignIn
 
 @main
 struct ToucheeseApp: App {
     
     @StateObject private var navigationManager = NavigationManager()
+    
+    init() {
+        KakaoSDK.initSDK(appKey: ToucheeseEnv.kakaoAppKey)
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -22,6 +29,13 @@ struct ToucheeseApp: App {
                     .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
                         navigationManager.build(fullScreenCover)
                     }
+            }
+            .onOpenURL { url in
+                if AuthApi.isKakaoTalkLoginUrl(url) {
+                    _ = AuthController.handleOpenUrl(url: url)
+                } else {
+                    GIDSignIn.sharedInstance.handle(url)
+                }
             }
         }
         .environmentObject(navigationManager)
