@@ -134,10 +134,11 @@ struct StudioDetailView: View {
         .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                ThumbnailNavigationView(
+                ThumbnailNameView(
                     thumbnail: studioInfo.profileImage,
                     title: studioInfo.name
                 )
+                .padding(.leading, -10)
             }
             
             ToolbarItem(placement: .topBarTrailing) {

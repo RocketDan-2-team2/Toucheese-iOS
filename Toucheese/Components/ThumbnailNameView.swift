@@ -1,5 +1,5 @@
 //
-//  ThumbnailNavigationView.swift
+//  ThumbnailNameView.swift
 //  Toucheese
 //
 //  Created by 최주리 on 11/26/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ThumbnailNavigationView: View {
+struct ThumbnailNameView: View {
 
     let thumbnail: String
     let title: String
@@ -42,11 +42,9 @@ struct ThumbnailNavigationView: View {
             
         }
         .padding(.vertical)
-        .padding(.leading, -10)
-        
     }
 }
 
 #Preview {
-    ThumbnailNavigationView(thumbnail: "", title: "김레이")
+    ThumbnailNameView(thumbnail: "", title: "김레이")
 }
