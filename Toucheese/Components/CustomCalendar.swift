@@ -233,7 +233,7 @@ private extension CustomCalendar {
         // 왼쪽 chevron 버튼 상태 업데이트 (현재 날짜보다 이전으로 이동 불가)
         if Calendar.current.startOfDay(for: month) <= today {
             isDownButtonDisabled = true
-            leftChevronColor = Color.gray.opacity(0.5) // 비활성화 시 회색으로 표시
+            leftChevronColor = Color.gray04 // 비활성화 시 회색으로 표시
         } else {
             isDownButtonDisabled = false
             leftChevronColor = Color.black // 활성화 시 검정색으로 표시
@@ -243,7 +243,7 @@ private extension CustomCalendar {
         let oneYearLater = Calendar.current.date(byAdding: .year, value: 1, to: today)!
         if Calendar.current.startOfDay(for: month) >= oneYearLater {
             isUpButtonDisabled = true
-            rightChevronColor = Color.gray.opacity(0.5) // 비활성화 시 회색으로 표시
+            rightChevronColor = Color.gray04 // 비활성화 시 회색으로 표시
         } else {
             isUpButtonDisabled = false
             rightChevronColor = Color.black // 활성화 시 검정색으로 표시
@@ -270,12 +270,12 @@ private extension CustomCalendar {
         
         // 현재 달이고 오늘보다 이전 날짜라면 비활성화 색상 반환
         if isCurrentMonth && startOfTargetDate < today {
-            return Color.gray.opacity(0.5) // 비활성화 색상
+            return Color.gray04 // 비활성화 색상
         }
         
         // 휴일이라면 비활성화 색상 반환
         if isHoliday {
-            return Color.gray.opacity(0.5) // 휴일 비활성화 색상
+            return Color.gray04 // 휴일 비활성화 색상
         }
         
         // 일요일은 빨간색 표시
