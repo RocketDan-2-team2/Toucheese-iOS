@@ -14,13 +14,13 @@ struct CustomCalendar: View {
     @State private var offset: CGSize = CGSize()
 
     private var calendar = Calendar(identifier: .gregorian)
-    private var weekdaySymbols: [String] = []
+    private var weekdaySymbols: [String] = ["일","월","화","수","목","금","토",]
     
     init(selectedDate: Binding<Date>, month: Binding<Date>, calendar: Foundation.Calendar = Calendar.current) {
         self._selectedDate = selectedDate
         self._month = month
         self.calendar = calendar
-        self.weekdaySymbols = calendar.shortWeekdaySymbols
+//        self.weekdaySymbols = calendar.shortWeekdaySymbols
     }
     
     var body: some View {
@@ -56,15 +56,9 @@ struct CustomCalendar: View {
             HStack {
                 ForEach(weekdaySymbols, id: \.self) { symbol in
 //                    TODO: Sun과 Sat은 절대 다수이나 전체 국가는 아니므로 다른 언어로(혹은 다른 스펠링으로) 나오게 될 경우에는 어떻게 처리할 지 고려해봐야함.(단순히 모든 locale의 경우를 다 때려박는거 말고)
-                    if symbol == "Sun" {
+                    if symbol == "일" {
                         Text(symbol)
                             .foregroundStyle(Color.red)
-                            .font(.subheadline)
-                            .bold()
-                            .frame(maxWidth: .infinity)
-                    } else if symbol == "Sat" {
-                        Text(symbol)
-                            .foregroundStyle(Color.blue)
                             .font(.subheadline)
                             .bold()
                             .frame(maxWidth: .infinity)
@@ -94,7 +88,7 @@ struct CustomCalendar: View {
                     } else {
                         let date = getDate(for: index - firstWeekday)
                         let day = index - firstWeekday + 1
-                        var color = checkWeekdayColor(for: day)
+                        let color = checkWeekdayColor(for: day)
                         
                         CellView(day: day, color: color)
                             .padding(.vertical)

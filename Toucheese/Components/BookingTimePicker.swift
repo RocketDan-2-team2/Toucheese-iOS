@@ -59,7 +59,7 @@ struct BookingTimePicker: View {
         }
     }
     
-    @State private var month = Date()
+    @State private var month: Date = Date()
     
     var body: some View {
         VStack {
@@ -226,20 +226,25 @@ struct TimeButtonGrid: View {
                         selectedTime = filteredTimes[idx]
                         selectedButton = idx + offset
                     } label: {
-                        let tempNum: Int = filteredTimes[idx] <= 12 ? filteredTimes[idx] : filteredTimes[idx] - 12
+                        let tempNum = calculateTempNum(for: filteredTimes[idx])
                         Text("\(tempNum):00")
                             .foregroundStyle(.black)
-                            .padding(.vertical)
+                            .padding(10)
                             .frame(maxWidth: .infinity)
                     }
-                    .clipShape(RoundedRectangle(cornerSize: 5))
-                    .background(selectedButton == idx + offset ? Color.primary06 : Color.white)
-                    .padding(2)
+                    .buttonStyle(.borderedProminent)
+                    .tint(selectedButton == idx + offset ? Color.primary06 : Color.white)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                           .stroke(Color.gray03, lineWidth: 1)
+                    }
                 }
             }
-        }
-        
-        
+        } 
+    }
+    
+    private func calculateTempNum(for num: Int) -> Int {
+        return num <= 12 ? num : num - 12
     }
     
     private var filteredTimes: [Int] {
@@ -250,4 +255,3 @@ struct TimeButtonGrid: View {
         isAM ? 0 : timeArr.filter { $0 < 12 }.count
     }
 }
-
