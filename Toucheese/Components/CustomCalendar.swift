@@ -115,7 +115,6 @@ private struct CellView: View {
             .overlay {
                 Text(String(day))
                     .foregroundStyle(color)
-                let _ = print("Color:",color)
             }
         
     }
