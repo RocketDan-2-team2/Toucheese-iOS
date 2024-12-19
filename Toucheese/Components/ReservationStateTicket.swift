@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-//TODO: 예약 조율 (handle)에 대한 디자인 상의 필요
 struct ReservationStateTicket: View {
     
     let type: ReservationStateType
     var textColor: Color {
         switch type {
-        case .waiting, .handle, .confirm:
+        case .waiting, .confirm:
                 .gray07
         case .finished:
                 .information
@@ -24,8 +23,6 @@ struct ReservationStateTicket: View {
     var fillColor: Color {
         switch type {
         case .waiting, .finished, .cancel:
-                .gray01
-        case .handle:
                 .gray01
         case .confirm:
                 .primary06
@@ -46,5 +43,5 @@ struct ReservationStateTicket: View {
 }
 
 #Preview {
-    ReservationStateTicket(type: .handle)
+    ReservationStateTicket(type: .cancel)
 }

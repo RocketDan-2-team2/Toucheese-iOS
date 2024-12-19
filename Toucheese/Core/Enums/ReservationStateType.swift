@@ -9,7 +9,6 @@ import Foundation
 
 enum ReservationStateType {
     case waiting
-    case handle
     case confirm
     case finished
     case cancel
@@ -18,8 +17,6 @@ enum ReservationStateType {
         switch self {
         case .waiting:
             "예약 대기"
-        case .handle:
-            "예약 조율"
         case .confirm:
             "예약 확정"
         case .finished:
@@ -33,8 +30,6 @@ enum ReservationStateType {
         switch self {
         case .waiting:
             "KEEP_RESERVATION"
-        case .handle:
-            "HANDLE_RESERVATION"
         case .confirm:
             "CONFIRM_RESERVATION"
         case .finished:
