@@ -69,7 +69,11 @@ struct ReviewDetailView: View {
         .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                ThumbnailNavigationView(thumbnail: "\(user.profileImg)", title: "\(user.name)")
+                ThumbnailNameView(
+                    thumbnail: "\(user.profileImg)",
+                    title: "\(user.name)"
+                )
+                    .padding(.leading, -10)
             }
         }
     }

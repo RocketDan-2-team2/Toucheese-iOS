@@ -47,16 +47,7 @@ struct ReviewPhotoDetailView: View {
             .padding(.vertical, 50)
             .padding(.top, 30)
             .scrollTargetBehavior(.viewAligned)
-            
-//            HStack {
-//                ForEach(0..<imageList.count) { num in
-//                    Image(systemName: "circle.fill")
-//                        .font(.system(size: 10))
-//                        .foregroundStyle(selectedPhotoIndex == num ? .blue : Color(uiColor: .systemGray4))
-//                }
-//            }
-//            .padding()
-//            
+               
             Spacer()
             
         }

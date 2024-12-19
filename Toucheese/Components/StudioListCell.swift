@@ -18,30 +18,8 @@ struct StudioListCell: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack {
-                AsyncImage(url: URL(string: profileImage)) { image in
-                    image.resizable()
-                        .scaledToFit()
-                        .clipShape(.circle)
-                } placeholder: {
-                    Circle()
-                        .fill(.clear)
-                        .skeleton(
-                            with: true,
-                            appearance: .gradient(
-                                color: Color(uiColor: .lightGray).opacity(0.2)
-                            ),
-                            shape: .circle
-                        )
-                }
-                .frame(width: 32, height: 32)
-                .background {
-                    Circle()
-                        .fill(.placeholder)
-                }
                 
-                Text(name)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.primary)
+                ThumbnailNameView(thumbnail: profileImage, title: name)
                 
                 Spacer()
                 
