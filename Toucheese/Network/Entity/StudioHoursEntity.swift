@@ -26,7 +26,7 @@ struct StudioHoursEntity: Decodable, Identifiable, Hashable {
             closeTime: "20:00:00",
             breakStartTime: nil,
             breakEndTime: nil,
-            holiday: true
+            holiday: false
         ),
         .init(
             id: 2,
@@ -36,7 +36,7 @@ struct StudioHoursEntity: Decodable, Identifiable, Hashable {
             closeTime: "20:00:00",
             breakStartTime: nil,
             breakEndTime: nil,
-            holiday: false
+            holiday: true
         ),
         .init(
             id: 3,
