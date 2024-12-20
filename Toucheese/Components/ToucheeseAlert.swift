@@ -120,8 +120,7 @@ extension ToucheeseAlert {
     var cancelText: String {
         switch alert {
         case .dateChanged, .reservationCancel: "아니오"
-        case .none:
-            ""
+        case .none: ""
         }
     }
     
