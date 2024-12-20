@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
+    @StateObject private var loginViewModel = LoginViewModel()
+    
     var body: some View {
         VStack {
             VStack(spacing: 16) {
@@ -36,15 +38,15 @@ struct LoginView: View {
             
             VStack {
                 SocialLoginButton(.kakao) {
-                    
+                    loginViewModel.requestKakaoLogin()
                 }
                 
                 SocialLoginButton(.google) {
-                    
+                    loginViewModel.requestGoogleLogin()
                 }
                 
                 SocialLoginButton(.apple) {
-                    
+                    loginViewModel.requestAppleLogin()
                 }
             }
             .padding(.top, 86)
