@@ -7,7 +7,11 @@
 
 import Foundation
 
-enum AlertType {
-    case dateChanged
-    case reservationCancel
+enum AlertType: Identifiable {
+    case dateChanged(date: String)
+    case reservationCancel(action: () -> Void)
+    
+    var id: String {
+        "\(self)"
+    }
 }

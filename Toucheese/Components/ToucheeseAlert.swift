@@ -9,27 +9,25 @@ import SwiftUI
 
 struct ToucheeseAlertModifier: ViewModifier {
     
-    @Binding var isPresented: Bool
-    let alert: ToucheeseAlert
+    @Binding var alert: AlertType?
     
     func body(content: Content) -> some View {
         ZStack {
             content
-        
-            if isPresented {
-                alert
+
+            if alert != nil {
+                ToucheeseAlert(alert: $alert)
             }
         }
+
     }
 }
 
 struct ToucheeseAlert: View {
     
-    let type: AlertType
-    @Binding var isPresented: Bool
+    @Binding var alert: AlertType?
     
-    var changeDate: String?
-    var confirmAction: (() -> Void)?
+    var date: String?
     
     var body: some View {
         ZStack {
@@ -45,9 +43,10 @@ struct ToucheeseAlert: View {
                 
                 HStack(spacing: 0) {
                     Button(action: {
-                        isPresented = false
-                        guard let confirmAction else { return }
-                        confirmAction()
+                        if let confirmAction {
+                            confirmAction()
+                        }
+                        alert = nil
                     }, label: {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(.primary06)
@@ -62,7 +61,7 @@ struct ToucheeseAlert: View {
                     
                     if isCancelButton {
                         Button(action: {
-                            isPresented = false
+                            alert = nil
                         }, label: {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(.gray02)
@@ -87,73 +86,62 @@ struct ToucheeseAlert: View {
 
 extension ToucheeseAlert {
     var description: String {
-        switch type {
-        case .dateChanged:
-            "\(changeDate ?? "")로\n예약일정이 변경되었습니다."
+        switch alert {
+        case let .dateChanged(date):
+            "\(date)로\n예약일정이 변경되었습니다."
         case .reservationCancel:
             "예약을 정말 취소하시겠습니까?"
+        default:
+            ""
+        }
+    }
+    
+    var confirmAction: (() -> Void)? {
+        switch alert {
+        case .dateChanged:
+            nil
+        case let .reservationCancel(action):
+            action
+        case .none:
+            nil
         }
     }
     
     var confirmText: String {
-        switch type {
+        switch alert {
         case .dateChanged:
             "확인"
         case .reservationCancel:
             "예"
+        case .none:
+            ""
         }
     }
     var cancelText: String {
-        switch type {
+        switch alert {
         case .dateChanged, .reservationCancel: "아니오"
+        case .none:
+            ""
         }
     }
     
     var isCancelButton: Bool {
-        switch type {
+        switch alert {
         case .dateChanged: false
         case .reservationCancel: true
+        case .none: false
         }
     }
 }
 
 extension View {
-    /// 투명 fullScreenCover
-    func clearFullScreenCover<Content: View>(isPresented: Binding<Bool>, content: @escaping () -> Content) -> some View {
-        fullScreenCover(isPresented: isPresented) {
-            ZStack {
-                content()
-            }
-            .background(ClearBackground())
-        }
-    }
-    
+  
     func toucheeseAlert(
-        isPresented: Binding<Bool>,
-        alert: @escaping() -> ToucheeseAlert)
+        alert: Binding<AlertType?>
+    )
     -> some View {
         modifier(
-            ToucheeseAlertModifier(isPresented: isPresented, alert: alert())
+            ToucheeseAlertModifier(alert: alert)
         )
-    }
-}
-
-struct ClearBackground: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        let view = ClearBackgroundView()
-        DispatchQueue.main.async {
-            view.superview?.superview?.backgroundColor = .clear
-        }
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {}
-}
-
-/// 깜빡거리는 현상 해결
-final class ClearBackgroundView: UIView {
-    override func layoutSubviews() {
-        guard let parentView = superview?.superview else { return }
-        parentView.backgroundColor = .clear
     }
 }
