@@ -38,7 +38,8 @@ struct ReservationUpdateView: View {
             }
             Spacer()
             Button(action: {
-                isPresented = true
+                navigationManager.pop(2)
+                navigationManager.alert = .dateChanged(date: selectedDateString)
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary06)
@@ -56,12 +57,6 @@ struct ReservationUpdateView: View {
         .navigationTitle("예약 날짜 변경")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
-        .toucheeseAlert(isPresented: $isPresented, alert: {
-            ToucheeseAlert(type: .dateChanged, isPresented: $isPresented, changeDate: selectedDateString) {
-                //TODO: 날짜 변경 API 호출
-                navigationManager.pop(2)
-            }
-        })
         .navigationBarBackButtonHidden(isPresented)
     }
 }

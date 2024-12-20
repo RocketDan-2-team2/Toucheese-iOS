@@ -53,7 +53,11 @@ struct ReservationDetailView: View {
                 
                 HStack {
                     Button(action: {
-                        isPresented = true
+                        navigationManager.alert = .reservationCancel(action: {
+                            //TODO: 취소 API
+                            print("취소 !!! ")
+                            navigationManager.pop(1)
+                        })
                     }, label: {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(.gray02)
@@ -93,12 +97,6 @@ struct ReservationDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
         .toolbar(.hidden, for: .tabBar)
-        .toucheeseAlert(isPresented: $isPresented, alert: {
-            ToucheeseAlert(type: .reservationCancel, isPresented: $isPresented) {
-                //TODO: 예약 취소 API
-                navigationManager.pop(1)
-            }
-        })
         .navigationBarBackButtonHidden(isPresented)
     }
 }
