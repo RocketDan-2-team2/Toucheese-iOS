@@ -26,23 +26,23 @@ struct StudioHoursEntity: Decodable, Identifiable, Hashable {
             closeTime: "20:00:00",
             breakStartTime: nil,
             breakEndTime: nil,
-            holiday: true
+            holiday: false
         ),
         .init(
             id: 2,
             wekkOfMonth: nil,
             dayOfWeek: "MONDAY",
-            openTime: "10:30:00",
+            openTime: "13:30:00",
             closeTime: "20:00:00",
             breakStartTime: nil,
             breakEndTime: nil,
-            holiday: false
+            holiday: true
         ),
         .init(
             id: 3,
             wekkOfMonth: nil,
             dayOfWeek: "TUESDAY",
-            openTime: "10:30:00",
+            openTime: "12:30:00",
             closeTime: "20:00:00",
             breakStartTime: nil,
             breakEndTime: nil,
@@ -62,7 +62,7 @@ struct StudioHoursEntity: Decodable, Identifiable, Hashable {
             id: 5,
             wekkOfMonth: nil,
             dayOfWeek: "THURSDAY",
-            openTime: "10:30:00",
+            openTime: "11:30:00",
             closeTime: "20:00:00",
             breakStartTime: nil,
             breakEndTime: nil,
@@ -72,7 +72,7 @@ struct StudioHoursEntity: Decodable, Identifiable, Hashable {
             id: 6,
             wekkOfMonth: nil,
             dayOfWeek: "FRIDAY",
-            openTime: "10:30:00",
+            openTime: "9:30:00",
             closeTime: "20:00:00",
             breakStartTime: nil,
             breakEndTime: nil,

@@ -10,23 +10,59 @@ import SwiftUI
 struct CustomCalendar: View {
     @Binding var selectedDate: Date
     @Binding var month: Date
+    let holidaySymbols: [String]
     
     @State private var offset: CGSize = CGSize()
+    
+    @State private var isDownButtonDisabled: Bool = false
+    @State private var isUpButtonDisabled: Bool = false
+    
+    @State private var leftChevronColor: Color = .black
+    @State private var rightChevronColor: Color = .black
+    
+    private var calculatedHolidaySymbols: [Int] {
+        var tempSymbols: [Int] = []
+        for i in holidaySymbols {
+            switch i {
+            case "SUNDAY":
+                tempSymbols.append(1)
+            case "MONDAY":
+                tempSymbols.append(2)
+            case "TUESDAY":
+                tempSymbols.append(3)
+            case "WEDNESDAY":
+                tempSymbols.append(4)
+            case "THURSDAY":
+                tempSymbols.append(5)
+            case "FRIDAY":
+                tempSymbols.append(6)
+            case "SATURDAY":
+                tempSymbols.append(7)
+            default:
+                continue
+            }
+        }
+        
+        return tempSymbols
+    }
 
     private var calendar = Calendar(identifier: .gregorian)
     private var weekdaySymbols: [String] = ["일","월","화","수","목","금","토",]
     
-    init(selectedDate: Binding<Date>, month: Binding<Date>, calendar: Foundation.Calendar = Calendar.current) {
+    init(selectedDate: Binding<Date>, month: Binding<Date>, holidaySymbols: [String], calendar: Foundation.Calendar = Calendar.current) {
         self._selectedDate = selectedDate
         self._month = month
         self.calendar = calendar
-//        self.weekdaySymbols = calendar.shortWeekdaySymbols
+        self.holidaySymbols = holidaySymbols
     }
     
     var body: some View {
         VStack {
             headerView
             calendarGridView
+        }
+        .onAppear {
+            updateButtonStates()
         }
     }
     
@@ -36,20 +72,25 @@ struct CustomCalendar: View {
             HStack {
                 Button {
                     changeMonth(by: -1)
+                    updateButtonStates() // 버튼 상태 업데이트 호출
                 } label: {
                     Image(systemName: "chevron.left")
-                        .foregroundStyle(Color(UIColor.label))
+                        .foregroundStyle(leftChevronColor)
                 }
-                
+                .disabled(isDownButtonDisabled) // 비활성화 처리
+
                 Text(month, formatter: Self.dateFormatter)
                     .font(.headline)
                 
                 Button {
                     changeMonth(by: 1)
+                    updateButtonStates() // 버튼 상태 업데이트 호출
                 } label: {
                     Image(systemName: "chevron.right")
-                        .foregroundStyle(Color(UIColor.label))
+                        .foregroundStyle(rightChevronColor)
                 }
+                .disabled(isUpButtonDisabled) // 비활성화 처리
+
             }
             .padding(.bottom)
             
@@ -88,13 +129,37 @@ struct CustomCalendar: View {
                     } else {
                         let date = getDate(for: index - firstWeekday)
                         let day = index - firstWeekday + 1
-                        let color = checkWeekdayColor(for: day)
+                        let color = getDayColor(for: day)
                         
                         CellView(day: day, color: color)
                             .padding(.vertical)
                             .background {
                                 RoundedRectangle(cornerRadius: 5)
                                     .fill(selectedDate.isSameDay(as: date) ? .yellow : Color.gray01)
+                            }
+                            .onTapGesture {
+                                let today = Calendar.current.startOfDay(for: Date())
+                                let startOfTargetDate = Calendar.current.startOfDay(for: date)
+                                
+                                // 현재 달인지 확인
+                                let isCurrentMonth = Calendar.current.isDate(month, equalTo: today, toGranularity: .month)
+                                
+                                let weekday = Calendar.current.component(.weekday, from: date)
+                                let weekdayResult = calculatedHolidaySymbols.contains(weekday)
+                                
+                                // 현재 달이고 오늘보다 이전 날짜라면 선택 불가
+                                if isCurrentMonth && startOfTargetDate < today {
+                                    print("아무 동작도 하지 않음")
+                                    return // 아무 동작도 하지 않음
+                                }
+                                
+                                if weekdayResult {
+                                    print("쉬는날이라 아무 동작도 하지 않음")
+                                    return
+                                }
+                                
+                                // 선택 가능한 경우에만 날짜 업데이트
+                                selectedDate = date
                             }
                     }
                 }
@@ -151,25 +216,78 @@ private extension CustomCalendar {
         let calendar = Calendar.current
         if let newMonth = calendar.date(byAdding: .month, value: value, to: month) {
             self.month = newMonth
+            
+            if calendar.dateComponents([.year, .month], from: newMonth) == calendar.dateComponents([.year, .month], from: Date()) {
+                self.selectedDate = Date()
+                return
+            }
             let newDate = calendar.date(from: calendar.dateComponents([.year, .month], from: month))
             self.selectedDate = newDate!
         }
     }
+
     
-    func checkWeekdayColor(for day: Int) -> Color {
-//        TODO: selectedDate 변수로 매달의 일요일 정보를 가져오면 되겠다.
-        let calendar = Calendar.current
-        var components = calendar.dateComponents([.year, .month], from: selectedDate)
-        components.day = day
-        let targetDate = calendar.date(from: components)
-        let weekday = calendar.component(.weekday, from: targetDate!)
+    func updateButtonStates() {
+        let today = Calendar.current.startOfDay(for: Date())
         
-        if weekday == 1 {
-            return Color.red
+        // 왼쪽 chevron 버튼 상태 업데이트 (현재 날짜보다 이전으로 이동 불가)
+        if Calendar.current.startOfDay(for: month) <= today {
+            isDownButtonDisabled = true
+            leftChevronColor = Color.gray04 // 비활성화 시 회색으로 표시
         } else {
-            return Color.black
+            isDownButtonDisabled = false
+            leftChevronColor = Color.black // 활성화 시 검정색으로 표시
+        }
+
+        // 오른쪽 chevron 버튼 상태 업데이트 (오늘 날짜 기준 최대 1년 이후까지만 이동 가능)
+        let oneYearLater = Calendar.current.date(byAdding: .year, value: 1, to: today)!
+        if Calendar.current.startOfDay(for: month) >= oneYearLater {
+            isUpButtonDisabled = true
+            rightChevronColor = Color.gray04 // 비활성화 시 회색으로 표시
+        } else {
+            isUpButtonDisabled = false
+            rightChevronColor = Color.black // 활성화 시 검정색으로 표시
         }
     }
+
+    
+    func getDayColor(for day: Int) -> Color {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month], from: month)
+        components.day = day
+        let targetDate = calendar.date(from: components)!
+        
+        // 오늘 날짜와 비교를 위한 변수
+        let today = calendar.startOfDay(for: Date())
+        let startOfTargetDate = calendar.startOfDay(for: targetDate)
+        
+        // 현재 달인지 확인
+        let isCurrentMonth = calendar.isDate(month, equalTo: today, toGranularity: .month)
+        
+        // 휴일 확인 (예: 일요일, 토요일 등)
+        let weekday = calendar.component(.weekday, from: targetDate)
+        let isHoliday = calculatedHolidaySymbols.contains(weekday)
+        
+        // 현재 달이고 오늘보다 이전 날짜라면 비활성화 색상 반환
+        if isCurrentMonth && startOfTargetDate < today {
+            return Color.gray04 // 비활성화 색상
+        }
+        
+        // 휴일이라면 비활성화 색상 반환
+        if isHoliday {
+            return Color.gray04 // 휴일 비활성화 색상
+        }
+        
+        // 일요일은 빨간색 표시
+        if weekday == 1 {
+            return Color.red
+        }
+        
+        // 기본적으로 검정색 반환
+        return Color.black
+    }
+
+
 }
 
 // MARK: - Static 프로퍼티
@@ -189,10 +307,16 @@ extension Date {
         let components2 = calendar.dateComponents([.year, .month, .day], from: otherDate)
         return components1 == components2
     }
+    
+    func getYearNMonth() -> DateComponents {
+        let result = Calendar.current.dateComponents([.year, .month], from: self)
+        return result
+    }
 }
 
-//#Preview {
-//    let october2024 = Calendar.current.date(from: DateComponents(year: 2024, month: 11))!
-//
-//    CustomCalendar(selectedDate: .constant(Date()))
-//}
+#Preview {
+//    @State var october2024 = Calendar.current.date(from: DateComponents(year: 2024, month: 11))!
+    @State var october2024 = Date()
+
+    CustomCalendar(selectedDate: $october2024, month: $october2024, holidaySymbols: ["일","월"])
+}

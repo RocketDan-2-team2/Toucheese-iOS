@@ -14,6 +14,8 @@ struct BookingTimePicker: View {
     @State private var selectedTime: Int = 0
     @State private var selectedButton: Int = 0
     
+    @State private var month: Date = Date()
+    
     @State private var isFirstInit: Bool = true
     
     private let gridRow = Array(repeating: GridItem(.adaptive(minimum: .infinity, maximum: .infinity)), count: 4)
@@ -59,16 +61,24 @@ struct BookingTimePicker: View {
         }
     }
     
-    @State private var month: Date = Date()
+    private var holidays: [String] {
+        var tempArr: [String] = []
+        for i in hoursRawData {
+            if i.holiday == true {
+                tempArr.append(i.dayOfWeek)
+            }
+        }
+        return tempArr
+    }
     
     var body: some View {
         VStack {
-            CustomCalendar(selectedDate: $selectedDate, month: $month)
+            CustomCalendar(selectedDate: $selectedDate, month: $month, holidaySymbols: holidays)
                 .onChange(of: month) { oldValue, newValue in
-                    print("newValue:", newValue)
+//                    TODO: 추후 필요시 이부분에 매달 데이터 가져오는 메서드 들어가면 됨.
                 }
             
-            //            MARK: 하단 시간 선택 버튼
+//            MARK: 하단 시간 선택 버튼
             VStack {
                 VStack {
                     HStack {
@@ -159,50 +169,43 @@ struct BookingTimePicker: View {
         ]
         
         for data in datas {
-            print("start convert data")
             guard let weekday = dayOfWeekMapping[data.dayOfWeek] else { continue }
-            print("weekdays",weekday)
             
             if data.holiday {
                 continue
             }
-            print("not holiday")
-            
+                        
             let timeFormatter = DateFormatter()
             timeFormatter.dateFormat = "HH:mm:ss"
             
             guard
                 let openTime = timeFormatter.date(from: data.openTime),
                 let closeTime = timeFormatter.date(from: data.closeTime)
-            else { print("onoffTimes 형식이 잘못되었습다");continue }
-            
-            print("onoffTimes", openTime, closeTime)
+            else { continue }
             
             let openHour = calendar.component(.hour, from: openTime)
             let closeHour = calendar.component(.hour, from: closeTime)
             
-            print("openHour, closeHour", openHour, closeHour)
-            
             for day in 0..<numberOfDays {
                 guard
                     let currentDate = calendar.date(byAdding: .day, value: day, to: startOfMonth)
-                else { print("currentDate 계산 guard문에서 실패함"); continue }
+                else { continue }
                 
-                guard calendar.component(.weekday, from: currentDate) == weekday else { print("요일 체크 계산 guard문에서 실패함"); continue }
+                guard calendar.component(.weekday, from: currentDate) == weekday else { continue }
                 
                 let index = day
                 result[index] = Array(openHour..<closeHour)
             }
         }
-        print("openedHours",result)
         return result
         
     }
 }
 
-//#Preview {
-//    BookingTimePicker(selectedDate: .constant(Date()), openedHoursArr: [[1,2,3,4],[9,10,11,13,14,15],[]])
-//}
+#Preview {
+    @State var date: Date = Date()
+    BookingTimePicker(selectedDate: $date, hoursRawData: StudioHoursEntity.mockData)
+}
 
 struct TimeButtonGrid: View {
     @Binding var selectedTime: Int
@@ -213,34 +216,32 @@ struct TimeButtonGrid: View {
     
     let isAM: Bool
     
-    private let buttonYellow = Color(cgColor: CGColor(red: 255/255.0, green: 242/255.0, blue: 204/255.0, alpha: 1.0))
-    
     var body: some View {
-        if timeArr.count == 0 {
-            Text("운영중인 시간이 없습니다.")
-                .bold()
-        } else {
-            LazyVGrid(columns: columnsArr) {
-                ForEach(filteredTimes.indices, id: \.self) { idx in
-                    Button {
-                        selectedTime = filteredTimes[idx]
-                        selectedButton = idx + offset
-                    } label: {
-                        let tempNum = calculateTempNum(for: filteredTimes[idx])
-                        Text("\(tempNum):00")
-                            .foregroundStyle(.black)
-                            .padding(10)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(selectedButton == idx + offset ? Color.primary06 : Color.white)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                           .stroke(Color.gray03, lineWidth: 1)
+            if filteredTimes.count == 0 {
+                Text("운영중인 시간이 없습니다.")
+                    .bold()
+            } else {
+                LazyVGrid(columns: columnsArr) {
+                    ForEach(filteredTimes.indices, id: \.self) { idx in
+                        Button {
+                            selectedTime = filteredTimes[idx]
+                            selectedButton = idx + offset
+                        } label: {
+                            let tempNum = calculateTempNum(for: filteredTimes[idx])
+                            Text("\(tempNum):00")
+                                .foregroundStyle(.black)
+                                .padding(10)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(selectedButton == idx + offset ? Color.primary06 : Color.white)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                               .stroke(Color.gray03, lineWidth: 1)
+                        }
                     }
                 }
             }
-        } 
     }
     
     private func calculateTempNum(for num: Int) -> Int {
