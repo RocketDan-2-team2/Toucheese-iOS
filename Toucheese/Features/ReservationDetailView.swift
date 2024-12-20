@@ -12,7 +12,6 @@ struct ReservationDetailView: View {
     @EnvironmentObject private var navigationManager: NavigationManager
     
     let reservationStateType: ReservationStateType
-    @State private var isPresented: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -98,7 +97,7 @@ struct ReservationDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
         .toolbar(.hidden, for: .tabBar)
-        .navigationBarBackButtonHidden(isPresented)
+        .navigationBarBackButtonHidden(navigationManager.alert != nil)
     }
 }
 
