@@ -21,8 +21,6 @@ struct ReservationUpdateView: View {
         return formatter.string(from: selectedDate)
     }
     
-    @State private var isPresented: Bool = false
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -58,7 +56,7 @@ struct ReservationUpdateView: View {
         .navigationTitle("예약 날짜 변경")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
-        .navigationBarBackButtonHidden(isPresented)
+        .navigationBarBackButtonHidden(navigationManager.alert != nil)
     }
 }
 
