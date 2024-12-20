@@ -14,6 +14,15 @@ struct ReservationUpdateView: View {
     
     let hoursRawData: [StudioHoursEntity] = []
     @State private var selectedDate: Date = .now
+    private var selectedDateString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM월 dd일(E) a h시"
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        return formatter.string(from: selectedDate)
+    }
+    
+    @State private var isPresented: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -30,8 +39,7 @@ struct ReservationUpdateView: View {
             }
             Spacer()
             Button(action: {
-                //TODO: 예약 날짜 변경 페이지로 이동
-                
+                isPresented = true
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary06)
@@ -45,6 +53,12 @@ struct ReservationUpdateView: View {
             })
             .padding(.vertical, 8)
         }
+        .toucheeseAlert(isPresented: $isPresented, alert: {
+            ToucheeseAlert(type: .dateChanged, isPresented: $isPresented, changeDate: selectedDateString) {
+                //TODO: 날짜 변경 API 호출 + navigation 이동
+                print("변경!")
+            }
+        })
         .padding(.horizontal, 16)
         .navigationTitle("예약 날짜 변경")
         .navigationBarTitleDisplayMode(.inline)

@@ -12,6 +12,7 @@ struct ReservationDetailView: View {
     @EnvironmentObject private var navigationManager: NavigationManager
     
     let reservationStateType: ReservationStateType
+    @State private var isPresented: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -52,8 +53,7 @@ struct ReservationDetailView: View {
                 
                 HStack {
                     Button(action: {
-                        //TODO: 예약 취소 알럿 띄우기
-                        
+                        isPresented = true
                     }, label: {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(.gray02)
@@ -68,7 +68,6 @@ struct ReservationDetailView: View {
                     
                     if reservationStateType == .waiting {
                         Button(action: {
-                            //TODO: 예약 날짜 변경 페이지로 이동
                             navigationManager.push(
                                 .reservationUpdateView
                             )
@@ -89,6 +88,12 @@ struct ReservationDetailView: View {
             }
             
         }
+        .toucheeseAlert(isPresented: $isPresented, alert: {
+            ToucheeseAlert(type: .reservationCancel, isPresented: $isPresented) {
+                //TODO: 예약 취소 API + navigation 이동
+                print("취소~")
+            }
+        })
         .padding(16)
         .navigationTitle("예약 상세 보기")
         .navigationBarTitleDisplayMode(.inline)
