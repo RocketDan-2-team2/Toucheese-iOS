@@ -70,10 +70,12 @@ struct InputField: View {
                     .offset(y: 1)
             }
             
-            Text(fieldState.description)
-                .font(.system(size: 14, weight: .regular))
-                .foregroundStyle(.red)
-                .frame(height: 20)
+            if !fieldState.description.isEmpty {
+                Text(fieldState.description)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.red)
+                    .frame(height: 20)
+            }
         }
     }
 }
