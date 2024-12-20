@@ -118,7 +118,7 @@ struct FilterExpansionView: View {
                     .font(.system(size: 14.0))
                     .bold()
                     .toucheeseButtonStyle(
-                        style: .medium,
+                        style: .mediumGray,
                         padding: (vertical: 11.5, horizontal: 21.5)
                     )
                     .onTapGesture {

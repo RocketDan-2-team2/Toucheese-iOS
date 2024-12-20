@@ -14,9 +14,9 @@ struct ToucheeseButtonStyle: ViewModifier {
     
     private var background: Color {
         switch styleType {
-        case .light: Color.gray01
-        case .medium: Color.gray02
-        case .color: Color.primary06
+        case .lightGray: Color.gray01
+        case .mediumGray: Color.gray02
+        case .primaryColor: Color.primary06
         case .withColor(let color): color
         }
     }
@@ -58,11 +58,11 @@ struct ToucheeseButtonStyle: ViewModifier {
     
     enum StyleType: Equatable {
         /// gray01 - FAFAFA
-        case light
+        case lightGray
         /// gray02 - F5F5F5
-        case medium
+        case mediumGray
         /// primary06 - FFC000
-        case color
+        case primaryColor
         /// 연관값으로 주어진 컬러
         case withColor(color: Color)
     }
@@ -77,7 +77,7 @@ struct ToucheeseButtonStyle: ViewModifier {
 
 extension View {
     func toucheeseButtonStyle(
-        style: ToucheeseButtonStyle.StyleType = .color,
+        style: ToucheeseButtonStyle.StyleType = .primaryColor,
         shapeStyle: ToucheeseButtonStyle.ShapeStyleType = .none,
         padding: (vertical: CGFloat?, horizontal: CGFloat?) = (14.0, 14.0)
     ) -> some View {
