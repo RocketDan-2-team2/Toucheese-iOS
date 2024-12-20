@@ -216,8 +216,6 @@ struct TimeButtonGrid: View {
     
     let isAM: Bool
     
-    private let buttonYellow = Color(cgColor: CGColor(red: 255/255.0, green: 242/255.0, blue: 204/255.0, alpha: 1.0))
-    
     var body: some View {
             if filteredTimes.count == 0 {
                 Text("운영중인 시간이 없습니다.")
