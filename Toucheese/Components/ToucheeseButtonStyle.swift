@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToucheeseButtonStyle: ViewModifier {
-    let styleType: StyleType
+    let styleType: ColorStyleType
     let shapeStyleType: ShapeStyleType
     let padding: (vertical: CGFloat?, horizontal: CGFloat?)
     
@@ -56,7 +56,7 @@ struct ToucheeseButtonStyle: ViewModifier {
         }
     }
     
-    enum StyleType: Equatable {
+    enum ColorStyleType: Equatable {
         /// gray01 - FAFAFA
         case lightGray
         /// gray02 - F5F5F5
@@ -77,7 +77,7 @@ struct ToucheeseButtonStyle: ViewModifier {
 
 extension View {
     func toucheeseButtonStyle(
-        style: ToucheeseButtonStyle.StyleType = .primaryColor,
+        style: ToucheeseButtonStyle.ColorStyleType = .primaryColor,
         shapeStyle: ToucheeseButtonStyle.ShapeStyleType = .none,
         padding: (vertical: CGFloat?, horizontal: CGFloat?) = (14.0, 14.0)
     ) -> some View {
