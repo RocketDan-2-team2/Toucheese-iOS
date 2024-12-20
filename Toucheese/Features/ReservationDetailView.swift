@@ -88,17 +88,18 @@ struct ReservationDetailView: View {
             }
             
         }
-        .toucheeseAlert(isPresented: $isPresented, alert: {
-            ToucheeseAlert(type: .reservationCancel, isPresented: $isPresented) {
-                //TODO: 예약 취소 API + navigation 이동
-                print("취소~")
-            }
-        })
         .padding(16)
         .navigationTitle("예약 상세 보기")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
         .toolbar(.hidden, for: .tabBar)
+        .toucheeseAlert(isPresented: $isPresented, alert: {
+            ToucheeseAlert(type: .reservationCancel, isPresented: $isPresented) {
+                //TODO: 예약 취소 API
+                navigationManager.pop(1)
+            }
+        })
+        .navigationBarBackButtonHidden(isPresented)
     }
 }
 
