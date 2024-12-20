@@ -67,6 +67,7 @@ struct ReservationCell: View {
             .padding(.horizontal, 16)
             
             Button(action: {
+                //TODO: API 호출
                 navigationManager.push(.reservationDetailView(reservationStateType: .waiting))
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
