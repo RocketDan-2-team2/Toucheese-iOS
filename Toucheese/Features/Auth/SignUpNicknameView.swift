@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SignUpNicknameView: View {
+    @FocusState private var isFocused: Bool
     @State private var fieldState: InputFieldState = .empty
     @State private var nickname: String = ""
     
@@ -29,14 +30,17 @@ struct SignUpNicknameView: View {
             
             InputField(
                 title: "닉네임",
-                placeholder: "닉네임을 입력해주세요",
+                placeholder: "닉네임을 입력해주세요 (국문, 영문 혼합 불가)",
                 fieldState: $fieldState,
                 inputField: $nickname
             )
+            .focused($isFocused)
             .padding(.bottom, 36)
             
+            Spacer()
+            
             Button {
-                fieldState = .error(message: "잘못된 필드")
+                validateNickname()
             } label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.yellow)
@@ -47,10 +51,38 @@ struct SignUpNicknameView: View {
                             .foregroundStyle(.gray09)
                     }
             }
-            
-            Spacer()
+            .padding(.bottom)
         }
         .padding(.horizontal)
+        .background {
+            Color.white
+                .onTapGesture {
+                    isFocused = false
+                }
+        }
+    }
+    
+    func validateNickname() {
+        if nickname.isEmpty {
+            fieldState = .error(message: "닉네임을 입력해주세요")
+        } else if !nickname.isValidNickname() {
+            if nickname.isValidKoreanNickname() {
+                if nickname.count > 7 {
+                    fieldState = .error(message: "국문은 최대 7자까지 입력 가능합니다.")
+                } else {
+                    fieldState = .error(message: "자음 또는 모음만 사용할 수 없습니다.")
+                }
+            } else if nickname.isValidEnglishNickname() {
+                if nickname.count > 14 {
+                    fieldState = .error(message: "영문은 최대 14자까지 입력 가능합니다.")
+                }
+            } else {
+                fieldState = .error(message: "국문과 영문을 함께 사용할 수 없습니다.")
+            }
+        } else {
+            // API 호출
+            isFocused = false
+        }
     }
 }
 
