@@ -29,6 +29,7 @@ struct ToucheeseApp: App {
                     .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
                         navigationManager.build(fullScreenCover)
                     }
+                    .toucheeseAlert(alert: $navigationManager.alert)
             }
             .onOpenURL { url in
                 if AuthApi.isKakaoTalkLoginUrl(url) {
@@ -37,6 +38,7 @@ struct ToucheeseApp: App {
                     GIDSignIn.sharedInstance.handle(url)
                 }
             }
+                
         }
         .environmentObject(navigationManager)
     }
