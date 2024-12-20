@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-//TODO: 피그마와 같이 오른쪽 상단에 x를 할지 아니면 네비게이션으로 할지?
-// 아니면 Fullscreencover로 할지... 상의하자 
-
 struct ReservationUpdateView: View {
+    
+    @EnvironmentObject private var navigationManager: NavigationManager
     
     let hoursRawData: [StudioHoursEntity] = []
     @State private var selectedDate: Date = .now
@@ -53,16 +52,17 @@ struct ReservationUpdateView: View {
             })
             .padding(.vertical, 8)
         }
-        .toucheeseAlert(isPresented: $isPresented, alert: {
-            ToucheeseAlert(type: .dateChanged, isPresented: $isPresented, changeDate: selectedDateString) {
-                //TODO: 날짜 변경 API 호출 + navigation 이동
-                print("변경!")
-            }
-        })
         .padding(.horizontal, 16)
         .navigationTitle("예약 날짜 변경")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
+        .toucheeseAlert(isPresented: $isPresented, alert: {
+            ToucheeseAlert(type: .dateChanged, isPresented: $isPresented, changeDate: selectedDateString) {
+                //TODO: 날짜 변경 API 호출
+                navigationManager.pop(2)
+            }
+        })
+        .navigationBarBackButtonHidden(isPresented)
     }
 }
 

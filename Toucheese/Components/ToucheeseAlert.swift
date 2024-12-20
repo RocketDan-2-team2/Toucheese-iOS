@@ -13,13 +13,13 @@ struct ToucheeseAlertModifier: ViewModifier {
     let alert: ToucheeseAlert
     
     func body(content: Content) -> some View {
-        content
-            .clearFullScreenCover(isPresented: $isPresented) {
+        ZStack {
+            content
+        
+            if isPresented {
                 alert
             }
-            .transaction { transaction in
-                transaction.disablesAnimations = true
-            }
+        }
     }
 }
 
@@ -146,7 +146,7 @@ struct ClearBackground: UIViewRepresentable {
         }
         return view
     }
-
+    
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
