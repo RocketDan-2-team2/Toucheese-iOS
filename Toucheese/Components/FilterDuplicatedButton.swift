@@ -54,17 +54,32 @@ struct FilterDuplicatedButton<T: FilterProtocol>: View {
             
             filterAction?()
         } label: {
-            VStack(alignment: .center) {
+            HStack {
+                Image(systemName: isSelected ? "checkmark.square.fill" : "square")
+                    .foregroundStyle(isSelected ? .primary06 : .gray04)
+                
                 if let type {
                     Text("\(type.title)")
+                        .bold(isSelected)
                 } else {
                     Text("전체")
+                        .bold(isSelected)
                 }
-                    
-                Image(systemName: isSelected ? "square.fill" : "square")
             }
-            .font(.system(size: 14))
+            .font(.system(size: 14.0))
         }
         .buttonStyle(PlainButtonStyle())
+    }
+}
+
+#Preview {
+    VStack {
+        FilterDuplicatedButton(selectedType: .constant([RegionType]()))
+        ForEach(RegionType.allCases, id: \.self) { region in
+            FilterDuplicatedButton(
+                type: region,
+                selectedType: .constant([RegionType]())
+            )
+        }
     }
 }

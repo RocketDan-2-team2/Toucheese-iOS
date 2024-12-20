@@ -92,6 +92,8 @@ final class NavigationManager: ObservableObject {
     @ViewBuilder
     func build(_ fullScreenCover: FullScreenCoverType) -> some View {
         switch fullScreenCover {
+        case let .filterExpansionView(studioViewModel):
+            FilterExpansionView(studioViewModel: studioViewModel)
         case let .reviewPhotoDetailView(imageList, selectedPhotoIndex):
             ReviewPhotoDetailView(imageList: imageList, selectedPhotoIndex: selectedPhotoIndex)
         }

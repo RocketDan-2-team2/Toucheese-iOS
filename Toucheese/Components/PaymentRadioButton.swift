@@ -50,3 +50,7 @@ struct PaymentRadioButton: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
+
+#Preview {
+    PaymentRadioButton(selectedType: .constant(.toss))
+}
