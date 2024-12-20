@@ -72,6 +72,7 @@ struct ReservationDetailView: View {
                     
                     if reservationStateType == .waiting {
                         Button(action: {
+                            //TODO: 스튜디오 운영 시간 API 호출 fetchStudioHours??
                             navigationManager.push(
                                 .reservationUpdateView
                             )

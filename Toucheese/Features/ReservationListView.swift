@@ -17,6 +17,9 @@ struct ReservationListView: View {
                 }
                 .padding(.top, 13)
             }
+            .onAppear {
+                //TODO: API 호출
+            }
         }
         .navigationTitle("예약 일정")
         .navigationBarTitleDisplayMode(.inline)
