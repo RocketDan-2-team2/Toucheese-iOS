@@ -51,9 +51,8 @@ struct SignUpNicknameView: View {
                             .foregroundStyle(.gray09)
                     }
             }
-            .padding(.bottom)
         }
-        .padding(.horizontal)
+        .padding()
         .background {
             Color.white
                 .onTapGesture {
