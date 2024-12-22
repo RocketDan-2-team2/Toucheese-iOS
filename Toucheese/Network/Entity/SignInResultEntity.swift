@@ -12,8 +12,8 @@ struct SignInResultEntity: Decodable {
     let refreshToken: String
     
     /// AccessToken의 발행일
-    let issuedAt: String//Date
+    let issuedAt: Date
     
     /// AccessToken의 만료일
-    let expiration: String//Date
+    let expiration: Date
 }
