@@ -52,8 +52,11 @@ struct ReservationDetailView: View {
                 
                 HStack {
                     Button(action: {
-                        //TODO: 예약 취소 알럿 띄우기
-                        
+                        navigationManager.alert = .reservationCancel(action: {
+                            //TODO: 취소 API
+                            print("취소 !!! ")
+                            navigationManager.pop(1)
+                        })
                     }, label: {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(.gray02)
@@ -68,7 +71,7 @@ struct ReservationDetailView: View {
                     
                     if reservationStateType == .waiting {
                         Button(action: {
-                            //TODO: 예약 날짜 변경 페이지로 이동
+                            //TODO: 스튜디오 운영 시간 API 호출 fetchStudioHours??
                             navigationManager.push(
                                 .reservationUpdateView
                             )
@@ -94,6 +97,7 @@ struct ReservationDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
         .toolbar(.hidden, for: .tabBar)
+        .navigationBarBackButtonHidden(navigationManager.alert != nil)
     }
 }
 

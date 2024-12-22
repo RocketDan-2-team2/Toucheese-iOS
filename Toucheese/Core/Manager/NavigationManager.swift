@@ -16,6 +16,7 @@ final class NavigationManager: ObservableObject {
     @Published var path: [ViewType] = []
     
     @Published var fullScreenCover: FullScreenCoverType?
+    @Published var alert: AlertType?
     
     //MARK: - View
     

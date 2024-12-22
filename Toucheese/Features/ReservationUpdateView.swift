@@ -7,13 +7,19 @@
 
 import SwiftUI
 
-//TODO: 피그마와 같이 오른쪽 상단에 x를 할지 아니면 네비게이션으로 할지?
-// 아니면 Fullscreencover로 할지... 상의하자 
-
 struct ReservationUpdateView: View {
+    
+    @EnvironmentObject private var navigationManager: NavigationManager
     
     let hoursRawData: [StudioHoursEntity] = []
     @State private var selectedDate: Date = .now
+    private var selectedDateString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM월 dd일(E) a h시"
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        return formatter.string(from: selectedDate)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -30,8 +36,9 @@ struct ReservationUpdateView: View {
             }
             Spacer()
             Button(action: {
-                //TODO: 예약 날짜 변경 페이지로 이동
-                
+                //TODO: API 호출
+                navigationManager.pop(2)
+                navigationManager.alert = .dateChanged(date: selectedDateString)
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary06)
@@ -49,6 +56,7 @@ struct ReservationUpdateView: View {
         .navigationTitle("예약 날짜 변경")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
+        .navigationBarBackButtonHidden(navigationManager.alert != nil)
     }
 }
 
