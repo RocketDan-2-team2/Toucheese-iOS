@@ -19,6 +19,8 @@ extension BaseAPI {
         var base = ToucheeseEnv.Network.baseURL
         
         switch Self.apiType {
+        case .auth:
+            base += "/auth"
         case .studio:
             base += "/studio"
         case .order:
@@ -43,6 +45,7 @@ extension BaseAPI {
 
 
 enum APIType {
+    case auth
     case studio
     case order
 }
