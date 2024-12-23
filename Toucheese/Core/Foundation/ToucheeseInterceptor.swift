@@ -32,4 +32,24 @@ final class ToucheeseInterceptor: RequestInterceptor {
         urlRequest.headers = HTTPHeaders(headers)
     }
     
+    func retry(
+        _ request: Request,
+        for session: Session,
+        dueTo error: any Error,
+        completion: @escaping (RetryResult) -> Void
+    ) {
+        guard request.response?.statusCode == 403 else {
+            completion(.doNotRetryWithError(error))
+            return
+        }
+        
+        DefaultAuthService().reissuance { isSuccessed in
+            if isSuccessed {
+                completion(.retry)
+            } else {
+                completion(.doNotRetryWithError(APIError.tokenReissuanceFailed))
+            }
+        }
+    }
+    
 }
