@@ -111,7 +111,8 @@ extension BaseService {
                             let body = try JSONDecoder().decode(T.self, from: value.data)
                             promise(.success(body))
                         case 400..<500:
-                            let body = try JSONDecoder().decode(ErrorResponse.self, from: value.data)
+                            // TODO: 임시 에러 처리중. 구체적인 구현 필요
+                            let body = try JSONDecoder().decode(ErrorEntity.self, from: value.data)
                             let apiError = APIError(
                                 error: NSError(domain: "임시에러", code: -1001),
                                 statusCode: response.statusCode,
@@ -125,7 +126,6 @@ extension BaseService {
                         promise(.failure(error))
                     }
                 case .failure(let error):
-                    // 여기서 필요에 의해 error 처리 가능
                     promise(.failure(error))
                 }
             }
