@@ -57,6 +57,12 @@ extension AppDelegate: MessagingDelegate {
         // Store this token to firebase and retrieve when to send message to someone...
         let dataDict: [String: String] = ["token": fcmToken ?? ""]
         
+        
+        // TODO: UserDefaults Manager로 해당 코드 변경
+        if let fcmToken {
+            UserDefaults.standard.set(fcmToken, forKey: "FCM Token")
+        }
+        
         // Store token in Firestore For Sending Notifications From Server in Future...
         
         print(dataDict)
