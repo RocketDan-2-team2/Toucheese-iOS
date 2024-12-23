@@ -300,20 +300,6 @@ extension CustomCalendar {
     }()
 }
 
-extension Date {
-    func isSameDay(as otherDate: Date) -> Bool {
-        let calendar = Calendar.current
-        let components1 = calendar.dateComponents([.year, .month, .day], from: self)
-        let components2 = calendar.dateComponents([.year, .month, .day], from: otherDate)
-        return components1 == components2
-    }
-    
-    func getYearNMonth() -> DateComponents {
-        let result = Calendar.current.dateComponents([.year, .month], from: self)
-        return result
-    }
-}
-
 #Preview {
 //    @State var october2024 = Calendar.current.date(from: DateComponents(year: 2024, month: 11))!
     @State var october2024 = Date()

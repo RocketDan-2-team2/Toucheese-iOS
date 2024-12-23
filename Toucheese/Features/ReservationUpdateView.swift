@@ -13,13 +13,6 @@ struct ReservationUpdateView: View {
     
     let hoursRawData: [StudioHoursEntity] = []
     @State private var selectedDate: Date = .now
-    private var selectedDateString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM월 dd일(E) a h시"
-        formatter.locale = Locale(identifier: "ko_KR")
-        
-        return formatter.string(from: selectedDate)
-    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -38,7 +31,7 @@ struct ReservationUpdateView: View {
             Button(action: {
                 //TODO: API 호출
                 navigationManager.pop(2)
-                navigationManager.alert = .dateChanged(date: selectedDateString)
+                navigationManager.alert = .dateChanged(date: selectedDate.getDateString())
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary06)

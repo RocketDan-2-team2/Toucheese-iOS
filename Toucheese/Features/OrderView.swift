@@ -35,14 +35,6 @@ struct OrderView: View {
         product.optionList.filter { $0.count > 0 }
     }
     
-    private var selectedDateString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM월 dd일(E) a h시"
-        formatter.locale = Locale(identifier: "ko_KR")
-        
-        return formatter.string(from: selectedDate)
-    }
-    
     var body: some View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
@@ -69,7 +61,7 @@ struct OrderView: View {
                         
                         OrderStudioInformationView(
                             studio: studio,
-                            selectedDateString: selectedDateString
+                            selectedDateString: selectedDate.getDateString()
                         )
                         
                     }
@@ -209,7 +201,7 @@ struct OrderView: View {
                             studio: studio,
                             product: product,
                             totalPrice: totalPrice,
-                            selectedDate: selectedDateString,
+                            selectedDate: selectedDate.getDateString(),
                             selectedOptions: selectedOptions
                         )
                     )
