@@ -10,25 +10,38 @@ import SwiftUI
 struct ToucheeseToastModifier: ViewModifier {
     
     @Binding var toast: ToastType?
+    @State private var yOffset = 200
+    @State private var opacity: Double = 0
     
     func body(content: Content) -> some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             content
-            VStack {
-                Spacer()
-                if toast != nil {
-                    ToucheeseToast(toast: $toast)
-                        .onAppear {
-                            dismissAfterShow()
+
+            if toast != nil {
+                ToucheeseToast(toast: $toast)
+                    .opacity(opacity)
+                    .offset(y: CGFloat(yOffset))
+                    .onAppear {
+                        withAnimation(.bouncy) {
+                            yOffset = 0
                         }
-                }
+                        withAnimation(.easeIn) {
+                            opacity = 1
+                        }
+                        dismissAfterShow()
+                    }
             }
         }
     }
     
     func dismissAfterShow() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            toast = nil
+            withAnimation(.bouncy.speed(0.8), {
+                yOffset = 200
+                opacity = 0
+            }, completion: {
+                toast = nil
+            })
         }
     }
 }

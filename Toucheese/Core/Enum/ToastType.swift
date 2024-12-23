@@ -7,13 +7,10 @@
 
 import Foundation
 
-enum ToastType {
+enum ToastType: Hashable {
     case cancelSuccess(date: String)
     case cancelFail
     
     case orderFail
     
-//    var id: String {
-//        "\(self)"
-//    }
 }
