@@ -27,11 +27,13 @@ struct ToucheeseApp: App {
                 IntroView()
                     .navigationDestination(for: ViewType.self) { view in
                         navigationManager.build(view)
+                            .toucheeseAlert(alert: $navigationManager.alert)
+                            .toucheeseToast(toast: $navigationManager.toast)
                     }
                     .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
                         navigationManager.build(fullScreenCover)
                     }
-                    .toucheeseAlert(alert: $navigationManager.alert)
+                    
             }
             .onOpenURL { url in
                 if AuthApi.isKakaoTalkLoginUrl(url) {
