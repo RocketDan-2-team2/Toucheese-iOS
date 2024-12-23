@@ -14,6 +14,7 @@
 		136419692D13043D005B0A3E /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 136419682D13043D005B0A3E /* GoogleSignIn */; };
 		136C79682CEC69E7009DEA76 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 136C79672CEC69E7009DEA76 /* CombineMoya */; };
 		136C796A2CEC69E7009DEA76 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 136C79692CEC69E7009DEA76 /* Moya */; };
+		1FACF0EB2D16EC34005651EA /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 1FACF0EA2D16EC34005651EA /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FACF0EB2D16EC34005651EA /* FirebaseMessaging in Frameworks */,
 				136C796A2CEC69E7009DEA76 /* Moya in Frameworks */,
 				1333B3252D02B9F9002FB7BA /* SkeletonUI in Frameworks */,
 				136417B92D12F54B005B0A3E /* KakaoSDKUser in Frameworks */,
@@ -102,6 +104,7 @@
 				136417B62D12F54B005B0A3E /* KakaoSDKCommon */,
 				136417B82D12F54B005B0A3E /* KakaoSDKUser */,
 				136419682D13043D005B0A3E /* GoogleSignIn */,
+				1FACF0EA2D16EC34005651EA /* FirebaseMessaging */,
 			);
 			productName = Toucheese;
 			productReference = 1317A4732CE5CE9B007264C7 /* Toucheese.app */;
@@ -136,6 +139,7 @@
 				1333B3232D02B9F9002FB7BA /* XCRemoteSwiftPackageReference "SkeletonUI" */,
 				136417B32D12F54B005B0A3E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				136419672D13043D005B0A3E /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				1FACF0E92D16EC34005651EA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1317A4742CE5CE9B007264C7 /* Products */;
@@ -419,6 +423,14 @@
 				minimumVersion = 15.0.0;
 			};
 		};
+		1FACF0E92D16EC34005651EA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.6.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -456,6 +468,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 136C79662CEC69E7009DEA76 /* XCRemoteSwiftPackageReference "Moya" */;
 			productName = Moya;
+		};
+		1FACF0EA2D16EC34005651EA /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1FACF0E92D16EC34005651EA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
