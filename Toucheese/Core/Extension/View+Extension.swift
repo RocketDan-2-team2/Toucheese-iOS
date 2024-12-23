@@ -32,4 +32,13 @@ extension View {
         )
     }
     
+    func toucheeseToast(
+        toast: Binding<ToastType?>
+    )
+    -> some View {
+        modifier(
+            ToucheeseToastModifier(toast: toast)
+        )
+    }
+    
 }

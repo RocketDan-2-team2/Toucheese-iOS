@@ -27,8 +27,6 @@ struct ToucheeseAlert: View {
     
     @Binding var alert: AlertType?
     
-    var date: String?
-    
     var body: some View {
         ZStack {
             Color.gray10.opacity(0.5)
@@ -130,17 +128,5 @@ extension ToucheeseAlert {
         case .reservationCancel: true
         case .none: false
         }
-    }
-}
-
-extension View {
-  
-    func toucheeseAlert(
-        alert: Binding<AlertType?>
-    )
-    -> some View {
-        modifier(
-            ToucheeseAlertModifier(alert: alert)
-        )
     }
 }

@@ -19,8 +19,6 @@ struct OrderView: View {
     @State private var selectedPayment: PaymentType = .pg
     @State private var isSuccessOrder: Bool = false
     
-    @State private var isShowAlert = false
-    
     let studio: StudioInfo
     let product: StudioProduct
     let totalPrice: Int
@@ -150,14 +148,6 @@ struct OrderView: View {
             .navigationTitle("주문/결제")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarRole(.editor)
-        //TODO: 임시
-            .alert("결제 요청이 실패했습니다.", isPresented: $isShowAlert) {
-                Button("확인") {
-                    
-                }
-            } message: {
-                Text("다시 시도해주세요.")
-            }
     }
     
     private func createOrder() {
@@ -190,7 +180,7 @@ struct OrderView: View {
                     print("Success: \(event)")
                 case .failure(let error):
                     print(error.localizedDescription)
-                    isShowAlert = true
+                    navigationManager.toast = .orderFail
                 }
             } receiveValue: { result in
                 isSuccessOrder = result
@@ -206,7 +196,7 @@ struct OrderView: View {
                         )
                     )
                 } else {
-                    isShowAlert = true
+                    navigationManager.toast = .orderFail
                 }
             }
             .store(in: &bag)

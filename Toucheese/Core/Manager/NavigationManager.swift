@@ -12,11 +12,12 @@ final class NavigationManager: ObservableObject {
     
 //    @Published var homePath: [ViewType] = []
 //    @Published var reservationPath: [ViewType] = []
-    
+//    
     @Published var path: [ViewType] = []
     
     @Published var fullScreenCover: FullScreenCoverType?
     @Published var alert: AlertType?
+    @Published var toast: ToastType?
     
     //MARK: - View
     
