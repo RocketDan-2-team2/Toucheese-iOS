@@ -39,7 +39,7 @@ extension BaseAPI {
     }
     
     var validationType: ValidationType {
-        return .customCodes(Array(200..<500))
+        return .customCodes(Array(200..<400))
     }
 }
 
@@ -61,10 +61,10 @@ enum HeaderType {
             return ["Content-Type": "application/json"]
         case .jsonWithToken:
             return ["Content-Type": "application/json",
-                    "Authorization": "accountToken"]
+                    "Bearer Token": UserDefaultsManager.accountToken ?? "none"]
         case .multipartWithToken:
             return ["Content-Type": "multipart/form-data",
-                    "Authorization": "accountToken"]
+                    "Bearer Token": UserDefaultsManager.accountToken ?? "none"]
         }
     }
 }
