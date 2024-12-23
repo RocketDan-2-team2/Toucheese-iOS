@@ -7,9 +7,14 @@
 
 import SwiftUI
 
+import Combine
+
 struct ReservationDetailView: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
+    
+    private let orderService = DefaultOrderService()
+    @State private var bag = Set<AnyCancellable>()
     
     let reservationStateType: ReservationStateType
     
@@ -53,9 +58,7 @@ struct ReservationDetailView: View {
                 HStack {
                     Button(action: {
                         navigationManager.alert = .reservationCancel(action: {
-                            //TODO: 취소 API
-                            print("취소 !!! ")
-                            navigationManager.pop(1)
+                            cancelReservation(orderID: 1)
                         })
                     }, label: {
                         RoundedRectangle(cornerRadius: 8)
@@ -98,6 +101,29 @@ struct ReservationDetailView: View {
         .toolbarRole(.editor)
         .toolbar(.hidden, for: .tabBar)
         .navigationBarBackButtonHidden(navigationManager.alert != nil)
+    }
+    
+    //MARK: - Network
+    
+    private func cancelReservation(orderID: Int) {
+        orderService.cancelOrder(orderID: orderID)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Cancel Reservation finished: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    //TODO: 취소 실패 toast
+                }
+            } receiveValue: { result in
+                if result {
+                    navigationManager.pop(1)
+                    //TODO: 취소 성공 toast
+                } else {
+                    //TODO: 취소 실패 toast
+                }
+            }
+            .store(in: &bag)
     }
 }
 
