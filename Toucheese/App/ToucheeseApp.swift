@@ -14,6 +14,8 @@ import GoogleSignIn
 struct ToucheeseApp: App {
     
     @StateObject private var navigationManager = NavigationManager()
+    // AppDelegate를 SwiftUI 앱 생명주기에 통합
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     init() {
         KakaoSDK.initSDK(appKey: ToucheeseEnv.kakaoAppKey)
