@@ -22,14 +22,34 @@ final class ToucheeseInterceptor: RequestInterceptor {
         completion(.success(adaptedRequest))
     }
     
-    // Note: 토큰 재발급 시 AccessToken 갱신
     private func validateHeader(_ urlRequest: inout URLRequest) {
         let headers = urlRequest.headers.map {
-            guard $0.name == "Authorization" else { return $0 }
-            return HTTPHeader(name: $0.name, value: "accountToken")
+            guard $0.name == "Bearer Token" else { return $0 }
+            
+            return HTTPHeader(name: $0.name, value: UserDefaultsManager.accountToken ?? "none")
         }
         
         urlRequest.headers = HTTPHeaders(headers)
+    }
+    
+    func retry(
+        _ request: Request,
+        for session: Session,
+        dueTo error: any Error,
+        completion: @escaping (RetryResult) -> Void
+    ) {
+        guard request.response?.statusCode == 403 else {
+            completion(.doNotRetryWithError(error))
+            return
+        }
+        
+        DefaultAuthService().reissuance { isSuccessed in
+            if isSuccessed {
+                completion(.retry)
+            } else {
+                completion(.doNotRetryWithError(APIError.tokenReissuanceFailed))
+            }
+        }
     }
     
 }

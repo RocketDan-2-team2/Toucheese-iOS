@@ -10,6 +10,7 @@ import Alamofire
 
 enum AuthAPI {
     case signIn(parameters: Parameters)
+    case reissuance
 }
 
 extension AuthAPI: BaseAPI {
@@ -20,12 +21,14 @@ extension AuthAPI: BaseAPI {
         switch self {
         case .signIn:
             "/sign-in/oauth"
+        case .reissuance:
+            "/reissuance"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .signIn: .post
+        case .signIn, .reissuance: .post
         }
     }
     
@@ -33,11 +36,18 @@ extension AuthAPI: BaseAPI {
         switch self {
         case .signIn(let parameters):
                 .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+        case .reissuance:
+                .requestPlain
         }
     }
     
     var headers: [String : String]? {
-        HeaderType.json.value
+        switch self {
+        case .signIn:
+            HeaderType.json.value
+        case .reissuance:
+            HeaderType.jsonWithToken.value
+        }
     }
     
 }
