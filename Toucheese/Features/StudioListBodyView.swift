@@ -60,6 +60,7 @@ struct StudioListBodyView: View {
                                     .foregroundStyle(.gray05)
                                     .onTapGesture {
                                         studioViewModel.selectedRating = nil
+                                        studioViewModel.searchStudioWithDefaultPage()
                                     }
                             }
                             .toucheeseButtonStyle(
@@ -76,6 +77,7 @@ struct StudioListBodyView: View {
                                     .foregroundStyle(.gray05)
                                     .onTapGesture {
                                         studioViewModel.selectedPrice = nil
+                                        studioViewModel.searchStudioWithDefaultPage()
                                     }
                             }
                             .toucheeseButtonStyle(
@@ -94,6 +96,8 @@ struct StudioListBodyView: View {
                                     .onTapGesture {
                                         let index = studioViewModel.selectedRegion.firstIndex(where: { $0 == region })!
                                         studioViewModel.selectedRegion.remove(at: index)
+                                        
+                                        studioViewModel.searchStudioWithDefaultPage()
                                     }
                             }
                             .toucheeseButtonStyle(
@@ -110,6 +114,8 @@ struct StudioListBodyView: View {
                             studioViewModel.selectedRegion.removeAll()
                             studioViewModel.selectedPrice = nil
                             studioViewModel.selectedRating = nil
+                            
+                            studioViewModel.searchStudioWithDefaultPage()
                         }
                 }
             }
@@ -155,8 +161,7 @@ struct StudioListBodyView: View {
                     .ignoresSafeArea()
                 }
                 .refreshable {
-                    studioViewModel.setDefaultPage()
-                    studioViewModel.searchStudio()
+                    studioViewModel.searchStudioWithDefaultPage()
                 }
             }
         }

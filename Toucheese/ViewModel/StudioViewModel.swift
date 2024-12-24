@@ -14,24 +14,9 @@ final class StudioViewModel: ObservableObject {
     let studioService: StudioService = DefaultStudioService()
     
     @Published var concept: ConceptEntity = ConceptEntity(id: 0, name: "init", image: nil)
-    @Published var selectedRegion: [RegionType] = [] {
-        didSet {
-            setDefaultPage()
-            searchStudio()
-        }
-    }
-    @Published var selectedRating: RatingType? {
-        didSet {
-            setDefaultPage()
-            searchStudio()
-        }
-    }
-    @Published var selectedPrice: PriceType? {
-        didSet {
-            setDefaultPage()
-            searchStudio()
-        }
-    }
+    @Published var selectedRegion: [RegionType] = []
+    @Published var selectedRating: RatingType?
+    @Published var selectedPrice: PriceType?
     
     @Published private(set) var studioList: [StudioEntity] = []
     
@@ -65,6 +50,11 @@ final class StudioViewModel: ObservableObject {
             self?.toNextPage(searchResult: searchResult)
         }
         .store(in: &bag)
+    }
+    
+    func searchStudioWithDefaultPage() {
+        setDefaultPage()
+        searchStudio()
     }
     
     // 다음 페이지로 세팅

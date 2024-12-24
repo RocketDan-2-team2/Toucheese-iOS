@@ -12,6 +12,13 @@ struct FilterExpansionView: View {
     @EnvironmentObject private var navigationManager: NavigationManager
     
     @ObservedObject var studioViewModel: StudioViewModel
+
+    var initialFilter: (region: [RegionType], rating: RatingType?, price: PriceType?)
+    
+    init(studioViewModel: StudioViewModel) {
+        self.studioViewModel = studioViewModel
+        self.initialFilter = (studioViewModel.selectedRegion, studioViewModel.selectedRating, studioViewModel.selectedPrice)
+    }
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
@@ -25,6 +32,10 @@ struct FilterExpansionView: View {
                 Image(systemName: "xmark")
                     .bold()
                     .onTapGesture {
+                        studioViewModel.selectedRegion = initialFilter.region
+                        studioViewModel.selectedPrice = initialFilter.price
+                        studioViewModel.selectedRating = initialFilter.rating
+                        
                         navigationManager.dismiss()
                     }
             }
@@ -133,7 +144,9 @@ struct FilterExpansionView: View {
                         shapeStyle: .fullWidth
                     )
                     .onTapGesture {
-                        studioViewModel.searchStudio()
+                        // API 호출
+                        studioViewModel.searchStudioWithDefaultPage()
+                        
                         navigationManager.dismiss()
                     }
             }
