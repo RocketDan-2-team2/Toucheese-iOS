@@ -136,9 +136,6 @@ struct FilterExpansionView: View {
                         studioViewModel.selectedRegion.removeAll()
                         studioViewModel.selectedRating = nil
                         studioViewModel.selectedPrice = nil
-                        
-                        // API 호출
-                        studioViewModel.searchStudioWithDefaultPage()
                     }
                 Text("n개의 스튜디오 보기")
                     .font(.system(size: 14.0))
