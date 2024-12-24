@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Alamofire
 import Moya
 
 class BaseService<Target: TargetType> {
@@ -85,28 +86,40 @@ extension BaseService {
                 case .success(let value):
                     do {
                         guard let response = value.response else { return }
+                        let body = try JSONDecoder().decode(BaseEntity<T>.self, from: value.data)
                         
                         switch response.statusCode {
+                        // 정상 response
                         case 200..<400:
-                            let body = try JSONDecoder().decode(T.self, from: value.data)
-                            promise(.success(body))
+                            if let payload = body.payload {
+                                promise(.success(payload))
+                            } else {
+                                throw ErrorEntity(code: 4018, message: "Unknown Error")
+                            }
+                        // 서버와 약속된 error
                         case 400..<500:
-                            // TODO: 임시 에러 처리중. 구체적인 구현 필요
-                            let body = try JSONDecoder().decode(ErrorEntity.self, from: value.data)
-                            let apiError = APIError(
-                                error: NSError(domain: "임시에러", code: -1001),
-                                statusCode: response.statusCode,
-                                response: body
-                            )
-                            
-                            throw apiError
-                        default: break
+                            if let error = body.error {
+                                promise(.failure(error))
+                            } else {
+                                throw ErrorEntity(code: 4018, message: "Unknown Error")
+                            }
+                        default:
+                            break
                         }
                     } catch {
+                        // decoding error
                         promise(.failure(error))
                     }
+                // 유효하지 않은 statusCode에 대한 처리
                 case .failure(let error):
-                    promise(.failure(error))
+                    if case MoyaError.underlying(let error, _) = error,
+                       case AFError.requestRetryFailed(let retryError, _) = error,
+                       let retryError = retryError as? ErrorEntity,
+                       retryError.code == 4016 {
+                        promise(.failure(retryError))
+                    } else {
+                        promise(.failure(error))
+                    }
                 }
             }
         }
