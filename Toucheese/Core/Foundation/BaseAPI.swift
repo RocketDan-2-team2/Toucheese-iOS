@@ -39,7 +39,7 @@ extension BaseAPI {
     }
     
     var validationType: ValidationType {
-        return .customCodes(Array(200..<400))
+        return .customCodes(Array(200..<600).filter { $0 != 403 })
     }
 }
 
