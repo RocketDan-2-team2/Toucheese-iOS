@@ -8,8 +8,7 @@
 import Foundation
 
 struct BaseEntity<T: Decodable>: Decodable {
-    let status: Int
-    let message: String
-    let data: T?
+    let success: Bool
+    let payload: T?
     let error: ErrorEntity?
 }
