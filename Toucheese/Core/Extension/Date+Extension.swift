@@ -9,6 +9,18 @@ import Foundation
 
 extension Date {
     
+    // MARK: Formatter
+    
+    static let isoFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        return formatter
+    }()
+    
+    func toString() -> String {
+        return Self.isoFormatter.string(from: self)
+    }
+        
+    
     func getDateString() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM월 dd일(E) a h시"
