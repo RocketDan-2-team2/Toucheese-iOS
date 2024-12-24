@@ -5,7 +5,7 @@
 //  Created by 유지호 on 11/19/24.
 //
 
-struct ErrorEntity: Error, Decodable, Equatable {
+struct ErrorEntity: Decodable, Error {
     let code: Int
     let message: String
 }
