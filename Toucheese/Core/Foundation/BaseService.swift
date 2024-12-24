@@ -78,26 +78,6 @@ class BaseService<Target: TargetType> {
 
 extension BaseService {
     
-    func requestObjectWith<T: Decodable>(_ target: API) -> AnyPublisher<T, Error> {
-        return Future { [weak self] promise in
-            self?.provider.request(target) { result in
-                switch result {
-                case .success(let response):
-                    do {
-                        let body = try JSONDecoder().decode(T.self, from: response.data)
-                        promise(.success(body))
-                    } catch {
-                        promise(.failure(error))
-                    }
-                case .failure(let error):
-                    // 여기서 필요에 의해 error 처리 가능
-                    promise(.failure(error))
-                }
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-    
     func requestObjectWithNetworkError<T: Decodable>(_ target: API) -> AnyPublisher<T, Error> {
         return Future { [weak self] promise in
             self?.provider.request(target) { result in
