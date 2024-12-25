@@ -94,14 +94,14 @@ extension BaseService {
                             if let payload = body.payload {
                                 promise(.success(payload))
                             } else {
-                                throw ErrorEntity(code: 4018, message: "Unknown Error")
+                                throw ErrorEntity(code: -1000, message: "Unknown Error")
                             }
                         // 서버와 약속된 error
                         case 400..<500:
                             if let error = body.error {
                                 promise(.failure(error))
                             } else {
-                                throw ErrorEntity(code: 4018, message: "Unknown Error")
+                                throw ErrorEntity(code: -1000, message: "Unknown Error")
                             }
                         default:
                             break
