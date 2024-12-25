@@ -40,7 +40,9 @@ final class ToucheeseInterceptor: RequestInterceptor {
     ) {
         // 비회원인 경우, 리프레쉬 토큰 만료 -> 로그인 유도
         // 엑세스 토큰 만료 -> 재발급
-        guard request.response?.statusCode == 403 else {
+        guard let pathComponents = request.request?.url?.pathComponents,
+              !pathComponents.contains("reissuance"),
+              request.response?.statusCode == 403 else {
             completion(.doNotRetryWithError(error))
             return
         }
