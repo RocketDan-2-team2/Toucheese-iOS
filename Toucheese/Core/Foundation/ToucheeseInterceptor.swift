@@ -26,7 +26,7 @@ final class ToucheeseInterceptor: RequestInterceptor {
         let headers = urlRequest.headers.map {
             guard $0.name == "Bearer Token" else { return $0 }
             
-            return HTTPHeader(name: $0.name, value: UserDefaultsManager.accessToken ?? "none")
+            return HTTPHeader(name: $0.name, value: UserDefaultsKey.Auth.accessToken ?? "none")
         }
         
         urlRequest.headers = HTTPHeaders(headers)
