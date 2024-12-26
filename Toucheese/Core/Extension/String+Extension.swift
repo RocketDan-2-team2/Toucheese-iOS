@@ -39,14 +39,8 @@ extension String {
     
     // MARK: Date
     
-    static let isoFormatter: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return formatter
-    }()
-    
     func toDate() -> Date? {
-        return Self.isoFormatter.date(from: self)
+        return Date.isoFormatter.date(from: self)
     }
     
 }
