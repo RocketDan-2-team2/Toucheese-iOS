@@ -86,25 +86,36 @@ extension BaseService {
                 case .success(let value):
                     do {
                         guard let response = value.response else { return }
-                        let body = try JSONDecoder().decode(BaseEntity<T>.self, from: value.data)
                         
-                        switch response.statusCode {
-                        // 정상 response
-                        case 200..<400:
-                            if let payload = body.payload {
-                                promise(.success(payload))
-                            } else {
-                                throw ErrorEntity(code: -1000, message: "Unknown Error")
+                        // TODO: 서버에서 Response 타입 정의가 완료되면 분기처리 제거
+                        if target.path == "/sign-in/oauth" {
+                            let body = try JSONDecoder().decode(BaseEntity<T>.self, from: value.data)
+                            
+                            switch response.statusCode {
+                            case 200..<400:
+                                if let payload = body.payload {
+                                    promise(.success(payload))
+                                } else {
+                                    throw ErrorEntity(code: -1000, message: "Unknown Error")
+                                }
+                            case 400..<500:
+                                if let error = body.error {
+                                    promise(.failure(error))
+                                } else {
+                                    throw ErrorEntity(code: -1000, message: "Unknown Error")
+                                }
+                            default: break
                             }
-                        // 서버와 약속된 error
-                        case 400..<500:
-                            if let error = body.error {
-                                promise(.failure(error))
-                            } else {
-                                throw ErrorEntity(code: -1000, message: "Unknown Error")
+                        } else {
+                            switch response.statusCode {
+                            case 200..<400:
+                                let body = try JSONDecoder().decode(T.self, from: value.data)
+                                promise(.success(body))
+                            case 400..<500:
+                                let body = try JSONDecoder().decode(ErrorEntity.self, from: value.data)
+                                promise(.failure(body))
+                            default: break
                             }
-                        default:
-                            break
                         }
                     } catch {
                         // decoding error
