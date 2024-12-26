@@ -61,10 +61,10 @@ enum HeaderType {
             return ["Content-Type": "application/json"]
         case .jsonWithToken:
             return ["Content-Type": "application/json",
-                    "Bearer Token": UserDefaultsManager.accountToken ?? "none"]
+                    "Authorization": "Bearer \(UserDefaultsManager.accessToken ?? "none")"]
         case .multipartWithToken:
             return ["Content-Type": "multipart/form-data",
-                    "Bearer Token": UserDefaultsManager.accountToken ?? "none"]
+                    "Authorization": "Bearer \(UserDefaultsManager.accessToken ?? "none")"]
         }
     }
 }
