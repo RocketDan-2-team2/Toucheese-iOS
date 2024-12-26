@@ -8,14 +8,16 @@
 import Foundation
 
 enum UserDefaultsKey {
-    case accountToken
+    case accessToken
+    case refreshToken
     case fcmToken
     
     case showTabFlow
 }
 
 struct UserDefaultsManager {
-    @UserDefaultsWrapper<String>(.accountToken) static var accountToken
+    @UserDefaultsWrapper<String>(.accessToken) static var accessToken
+    @UserDefaultsWrapper<String>(.refreshToken) static var refreshToken
     @UserDefaultsWrapper<String>(.fcmToken) static var fcmToken
     @UserDefaultsWrapper<Bool>(.showTabFlow) static var showTabFlow
 }
