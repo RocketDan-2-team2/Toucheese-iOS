@@ -11,6 +11,10 @@ struct ReservationCell: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
+    //임시
+    let reservation: ReservationEntity
+    let studioId: Int = 1
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
@@ -45,21 +49,21 @@ struct ReservationCell: View {
                     HStack(spacing: 0) {
                         Image(systemName: "calendar")
                             .padding(.trailing, 4)
-                        Text("2024-12-18")
+                        Text(reservation.reservedDateTime)
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.gray06)
                     }
                     .padding(.bottom, 4)
-                    Text("여기 스튜디오")
+                    Text(reservation.studioName)
                         .font(.system(size: 16, weight: .semibold))
                         .padding(.bottom, 2)
-                    Text("상품 이름")
+                    Text(reservation.orderItemDto.first?.itemName)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(.gray06)
                 }
                 Spacer()
                 VStack {
-                    ReservationStateTicket(type: .cancel)
+                    ReservationStateTicket(type: reservation.status)
                     Spacer()
                 }
             }
@@ -67,8 +71,8 @@ struct ReservationCell: View {
             .padding(.horizontal, 16)
             
             Button(action: {
-                //TODO: API 호출
-                navigationManager.push(.reservationDetailView(reservationStateType: .waiting))
+                //TODO: 상세 보기 API 호출 -> 파라미터로 detail 전달
+//                navigationManager.push(.reservationDetailView(reservation: reservation))
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary01)
@@ -92,8 +96,4 @@ struct ReservationCell: View {
         }
         .padding(.horizontal, 16)
     }
-}
-
-#Preview {
-    ReservationCell()
 }

@@ -7,23 +7,46 @@
 
 import SwiftUI
 
+import Combine
+
 struct ReservationListView: View {
+    
+    let orderService = DefaultOrderService()
+    @State private var reservationList: [ReservationEntity] = []
+    
+    @State private var bag = Set<AnyCancellable>()
     
     var body: some View {
         ScrollView {
             VStack {
-                ForEach(0..<5) { _ in
-                    ReservationCell()
+                ForEach(reservationList, id:\.self) { reservation in
+                    ReservationCell(reservation: reservation)
                 }
                 .padding(.top, 13)
             }
             .onAppear {
-                //TODO: API 호출
+                fetchReservationList()
             }
         }
         .navigationTitle("예약 일정")
         .navigationBarTitleDisplayMode(.inline)
     }
+    
+    private func fetchReservationList() {
+        orderService.getOrderList()
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("")
+                case .failure(let error):
+                    print(error)
+                }
+            } receiveValue: { list in
+                reservationList = list
+            }
+            .store(in: &bag)
+    }
+
 }
 
 #Preview {
