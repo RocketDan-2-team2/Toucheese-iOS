@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Alamofire
 import Moya
 
 class BaseService<Target: TargetType> {
@@ -78,26 +79,6 @@ class BaseService<Target: TargetType> {
 
 extension BaseService {
     
-    func requestObjectWith<T: Decodable>(_ target: API) -> AnyPublisher<T, Error> {
-        return Future { [weak self] promise in
-            self?.provider.request(target) { result in
-                switch result {
-                case .success(let response):
-                    do {
-                        let body = try JSONDecoder().decode(T.self, from: response.data)
-                        promise(.success(body))
-                    } catch {
-                        promise(.failure(error))
-                    }
-                case .failure(let error):
-                    // 여기서 필요에 의해 error 처리 가능
-                    promise(.failure(error))
-                }
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-    
     func requestObjectWithNetworkError<T: Decodable>(_ target: API) -> AnyPublisher<T, Error> {
         return Future { [weak self] promise in
             self?.provider.request(target) { result in
@@ -106,27 +87,50 @@ extension BaseService {
                     do {
                         guard let response = value.response else { return }
                         
-                        switch response.statusCode {
-                        case 200..<400:
-                            let body = try JSONDecoder().decode(T.self, from: value.data)
-                            promise(.success(body))
-                        case 400..<500:
-                            // TODO: 임시 에러 처리중. 구체적인 구현 필요
-                            let body = try JSONDecoder().decode(ErrorEntity.self, from: value.data)
-                            let apiError = APIError(
-                                error: NSError(domain: "임시에러", code: -1001),
-                                statusCode: response.statusCode,
-                                response: body
-                            )
+                        // TODO: 서버에서 Response 타입 정의가 완료되면 분기처리 제거
+                        if target.path == "/sign-in/oauth" {
+                            let body = try JSONDecoder().decode(BaseEntity<T>.self, from: value.data)
                             
-                            throw apiError
-                        default: break
+                            switch response.statusCode {
+                            case 200..<400:
+                                if let payload = body.payload {
+                                    promise(.success(payload))
+                                } else {
+                                    throw ErrorEntity(code: -1000, message: "Unknown Error")
+                                }
+                            case 400..<500:
+                                if let error = body.error {
+                                    promise(.failure(error))
+                                } else {
+                                    throw ErrorEntity(code: -1000, message: "Unknown Error")
+                                }
+                            default: break
+                            }
+                        } else {
+                            switch response.statusCode {
+                            case 200..<400:
+                                let body = try JSONDecoder().decode(T.self, from: value.data)
+                                promise(.success(body))
+                            case 400..<500:
+                                let body = try JSONDecoder().decode(ErrorEntity.self, from: value.data)
+                                promise(.failure(body))
+                            default: break
+                            }
                         }
                     } catch {
+                        // decoding error
                         promise(.failure(error))
                     }
+                // 유효하지 않은 statusCode에 대한 처리
                 case .failure(let error):
-                    promise(.failure(error))
+                    if case MoyaError.underlying(let error, _) = error,
+                       case AFError.requestRetryFailed(let retryError, _) = error,
+                       let retryError = retryError as? ErrorEntity,
+                       retryError.code == 4016 {
+                        promise(.failure(retryError))
+                    } else {
+                        promise(.failure(error))
+                    }
                 }
             }
         }

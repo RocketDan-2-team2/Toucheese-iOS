@@ -104,13 +104,13 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
         guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
         
         // 애플 로그인의 경우 첫 인증 시에만 유저 정보를 제공하고 이후에는 credential만 보내줌 (보안 이슈)
-        if let email = credential.email,
-           let name = credential.fullName?.formatted() {
-            let isHideEmail = email.contains("privaterelay.appleid")
-            requestSignIn(.apple, id: credential.user, email: isHideEmail ? nil : email, name: name.isEmpty ? nil : name)
-        } else {
-            requestSignIn(.apple, id: credential.user, email: nil, name: nil)
-        }
+//        let isHideEmail = email.contains("privaterelay.appleid")
+        requestSignIn(
+            .apple,
+            id: credential.user,
+            email: credential.email,
+            name: credential.fullName?.formatted()
+        )
     }
     
     func authorizationController(

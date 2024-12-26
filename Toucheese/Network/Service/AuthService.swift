@@ -43,7 +43,8 @@ extension DefaultAuthService: AuthService {
             case .success(let value):
                 do {
                     let body = try JSONDecoder().decode(SignInResultEntity.self, from: value.data)
-                    UserDefaultsManager.accountToken = body.accessToken
+                    UserDefaultsManager.accessToken = body.accessToken
+                    UserDefaultsManager.refreshToken = body.refreshToken
                     completion(true)
                 } catch {
                     completion(false)

@@ -34,7 +34,7 @@ final class DefaultStudioService: BaseService<StudioAPI> { }
 extension DefaultStudioService: StudioService {
     
     func getStudioConceptList() -> AnyPublisher<[ConceptEntity], Error> {
-        requestObjectWith(.concept)
+        requestObjectWithNetworkError(.concept)
     }
     
     func getStudioList(

@@ -37,7 +37,9 @@ extension AuthAPI: BaseAPI {
         case .signIn(let parameters):
                 .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         case .reissuance:
-                .requestPlain
+                .requestParameters(parameters: ["accessToken": UserDefaultsManager.accessToken ?? "",
+                                                "refreshToken": UserDefaultsManager.refreshToken ?? ""],
+                                   encoding: JSONEncoding.default)
         }
     }
     

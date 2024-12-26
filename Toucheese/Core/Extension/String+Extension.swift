@@ -9,6 +9,8 @@ import Foundation
 
 extension String {
     
+    // MARK: Validation
+    
     func isValidNickname() -> Bool {
         let nicknameRegex = "^(?:[가-힣]{1,7}|[a-zA-Z]{1,14})$"
         let predicate = NSPredicate(format: "SELF MATCHES %@", nicknameRegex)
@@ -31,6 +33,14 @@ extension String {
         let emailRegex = #"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+(?:\.com|\.net|\.co\.kr)"#
         let predicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
         return predicate.evaluate(with: self)
+    }
+    
+    
+    
+    // MARK: Date
+    
+    func toDate() -> Date? {
+        return Date.isoFormatter.date(from: self)
     }
     
 }
