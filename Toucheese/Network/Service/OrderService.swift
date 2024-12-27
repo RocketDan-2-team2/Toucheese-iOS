@@ -13,7 +13,8 @@ protocol OrderService {
     func createOrder(order: OrderEntity) -> AnyPublisher<Bool, Error>
     func cancelOrder(orderID: Int) -> AnyPublisher<Bool, Error>
     func getOrderList() -> AnyPublisher<[ReservationEntity], Error>
-    func getOrderDetail(orderID: Int) -> AnyPublisher<ReservationDetail, Error>
+    func getOrderDetail(orderID: Int) -> AnyPublisher<ReservationEntity, Error>
+    func updateOrder(orderId: Int, order: UpdateOrderEntity) -> AnyPublisher<Bool, Error>
 }
 
 final class DefaultOrderService: BaseService<OrderAPI> { }
@@ -32,8 +33,12 @@ extension DefaultOrderService: OrderService {
         requestObjectWithNetworkError(.getList)
     }
     
-    func getOrderDetail(orderID: Int) -> AnyPublisher<ReservationDetail, any Error> {
+    func getOrderDetail(orderID: Int) -> AnyPublisher<ReservationEntity, any Error> {
         requestObjectWithNetworkError(.detail(orderID: orderID))
+    }
+    
+    func updateOrder(orderId: Int, order: UpdateOrderEntity) -> AnyPublisher<Bool, any Error> {
+        requestObjectWithNetworkError(.update(orderId: orderId, order: order))
     }
 
 }
@@ -63,36 +68,63 @@ extension MockOrderService: OrderService {
             let list: [ReservationEntity] = [
                 .init(
                     orderId: 0,
+                    studioId: 0,
                     orderUserDto: OrderUserEntity(
                         userId: 0,
-                        userName: "김멋사"
+                        userName: "김멋사",
+                        userEmail: "",
+                        userPhone: ""
                     ),
                     studioName: "여기스튜디오",
                     reservedDateTime: "2024-12-28",
-                    orderItemDto: [],
-                    status: .cancel
+                    orderItemDto: OrderItemEntity(itemId: 0, itemName: "프로필A", itemImage: "", quantity: 1, itemPrice: 20000, totalPrice: 20000, orderOptionDtos: []),
+                    status: .cancel,
+                    studioImage: ""
                 ),
                 .init(
                     orderId: 0,
+                    studioId: 0,
                     orderUserDto: OrderUserEntity(
                         userId: 0,
-                        userName: "김멋사2"
+                        userName: "김멋사2",
+                        userEmail: "",
+                        userPhone: ""
                     ),
                     studioName: "저기스튜디오",
                     reservedDateTime: "2024-12-30",
-                    orderItemDto: [],
-                    status: .confirm
+                    orderItemDto: OrderItemEntity(itemId: 0, itemName: "프로필B", itemImage: "", quantity: 1, itemPrice: 20000, totalPrice: 20000, orderOptionDtos: []),
+                    status: .confirm,
+                    studioImage: ""
                 ),
                 .init(
                     orderId: 0,
+                    studioId: 0,
                     orderUserDto: OrderUserEntity(
                         userId: 0,
-                        userName: "김멋사"
+                        userName: "김멋사",
+                        userEmail: "",
+                        userPhone: ""
                     ),
                     studioName: "여기스튜디오1",
                     reservedDateTime: "2024-12-28",
-                    orderItemDto: [],
-                    status: .waiting
+                    orderItemDto: OrderItemEntity(itemId: 0, itemName: "프로필C", itemImage: "", quantity: 1, itemPrice: 20000, totalPrice: 20000, orderOptionDtos: []),
+                    status: .waiting,
+                    studioImage: ""
+                ),
+                .init(
+                    orderId: 0,
+                    studioId: 0,
+                    orderUserDto: OrderUserEntity(
+                        userId: 0,
+                        userName: "김멋사",
+                        userEmail: "",
+                        userPhone: ""
+                    ),
+                    studioName: "여기스튜디오1",
+                    reservedDateTime: "2024-12-28",
+                    orderItemDto: OrderItemEntity(itemId: 0, itemName: "프로필D", itemImage: "", quantity: 1, itemPrice: 20000, totalPrice: 20000, orderOptionDtos: []),
+                    status: .finished,
+                    studioImage: ""
                 ),
             ]
             
@@ -101,17 +133,33 @@ extension MockOrderService: OrderService {
         .eraseToAnyPublisher()
     }
     
-    func getOrderDetail(orderID: Int) -> AnyPublisher<ReservationDetail, any Error> {
+    func getOrderDetail(orderID: Int) -> AnyPublisher<ReservationEntity, any Error> {
         return Future { promise in
-            let reservation: ReservationDetail = .init(
-                studiName: "멋사 스튜디오",
-                date: "2024-11-11",
-                orderItem: "프로필B",
-                ordererName: "강미미"
+            let reservation: ReservationEntity = .init(
+                orderId: 0,
+                studioId: 0,
+                orderUserDto: OrderUserEntity(
+                    userId: 0,
+                    userName: "김멋사",
+                    userEmail: "",
+                    userPhone: ""
+                ),
+                studioName: "여기스튜디오1",
+                reservedDateTime: "2024-12-28",
+                orderItemDto: OrderItemEntity(itemId: 0, itemName: "프로필A", itemImage: "", quantity: 1, itemPrice: 20000, totalPrice: 30000, orderOptionDtos: [OrderOptionEntity(id: 0, name: "보정사진추가", price: 10000, quantity: 1)]),
+                status: .waiting,
+                studioImage: ""
             )
             promise(.success(reservation))
         }
         .eraseToAnyPublisher()
     }
     
+    func updateOrder(orderId: Int, order: UpdateOrderEntity) -> AnyPublisher<Bool, any Error> {
+        return Future<Bool, any Error> { promise in
+            let success: Bool = false
+            promise(.success(success))
+        }
+        .eraseToAnyPublisher()
+    }
 }

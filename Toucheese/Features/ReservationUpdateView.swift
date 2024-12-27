@@ -7,12 +7,18 @@
 
 import SwiftUI
 
+import Combine
+
 struct ReservationUpdateView: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
-    let hoursRawData: [StudioHoursEntity] = []
-    @State private var selectedDate: Date = .now
+    let orderService = MockOrderService()
+    @State private var bag = Set<AnyCancellable>()
+    
+    let reservation: ReservationEntity
+    let hoursRawData: [StudioHoursEntity]
+    @State var changeDate: Date
     
     @State private var isTimeSelected: Bool = false
     
@@ -32,9 +38,7 @@ struct ReservationUpdateView: View {
             }
             Spacer()
             Button(action: {
-                //TODO: API 호출
-                navigationManager.pop(2)
-                navigationManager.alert = .dateChanged(date: selectedDate.getDateString())
+                updateReservation()
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary06)
@@ -54,10 +58,46 @@ struct ReservationUpdateView: View {
         .toolbarRole(.editor)
         .navigationBarBackButtonHidden(navigationManager.alert != nil)
     }
-}
+    
+    //MARK: - Network
+    
+    private func updateReservation() {
+        guard let studioId = reservation.studioId,
+        let options = reservation.orderItemDto.orderOptionDtos else { return }
+        
+        var optionList: [OptionRequestEntity] = []
+        for option in options {
+            let newOption = OptionRequestEntity(optionId: option.id, optionQuantity: 1)
+            optionList.append(newOption)
+        }
+        let item = ItemRequestEntity(
+            itemId: reservation.orderItemDto.itemId,
+            itemQuantity: 1,
+            orderRequestOptionDtos: optionList
+        )
+        let updateReservation = UpdateOrderEntity(
+            studioId: studioId,
+            orderDateTime: changeDate.toString(),
+            orderRequestItemDtos: [item]
+        )
 
-#Preview {
-    NavigationStack {
-        ReservationUpdateView()
+        orderService.updateOrder(orderId: reservation.orderId, order: updateReservation)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Success: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    navigationManager.toast = .orderFail
+                }
+            } receiveValue: { result in
+                if result {
+                    navigationManager.pop(2)
+                    navigationManager.alert = .dateChanged(date: changeDate.getDateString())
+                } else {
+                    navigationManager.toast = .reservationUpdateFail
+                }
+            }
+            .store(in: &bag)
     }
 }
