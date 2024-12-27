@@ -26,6 +26,8 @@ struct StudioProductDetailView: View {
         
     @State private var studioHours: [[Int]] = Array(repeating: [], count: 31)
     
+    @State private var isTimeSelected: Bool = false
+    
     let studioService: StudioService = DefaultStudioService()
     
     var totalPrice: Int {
@@ -106,7 +108,8 @@ struct StudioProductDetailView: View {
                     
                     BookingTimePicker(
                         selectedDate: $selectedDate,
-                        hoursRawData: hoursRawData)
+                        hoursRawData: hoursRawData,
+                        isTimeSelected: $isTimeSelected)
                     .onChange(of: selectedDate) { oldValue, newValue in
                         let calendar = Calendar.current
                         if calendar.component(.month, from: oldValue) != calendar.component(.month, from: newValue) {
@@ -118,26 +121,39 @@ struct StudioProductDetailView: View {
                     }
                 }
                 
-                Button(
-                    action: {
-                        navigationManager.push(
-                            .orderView(
-                                studio: studio,
-                                product: product,
-                                totalPrice: totalPrice,
-                                selectedDate: selectedDate
+                if isTimeSelected {
+                    Button(
+                        action: {
+                            navigationManager.push(
+                                .orderView(
+                                    studio: studio,
+                                    product: product,
+                                    totalPrice: totalPrice,
+                                    selectedDate: selectedDate
+                                )
                             )
-                        )
-                    },
-                    label: {
-                    Capsule()
-                        .fill(.yellow)
-                        .frame(height: 40)
-                        .overlay {
-                            Text("주문하기 (₩\(totalPrice))")
-                                .tint(.black)
-                        }
-                })
+                        },
+                        label: {
+                        Capsule()
+                            .fill(.yellow)
+                            .frame(height: 40)
+                            .overlay {
+                                Text("주문하기 (₩\(totalPrice))")
+                                    .tint(.black)
+                            }
+                    })
+                } else {
+                    Button {
+                    } label: {
+                        Capsule()
+                            .fill(.gray03)
+                            .frame(height: 40)
+                            .overlay {
+                                Text("날짜를 선택해주세요.")
+                                    .tint(.gray05)
+                            }
+                    }
+                }
             }
             .padding(.horizontal, 36)
         }

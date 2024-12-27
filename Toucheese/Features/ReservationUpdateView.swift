@@ -14,6 +14,8 @@ struct ReservationUpdateView: View {
     let hoursRawData: [StudioHoursEntity] = []
     @State private var selectedDate: Date = .now
     
+    @State private var isTimeSelected: Bool = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -25,7 +27,8 @@ struct ReservationUpdateView: View {
                 }
                 BookingTimePicker(
                     selectedDate: $selectedDate,
-                    hoursRawData: hoursRawData)
+                    hoursRawData: hoursRawData,
+                    isTimeSelected: $isTimeSelected)
             }
             Spacer()
             Button(action: {
