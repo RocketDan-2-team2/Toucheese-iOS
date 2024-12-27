@@ -55,13 +55,6 @@ struct ConceptButton: View {
 }
 
 #Preview {
-    ConceptView(conceptList: [
-        .init(id: 0, name: "a", image: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA4MjFfNyAg%2FMDAxNzI0MTc4NDkxMjEw.yqR04Au7pctHZpPdFmoXxjmWvGdljNdkLDpLD4TxlRgg.D5bXtwnGoyY8Llc93kRlCTga0KqWRlaK3xu_WkBpU4cg.JPEG%2FIMG_1965.JPG&type=sc960_832"),
-        .init(id: 1, name: "b", image: "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fimg.flayus.com%2Ffiles%2Fattach%2Fimages%2F425025%2F905%2F553%2F106%2Ffee411bdc98d0c301eb145f4ff1cf64a.jpg&type=sc960_832"),
-        .init(id: 2, name: "c", image: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA4MjFfNyAg%2FMDAxNzI0MTc4NDkxMjEw.yqR04Au7pctHZpPdFmoXxjmWvGdljNdkLDpLD4TxlRgg.D5bXtwnGoyY8Llc93kRlCTga0KqWRlaK3xu_WkBpU4cg.JPEG%2FIMG_1965.JPG&type=sc960_832"),
-        .init(id: 3, name: "d", image: "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fwww.fomos.kr%2Fcontents%2Fimages%2Fboard%2F2022%2F0816%2F1660616397238148.jpg&type=sc960_832"),
-        .init(id: 4, name: "e", image: "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fimg.flayus.com%2Ffiles%2Fattach%2Fimages%2F425025%2F905%2F553%2F106%2Ffee411bdc98d0c301eb145f4ff1cf64a.jpg&type=sc960_832"),
-        .init(id: 5, name: "f", image: "")
-    ])
-    .environmentObject(NavigationManager())
+    ConceptView()
+        .environmentObject(NavigationManager())
 }

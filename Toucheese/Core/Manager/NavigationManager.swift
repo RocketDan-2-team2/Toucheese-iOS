@@ -24,8 +24,8 @@ final class NavigationManager: ObservableObject {
     @ViewBuilder
     func build(_ view: ViewType) -> some View {
         switch view {
-        case let .conceptView(conceptList):
-            ConceptView(conceptList: conceptList)
+        case .conceptView:
+            ConceptView()
         case let .studioListView(concept):
             StudioListView(concept: concept)
         case let .studioDetailView(studioId):
