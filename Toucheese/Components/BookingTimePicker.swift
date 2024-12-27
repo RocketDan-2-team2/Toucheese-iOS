@@ -18,6 +18,8 @@ struct BookingTimePicker: View {
     
     @State private var isFirstInit: Bool = true
     
+    @Binding var isTimeSelected: Bool
+    
     private let gridRow = Array(repeating: GridItem(.adaptive(minimum: .infinity, maximum: .infinity)), count: 4)
     
     private var calculatedTime: Int {
@@ -90,6 +92,7 @@ struct BookingTimePicker: View {
                     
                     TimeButtonGrid(selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
+                                   isTimeSelected: $isTimeSelected,
                                    columnsArr: gridRow,
                                    timeArr: openedHoursArr[calculatedDate],
                                    isAM: true)
@@ -106,6 +109,7 @@ struct BookingTimePicker: View {
                     
                     TimeButtonGrid(selectedTime: $selectedTime,
                                    selectedButton: $selectedButton,
+                                   isTimeSelected: $isTimeSelected,
                                    columnsArr: gridRow,
                                    timeArr: openedHoursArr[calculatedDate],
                                    isAM: false)
@@ -204,12 +208,14 @@ struct BookingTimePicker: View {
 
 #Preview {
     @State var date: Date = Date()
-    BookingTimePicker(selectedDate: $date, hoursRawData: StudioHoursEntity.mockData)
+//    BookingTimePicker(selectedDate: $date, hoursRawData: StudioHoursEntity.mockData)
 }
 
 struct TimeButtonGrid: View {
     @Binding var selectedTime: Int
     @Binding var selectedButton: Int
+    
+    @Binding var isTimeSelected: Bool
     
     let columnsArr: [GridItem]
     let timeArr: [Int]
@@ -230,7 +236,7 @@ struct TimeButtonGrid: View {
                             let tempNum = calculateTempNum(for: filteredTimes[idx])
                             Text("\(tempNum):00")
                                 .foregroundStyle(.black)
-                                .padding(10)
+                                .padding(5)
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
@@ -240,6 +246,9 @@ struct TimeButtonGrid: View {
                                .stroke(Color.gray03, lineWidth: 1)
                         }
                     }
+                }
+                .onAppear {
+                    isTimeSelected = true
                 }
             }
     }
