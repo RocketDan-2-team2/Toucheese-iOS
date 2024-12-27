@@ -10,7 +10,7 @@ import SwiftUI
 struct OrderProductInformationView: View {
     
     let product: StudioProduct
-    let studio: StudioInfo
+    let studioName: String
     let selectedOptions: [StudioProductOption]
     let totalPrice: Int
     
@@ -43,7 +43,7 @@ struct OrderProductInformationView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 12, height: 12)
-                    Text("\(studio.name)")
+                    Text(studioName)
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(.gray06)
                 }

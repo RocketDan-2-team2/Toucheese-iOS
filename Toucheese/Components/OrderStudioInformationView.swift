@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct OrderStudioInformationView: View {
-    let studio: StudioInfo
+    let studioName: String
     let selectedDateString: String
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("\(studio.name)")
+            Text(studioName)
                 .font(.system(size: 16, weight: .bold))
             Text(selectedDateString)
                 .font(.system(size: 16, weight: .medium))

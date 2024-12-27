@@ -9,11 +9,7 @@ import SwiftUI
 
 struct OrderUserInformationView: View {
     
-    let user: UserEntity = .init(
-        name: "강미미",
-        phone: "010-1234-5678",
-        email: "toucheeseeni@gmail.com"
-    )
+    let user: UserEntity
     
     var body: some View {
         HStack {
@@ -34,8 +30,4 @@ struct OrderUserInformationView: View {
             .padding(.leading, 30)
         }
     }
-}
-
-#Preview {
-    OrderUserInformationView()
 }
