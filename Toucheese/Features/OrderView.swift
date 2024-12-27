@@ -44,7 +44,8 @@ struct OrderView: View {
                         Text("주문자 정보")
                             .font(.system(size: 16, weight: .bold))
                             .padding(.vertical, 14)
-                        OrderUserInformationView()
+                        //TODO: API 받으면 고치기
+                        OrderUserInformationView(user: user)
                     }
                     
                     VStack(alignment: .leading, spacing: 0) {
@@ -58,7 +59,7 @@ struct OrderView: View {
                             .padding(.vertical, 14)
                         
                         OrderStudioInformationView(
-                            studio: studio,
+                            studioName: studio.name,
                             selectedDateString: selectedDate.getDateString()
                         )
                         
@@ -76,7 +77,7 @@ struct OrderView: View {
                         
                         OrderProductInformationView(
                             product: product,
-                            studio: studio,
+                            studioName: studio.name,
                             selectedOptions: selectedOptions,
                             totalPrice: totalPrice
                         )
@@ -183,9 +184,7 @@ struct OrderView: View {
                     navigationManager.toast = .orderFail
                 }
             } receiveValue: { result in
-                isSuccessOrder = result
-                
-                if isSuccessOrder {
+                if result {
                     navigationManager.push(
                         .orderSuccessView(
                             studio: studio,
