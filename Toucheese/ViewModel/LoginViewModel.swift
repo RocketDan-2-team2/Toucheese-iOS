@@ -17,7 +17,10 @@ class LoginViewModel: NSObject, ObservableObject {
     private let authService: AuthService = DefaultAuthService()
     private var bag = Set<AnyCancellable>()
     
-    func requestSignIn(_ socialType: SocialType, id: String, email: String?, name: String?) {
+    @Published var needNickname: Bool = false
+    
+    
+    private func requestSignIn(_ socialType: SocialType, id: String, email: String?, name: String?) {
         authService.signIn(socialType, id: id, email: email, name: name)
             .sink { event in
                 switch event {
@@ -27,10 +30,11 @@ class LoginViewModel: NSObject, ObservableObject {
                     print(error.localizedDescription)
                 }
             } receiveValue: { result in
-                // TODO: statusCode에 따라 첫 로그인 시도인지 아닌지 판별
-                // - 첫 로그인 시도면 회원가입 플로우
-                // - 두번째 이상 시도면 로그인 처리
-                debugPrint(result)
+                UserDefaultsKey.Auth.accessToken = result.tokens.accessToken
+                UserDefaultsKey.Auth.refreshToken = result.tokens.refreshToken
+
+                self.needNickname = result.nickname == nil
+                UserDefaultsKey.Auth.isLogined = result.nickname != nil
             }
             .store(in: &bag)
     }
