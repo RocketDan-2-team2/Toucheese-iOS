@@ -51,6 +51,6 @@ struct ConceptView: View {
 
 #Preview {
     NavigationStack {
-        IntroView()
+        ConceptView()
     }
 }
