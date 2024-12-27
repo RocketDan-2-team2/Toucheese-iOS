@@ -7,13 +7,16 @@
 
 import SwiftUI
 
+import Combine
+
 struct ReservationCell: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
-    //임시
-    let reservation: ReservationEntity
-    let studioId: Int = 1
+    let orderService = MockOrderService()
+    @State private var bag = Set<AnyCancellable>()
+
+    @State var reservation: ReservationEntity
     
     var body: some View {
         VStack(spacing: 0) {
@@ -57,7 +60,7 @@ struct ReservationCell: View {
                     Text(reservation.studioName)
                         .font(.system(size: 16, weight: .semibold))
                         .padding(.bottom, 2)
-                    Text(reservation.orderItemDto.first?.itemName)
+                    Text(reservation.orderItemDto.itemName)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(.gray06)
                 }
@@ -71,8 +74,7 @@ struct ReservationCell: View {
             .padding(.horizontal, 16)
             
             Button(action: {
-                //TODO: 상세 보기 API 호출 -> 파라미터로 detail 전달
-//                navigationManager.push(.reservationDetailView(reservation: reservation))
+                getOrderDetail(orderId: reservation.orderId)
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary01)
@@ -95,5 +97,22 @@ struct ReservationCell: View {
                 
         }
         .padding(.horizontal, 16)
+    }
+    
+    //MARK: - Network
+    
+    private func getOrderDetail(orderId: Int) {
+        orderService.getOrderDetail(orderID: orderId)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("get order detail finished")
+                case .failure(let error):
+                    print(error)
+                }
+            } receiveValue: { result in
+                navigationManager.push(.reservationDetailView(reservation: result))
+            }
+            .store(in: &bag)
     }
 }
