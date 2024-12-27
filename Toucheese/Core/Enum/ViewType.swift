@@ -11,7 +11,7 @@ enum ViewType: Hashable {
     
     //MARK: - Home Tab
     
-    case conceptView(conceptList: [ConceptEntity])
+    case conceptView
     case studioListView(concept: ConceptEntity)
     
     case studioDetailView(studioId: Int)

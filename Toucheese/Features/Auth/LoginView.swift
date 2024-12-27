@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject private var navigationManager: AuthNavigationManager
+    
     @StateObject private var loginViewModel = LoginViewModel()
     
     var body: some View {
@@ -52,6 +54,12 @@ struct LoginView: View {
             .padding(.top, 86)
         }
         .padding(.horizontal)
+        .environmentObject(loginViewModel)
+        .onChange(of: loginViewModel.needNickname) { _, newValue in
+            if !newValue { return }
+            navigationManager.push(.nickname)
+            loginViewModel.needNickname = false
+        }
     }
 }
 

@@ -12,10 +12,12 @@ import GoogleSignIn
 
 @main
 struct ToucheeseApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     @StateObject private var navigationManager = NavigationManager()
-    // AppDelegate를 SwiftUI 앱 생명주기에 통합
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var authNavigationManager = AuthNavigationManager()
+    
+    @AppStorage("isLogined") private var isLogined: Bool = false
     
     init() {
         KakaoSDK.initSDK(appKey: ToucheeseEnv.kakaoAppKey)
@@ -23,27 +25,35 @@ struct ToucheeseApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $navigationManager.path) {
-                IntroView()
-                    .navigationDestination(for: ViewType.self) { view in
-                        navigationManager.build(view)
-                            .toucheeseAlert(alert: $navigationManager.alert)
-                            .toucheeseToast(toast: $navigationManager.toast)
+            if isLogined {
+                NavigationStack(path: $navigationManager.path) {
+                    navigationManager.build(.conceptView)
+                        .navigationDestination(for: ViewType.self) { view in
+                            navigationManager.build(view)
+                                .toucheeseAlert(alert: $navigationManager.alert)
+                                .toucheeseToast(toast: $navigationManager.toast)
+                        }
+                        .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
+                            navigationManager.build(fullScreenCover)
+                        }
+                }
+                .environmentObject(navigationManager)
+            } else {
+                NavigationStack(path: $authNavigationManager.path) {
+                    authNavigationManager.build(.login)
+                        .navigationDestination(for: Destination.Auth.self) { destination in
+                            authNavigationManager.build(destination)
+                        }
+                }
+                .environmentObject(authNavigationManager)
+                .onOpenURL { url in
+                    if AuthApi.isKakaoTalkLoginUrl(url) {
+                        _ = AuthController.handleOpenUrl(url: url)
+                    } else {
+                        GIDSignIn.sharedInstance.handle(url)
                     }
-                    .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
-                        navigationManager.build(fullScreenCover)
-                    }
-                    
-            }
-            .onOpenURL { url in
-                if AuthApi.isKakaoTalkLoginUrl(url) {
-                    _ = AuthController.handleOpenUrl(url: url)
-                } else {
-                    GIDSignIn.sharedInstance.handle(url)
                 }
             }
-                
         }
-        .environmentObject(navigationManager)
     }
 }
