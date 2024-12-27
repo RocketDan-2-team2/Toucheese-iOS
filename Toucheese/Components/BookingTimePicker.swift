@@ -236,7 +236,7 @@ struct TimeButtonGrid: View {
                             let tempNum = calculateTempNum(for: filteredTimes[idx])
                             Text("\(tempNum):00")
                                 .foregroundStyle(.black)
-                                .padding(10)
+                                .padding(5)
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
