@@ -11,7 +11,7 @@ import Combine
 
 protocol AuthService {
     func signIn(_ socialType: SocialType, id: String, email: String?, name: String?) -> AnyPublisher<SignInResultEntity, Error>
-    func reissuance() -> AnyPublisher<SignInResultEntity, Error>
+    func reissuance() -> AnyPublisher<AuthTokenEntity, Error>
     func reissuance(completion: @escaping (Bool) -> Void)
 }
 
@@ -33,7 +33,7 @@ extension DefaultAuthService: AuthService {
         ))
     }
     
-    func reissuance() -> AnyPublisher<SignInResultEntity, Error> {
+    func reissuance() -> AnyPublisher<AuthTokenEntity, Error> {
         requestObjectWithNetworkError(.reissuance)
     }
     
@@ -42,9 +42,9 @@ extension DefaultAuthService: AuthService {
             switch result {
             case .success(let value):
                 do {
-                    let body = try JSONDecoder().decode(SignInResultEntity.self, from: value.data)
-                    UserDefaultsManager.accessToken = body.accessToken
-                    UserDefaultsManager.refreshToken = body.refreshToken
+                    let body = try JSONDecoder().decode(AuthTokenEntity.self, from: value.data)
+                    UserDefaultsKey.Auth.accessToken = body.accessToken
+                    UserDefaultsKey.Auth.refreshToken = body.refreshToken
                     completion(true)
                 } catch {
                     completion(false)
