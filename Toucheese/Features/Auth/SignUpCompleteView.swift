@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SignUpCompleteView: View {
+    @EnvironmentObject private var navigationManager: AuthNavigationManager
+
     @State private var showContent: Bool = false
     @State private var showButton: Bool = false
     
@@ -39,6 +41,8 @@ struct SignUpCompleteView: View {
             
             if showButton {
                 Button {
+                    UserDefaultsKey.Auth.isLogined = true
+                    navigationManager.popToRoot()
                 } label: {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(.yellow)
@@ -64,4 +68,5 @@ struct SignUpCompleteView: View {
 
 #Preview {
     SignUpCompleteView()
+        .environmentObject(AuthNavigationManager())
 }

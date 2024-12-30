@@ -23,7 +23,7 @@ final class AuthNavigationManager: ObservableObject {
     }
     
     func popToRoot() {
-        path.removeLast(path.count - 1)
+        path.removeLast(path.count)
     }
     
     
