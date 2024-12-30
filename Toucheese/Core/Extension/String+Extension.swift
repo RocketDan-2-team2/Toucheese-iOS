@@ -44,7 +44,6 @@ extension String {
     }
     
     func toDateReservation() -> Date? {
-        print("before: \(self)")
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "MM월 dd일(E) a h시"

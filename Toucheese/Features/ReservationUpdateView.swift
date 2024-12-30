@@ -31,13 +31,12 @@ struct ReservationUpdateView: View {
                         .padding(.vertical, 15.5)
                     Spacer()
                 }
-                
-                //TODO: 이상한 곳으로 선택되어 있음 ..
-                
+                //TODO: API 변경 요청하기
                 BookingTimePicker(
                     selectedDate: $selectedDate,
                     hoursRawData: hoursRawData,
-                    isTimeSelected: $isTimeSelected)
+                    isTimeSelected: $isTimeSelected
+                )
             }
             .scrollIndicators(.hidden)
             

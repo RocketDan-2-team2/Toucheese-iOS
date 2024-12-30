@@ -13,7 +13,7 @@ struct ReservationCell: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
-    let orderService = MockOrderService()
+    let orderService = DefaultOrderService()
     @State private var bag = Set<AnyCancellable>()
 
     @State var reservation: ReservationEntity
@@ -111,7 +111,8 @@ struct ReservationCell: View {
                     print(error)
                 }
             } receiveValue: { result in
-                navigationManager.push(.reservationDetailView(reservation: result))
+                guard let reservation = result.first else { return }
+                navigationManager.push(.reservationDetailView(reservation: reservation))
             }
             .store(in: &bag)
     }

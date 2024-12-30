@@ -37,7 +37,7 @@ struct ReservationListView: View {
             .sink { event in
                 switch event {
                 case .finished:
-                    print("")
+                    print("fetch reservation list!")
                 case .failure(let error):
                     print(error)
                 }
