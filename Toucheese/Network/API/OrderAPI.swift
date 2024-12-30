@@ -30,7 +30,7 @@ extension OrderAPI: BaseAPI {
         case .getList:
             "schedule"
         case let .detail(orderID):
-            "/\(orderID)/detailed"
+            "/\(orderID)/schedule/detailed"
         case let .update(orderId, _):
             "\(orderId)/schedule/modify"
         }

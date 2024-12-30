@@ -38,7 +38,7 @@ struct OrderItemEntity: Decodable, Hashable {
     let itemName: String
     let itemImage: String?
     let quantity: Int
-    let itemPrice: Int
+    let itemPrice: Int?
     let totalPrice: Int?
     let orderOptionDtos: [OrderOptionEntity]?
     
