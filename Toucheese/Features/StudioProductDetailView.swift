@@ -28,16 +28,17 @@ struct StudioProductDetailView: View {
     
     @State private var isTimeSelected: Bool = false
     
+    @State private var user: UserEntity?
+    
     let studioService: StudioService = DefaultStudioService()
+    let userService: UserService = DefaultUserService()
     
     var totalPrice: Int {
         product.optionList.reduce(product.price) {
             $0 + $1.price * $1.count
         }
     }
-    
-    
-     
+
     init(studio: StudioInfo, product: StudioProduct, hoursRawData: [StudioHoursEntity]) {
         self.studio = studio
         self.product = product
@@ -124,14 +125,17 @@ struct StudioProductDetailView: View {
                 if isTimeSelected {
                     Button(
                         action: {
-                            navigationManager.push(
-                                .orderView(
-                                    studio: studio,
-                                    product: product,
-                                    totalPrice: totalPrice,
-                                    selectedDate: selectedDate
+                            if let user {
+                                navigationManager.push(
+                                    .orderView(
+                                        studio: studio,
+                                        product: product,
+                                        totalPrice: totalPrice,
+                                        selectedDate: selectedDate,
+                                        user: user
+                                    )
                                 )
-                            )
+                            }
                         },
                         label: {
                         Capsule()
@@ -157,6 +161,25 @@ struct StudioProductDetailView: View {
             }
             .padding(.horizontal, 36)
         }
+        .onAppear {
+            fetchUserDetail()
+        }
+    }
+    
+    private func fetchUserDetail() {
+        userService.detail()
+            .sink { event in
+                switch event {
+                case .finished:
+                    print(event)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { user in
+                self.user = user.translate()
+                print("user!\(user.nickname)")
+            }
+            .store(in: &bag)
     }
     
     private func fetchStudioHours(month: Date) {

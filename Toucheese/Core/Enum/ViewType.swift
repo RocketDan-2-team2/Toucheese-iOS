@@ -18,7 +18,7 @@ enum ViewType: Hashable {
     case studioProductDetailView(studio: StudioInfo, product: StudioProduct, hoursRawData: [StudioHoursEntity])
     case reviewDetailView(review: Review, user: UserProfile)
     
-    case orderView(studio: StudioInfo, product: StudioProduct, totalPrice: Int, selectedDate: Date)
+    case orderView(studio: StudioInfo, product: StudioProduct, totalPrice: Int, selectedDate: Date, user: UserEntity)
     case orderSuccessView(studio: StudioInfo, product: StudioProduct, totalPrice: Int, selectedDate: String, selectedOptions: [StudioProductOption])
     
     //MARK: - Reservation Tab

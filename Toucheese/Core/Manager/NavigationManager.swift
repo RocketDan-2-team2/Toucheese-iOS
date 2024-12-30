@@ -34,12 +34,13 @@ final class NavigationManager: ObservableObject {
             StudioProductDetailView(studio: studio, product: product, hoursRawData: hoursRawData)
         case let .reviewDetailView(review, user):
             ReviewDetailView(review: review, user: user)
-        case let .orderView(studio, product, totalPrice, selectedDate):
+        case let .orderView(studio, product, totalPrice, selectedDate, user):
             OrderView(
                 studio: studio,
                 product: product,
                 totalPrice: totalPrice,
-                selectedDate: selectedDate
+                selectedDate: selectedDate,
+                user: user
             )
         case let .orderSuccessView(studio, product, totalPrice, selectedDate, selectedOptions):
             OrderSuccessView(

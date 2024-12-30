@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserEntity {
+struct UserEntity: Hashable {
     let name: String
     let phone: String
     let email: String
