@@ -13,21 +13,43 @@ struct ReservationDetailView: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
-    private let orderService = MockOrderService()
+    private let orderService = DefaultOrderService()
     private let studioService = DefaultStudioService()
     @State private var bag = Set<AnyCancellable>()
-
+    
     let reservation: ReservationEntity
-
+    
+    private var description: String? {
+        switch reservation.status {
+        case .waiting, .finished:
+            nil
+        case .confirm:
+            "예약 확정 상태는 일정 변경 및 취소가 불가능합니다.\n문의 번호 : 1111-1111"
+        case .cancel:
+            "취소된 일정입니다."
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
+            if let description {
+                VStack(spacing: 0) {
+                    Text(description)
+                        .font(.system(size: 16, weight: .semibold))
+                        .multilineTextAlignment(.center)
+                        .padding(16)
+                }
+                .frame(maxWidth: .infinity)
+                .background(.gray02, in: RoundedRectangle(cornerRadius: 8))
+            }
+            
             VStack(alignment: .leading, spacing: 0) {
                 Text("예약 정보")
                     .font(.system(size: 16, weight: .bold))
                     .padding(.vertical, 14)
                 OrderStudioInformationView(
                     studioName: reservation.studioName,
-                    selectedDateString: reservation.reservedDateTime.toDate()?.getDateString() ?? ""
+                    selectedDateString: reservation.reservedDateTime
                 )
             }
             
@@ -40,7 +62,7 @@ struct ReservationDetailView: View {
                 Text("주문 상품")
                     .font(.system(size: 16, weight: .bold))
                     .padding(.vertical, 14)
-
+                
                 OrderProductInformationView(
                     product: reservation.orderItemDto.translate(),
                     studioName: reservation.studioName,
@@ -63,12 +85,12 @@ struct ReservationDetailView: View {
             
             Spacer()
             
-            if reservation.status == .waiting || reservation.status == .confirm {
+            if reservation.status == .waiting {
                 
                 HStack {
                     Button(action: {
                         navigationManager.alert = .reservationCancel(action: {
-                            cancelReservation(orderID: 1)
+                            cancelReservation(orderID: reservation.orderId)
                         })
                     }, label: {
                         RoundedRectangle(cornerRadius: 8)
@@ -82,21 +104,19 @@ struct ReservationDetailView: View {
                             }
                     })
                     
-                    if reservation.status == .waiting {
-                        Button(action: {
-                            fetchStudioHours()
-                        }, label: {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(.primary06)
-                                .frame(height: 48)
-                                .overlay {
-                                    Text("예약날짜 변경하기")
-                                        .font(.system(size: 16, weight: .bold))
-                                        .fontWeight(.bold)
-                                        .foregroundStyle(.black)
-                                }
-                        })
-                    }
+                    Button(action: {
+                        fetchStudioHours()
+                    }, label: {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(.primary06)
+                            .frame(height: 48)
+                            .overlay {
+                                Text("예약날짜 변경하기")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.black)
+                            }
+                    })
                 }
                 .padding(.bottom, 8)
             }
@@ -125,7 +145,7 @@ struct ReservationDetailView: View {
             } receiveValue: { result in
                 if result {
                     navigationManager.pop(1)
-                    navigationManager.toast = .cancelSuccess(date: reservation.reservedDateTime.toDate()?.getDateString() ?? "")
+                    navigationManager.toast = .cancelSuccess(date: reservation.reservedDateTime)
                 } else {
                     navigationManager.toast = .cancelFail
                 }
@@ -143,8 +163,9 @@ struct ReservationDetailView: View {
                     print(error.localizedDescription)
                 }
             } receiveValue: { data in
+                guard let date = reservation.reservedDateTime.toDateReservation() else { return }
                 navigationManager.push(
-                    .reservationUpdateView(reservation: reservation, hoursRawData: data, changeDate: reservation.reservedDateTime.toDate() ?? Date())
+                    .reservationUpdateView(reservation: reservation, hoursRawData: data, changeDate: date)
                 )
             }
             .store(in: &bag)
