@@ -48,7 +48,7 @@ extension String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "MM월 dd일(E) a h시"
-        //TODO: 9시간 더해야됨
+
         if let date = formatter.date(from: self) {
             let timeZoneOffset = TimeZone(identifier: "Asia/Seoul")?.secondsFromGMT(for: date) ?? 0
             return date.addingTimeInterval(TimeInterval(timeZoneOffset))
