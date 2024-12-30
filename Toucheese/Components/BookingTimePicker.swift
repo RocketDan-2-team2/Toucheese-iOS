@@ -143,7 +143,6 @@ struct BookingTimePicker: View {
         .onAppear {
             selectedTime = calculatedTime
             selectedButton = buttonIndex
-            print("calculated time : \(calculatedTime)")
         }
     }
     

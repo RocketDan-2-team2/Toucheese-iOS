@@ -31,7 +31,7 @@ struct ReservationUpdateView: View {
                         .padding(.vertical, 15.5)
                     Spacer()
                 }
-                //TODO: API 변경 요청하기
+
                 BookingTimePicker(
                     selectedDate: $selectedDate,
                     hoursRawData: hoursRawData,
