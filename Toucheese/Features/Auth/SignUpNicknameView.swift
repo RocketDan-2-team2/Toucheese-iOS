@@ -6,11 +6,18 @@
 //
 
 import SwiftUI
+import Combine
 
 struct SignUpNicknameView: View {
+    let authService: AuthService = DefaultAuthService()
+    
+    @EnvironmentObject private var navigationManager: AuthNavigationManager
+    
     @FocusState private var isFocused: Bool
     @State private var fieldState: InputFieldState = .empty
     @State private var nickname: String = ""
+    
+    @State private var bag = Set<AnyCancellable>()
     
     var body: some View {
         VStack {
@@ -86,7 +93,33 @@ struct SignUpNicknameView: View {
         } else {
             // API 호출
             isFocused = false
+            checkNickname()
         }
+    }
+    
+    func checkNickname() {
+        authService.nicknameCheck(nickname)
+            .sink { event in
+                print("SignUpNickname: \(event)")
+            } receiveValue: { isDuplicated in
+                if isDuplicated {
+                    fieldState = .error(message: "중복된 닉네임입니다.")
+                } else {
+                    updateUserProfile()
+                }
+            }
+            .store(in: &bag)
+    }
+    
+    func updateUserProfile() {
+        authService.profileUpdate(name: nil, nickname: nickname, email: nil, phone: nil)
+        .sink { event in
+            print("SignUpNickname: \(event)")
+        } receiveValue: { isSuccessed in
+            if !isSuccessed { return }
+            navigationManager.push(.complete)
+        }
+        .store(in: &bag)
     }
 }
 
@@ -103,4 +136,5 @@ struct SignUpNicknameView: View {
                 }
             }
     }
+    .environmentObject(AuthNavigationManager())
 }
