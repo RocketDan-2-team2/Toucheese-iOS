@@ -46,11 +46,10 @@ extension String {
     func toDateReservation() -> Date? {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "MM월 dd일(E) a h시"
+        formatter.dateFormat = "yyyy년 MM월 dd일(E) a h시"
 
         if let date = formatter.date(from: self) {
-            let timeZoneOffset = TimeZone(identifier: "Asia/Seoul")?.secondsFromGMT(for: date) ?? 0
-            return date.addingTimeInterval(TimeInterval(timeZoneOffset))
+            return date
             
         } else {
             return nil

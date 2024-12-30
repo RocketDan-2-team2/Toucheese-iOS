@@ -79,6 +79,9 @@ struct BookingTimePicker: View {
                 .onChange(of: month) { oldValue, newValue in
 //                    TODO: 추후 필요시 이부분에 매달 데이터 가져오는 메서드 들어가면 됨.
                 }
+                .onAppear {
+                    month = selectedDate
+                }
             
 //            MARK: 하단 시간 선택 버튼
             VStack {
@@ -140,6 +143,7 @@ struct BookingTimePicker: View {
         .onAppear {
             selectedTime = calculatedTime
             selectedButton = buttonIndex
+            print("calculated time : \(calculatedTime)")
         }
     }
     
