@@ -7,19 +7,50 @@
 
 import SwiftUI
 
+import Combine
+
 struct ReservationDetailView: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
-    let reservationStateType: ReservationStateType
+    private let orderService = DefaultOrderService()
+    private let studioService = DefaultStudioService()
+    @State private var bag = Set<AnyCancellable>()
+    
+    let reservation: ReservationEntity
+    
+    private var description: String? {
+        switch reservation.status {
+        case .waiting, .finished:
+            nil
+        case .confirm:
+            "예약 확정 상태는 일정 변경 및 취소가 불가능합니다.\n문의 번호 : 1111-1111"
+        case .cancel:
+            "취소된 일정입니다."
+        }
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
+            if let description {
+                VStack(spacing: 0) {
+                    Text(description)
+                        .font(.system(size: 16, weight: .semibold))
+                        .multilineTextAlignment(.center)
+                        .padding(16)
+                }
+                .frame(maxWidth: .infinity)
+                .background(.gray02, in: RoundedRectangle(cornerRadius: 8))
+            }
+            
             VStack(alignment: .leading, spacing: 0) {
                 Text("예약 정보")
                     .font(.system(size: 16, weight: .bold))
                     .padding(.vertical, 14)
-                OrderStudioInformationView(studio: StudioInfo(id: 0, name: "멋사스튜디오", profileImage: "", backgrounds: [], popularity: 4.5, dutyDate: "", address: "", description: ""), selectedDateString: "12월 24일(화) 오후 01:00")
+                OrderStudioInformationView(
+                    studioName: reservation.studioName,
+                    selectedDateString: reservation.reservedDateTime
+                )
             }
             
             VStack(alignment: .leading, spacing: 0) {
@@ -31,7 +62,13 @@ struct ReservationDetailView: View {
                 Text("주문 상품")
                     .font(.system(size: 16, weight: .bold))
                     .padding(.vertical, 14)
-                OrderProductInformationView(product: StudioProduct(id: 0, image: nil, name: "", description: "", reviewCount: 0, price: 0, optionList: []), studio: StudioInfo(id: 0, name: "멋사스튜디오", profileImage: "", backgrounds: [], popularity: 4.5, dutyDate: "", address: "", description: ""), selectedOptions: [], totalPrice: 105000)
+                
+                OrderProductInformationView(
+                    product: reservation.orderItemDto.translate(),
+                    studioName: reservation.studioName,
+                    selectedOptions: reservation.orderItemDto.orderOptionDtos?.map { $0.translate() } ?? [],
+                    totalPrice: reservation.orderItemDto.totalPrice ?? 0
+                )
             }
             
             VStack(alignment: .leading, spacing: 0) {
@@ -43,19 +80,17 @@ struct ReservationDetailView: View {
                 Text("주문자 정보")
                     .font(.system(size: 16, weight: .bold))
                     .padding(.vertical, 14)
-                OrderUserInformationView()
+                OrderUserInformationView(user: reservation.orderUserDto.translate())
             }
             
             Spacer()
             
-            if reservationStateType == .waiting || reservationStateType == .confirm {
+            if reservation.status == .waiting {
                 
                 HStack {
                     Button(action: {
                         navigationManager.alert = .reservationCancel(action: {
-                            //TODO: 취소 API
-                            print("취소 !!! ")
-                            navigationManager.pop(1)
+                            cancelReservation(orderID: reservation.orderId)
                         })
                     }, label: {
                         RoundedRectangle(cornerRadius: 8)
@@ -69,24 +104,19 @@ struct ReservationDetailView: View {
                             }
                     })
                     
-                    if reservationStateType == .waiting {
-                        Button(action: {
-                            //TODO: 스튜디오 운영 시간 API 호출 fetchStudioHours??
-                            navigationManager.push(
-                                .reservationUpdateView
-                            )
-                        }, label: {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(.primary06)
-                                .frame(height: 48)
-                                .overlay {
-                                    Text("예약날짜 변경하기")
-                                        .font(.system(size: 16, weight: .bold))
-                                        .fontWeight(.bold)
-                                        .foregroundStyle(.black)
-                                }
-                        })
-                    }
+                    Button(action: {
+                        fetchStudioHours()
+                    }, label: {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(.primary06)
+                            .frame(height: 48)
+                            .overlay {
+                                Text("예약날짜 변경하기")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.black)
+                            }
+                    })
                 }
                 .padding(.bottom, 8)
             }
@@ -99,11 +129,45 @@ struct ReservationDetailView: View {
         .toolbar(.hidden, for: .tabBar)
         .navigationBarBackButtonHidden(navigationManager.alert != nil)
     }
-}
-
-#Preview {
-    NavigationStack {
-        ReservationDetailView(reservationStateType: .confirm)
-            .environmentObject(NavigationManager())
+    
+    //MARK: - Network
+    
+    private func cancelReservation(orderID: Int) {
+        orderService.cancelOrder(orderID: orderID)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Cancel Reservation finished: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    navigationManager.toast = .cancelFail
+                }
+            } receiveValue: { result in
+                if result {
+                    navigationManager.pop(1)
+                    navigationManager.toast = .cancelSuccess(date: reservation.reservedDateTime)
+                } else {
+                    navigationManager.toast = .cancelFail
+                }
+            }
+            .store(in: &bag)
+    }
+    
+    private func fetchStudioHours() {
+        studioService.getStudioHours(studioID: reservation.studioId ?? 0)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("Event: \(event)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { data in
+                guard let date = reservation.reservedDateTime.toDateReservation() else { return }
+                navigationManager.push(
+                    .reservationUpdateView(reservation: reservation, hoursRawData: data, changeDate: date)
+                )
+            }
+            .store(in: &bag)
     }
 }

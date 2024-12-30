@@ -12,5 +12,6 @@ enum ToastType: Hashable {
     case cancelFail
     
     case orderFail
+    case reservationUpdateFail
     
 }

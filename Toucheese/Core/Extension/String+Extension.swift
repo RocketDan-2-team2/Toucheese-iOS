@@ -43,4 +43,17 @@ extension String {
         return Date.isoFormatter.date(from: self)
     }
     
+    func toDateReservation() -> Date? {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy년 MM월 dd일(E) a h시"
+
+        if let date = formatter.date(from: self) {
+            return date
+            
+        } else {
+            return nil
+        }
+    }
+    
 }

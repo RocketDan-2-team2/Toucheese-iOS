@@ -72,6 +72,8 @@ extension ToucheeseToast {
             "예약 취소에 실패하였습니다. 다시 시도해주세요."
         case .orderFail:
             "예약에 실패하였습니다. 다시 시도해주세요."
+        case .reservationUpdateFail:
+            "예약 변경에 실패하였습니다. 다시 시도해주세요."
         case nil:
             "알 수 없는 오류입니다. 다시 시도해주세요."
         }

@@ -24,7 +24,7 @@ enum ViewType: Hashable {
     //MARK: - Reservation Tab
 
     case reservationListView
-    case reservationDetailView(reservationStateType: ReservationStateType)
-    case reservationUpdateView
+    case reservationDetailView(reservation: ReservationEntity)
+    case reservationUpdateView(reservation: ReservationEntity, hoursRawData: [StudioHoursEntity], changeDate: Date)
     
 }

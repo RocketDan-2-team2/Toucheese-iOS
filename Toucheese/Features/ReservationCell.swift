@@ -7,9 +7,16 @@
 
 import SwiftUI
 
+import Combine
+
 struct ReservationCell: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
+    
+    let orderService = DefaultOrderService()
+    @State private var bag = Set<AnyCancellable>()
+
+    let reservation: ReservationEntity
     
     var body: some View {
         VStack(spacing: 0) {
@@ -45,21 +52,21 @@ struct ReservationCell: View {
                     HStack(spacing: 0) {
                         Image(systemName: "calendar")
                             .padding(.trailing, 4)
-                        Text("2024-12-18")
+                        Text(reservation.reservedDateTime)
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.gray06)
                     }
                     .padding(.bottom, 4)
-                    Text("여기 스튜디오")
+                    Text(reservation.studioName)
                         .font(.system(size: 16, weight: .semibold))
                         .padding(.bottom, 2)
-                    Text("상품 이름")
+                    Text(reservation.orderItemDto.itemName)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(.gray06)
                 }
                 Spacer()
                 VStack {
-                    ReservationStateTicket(type: .cancel)
+                    ReservationStateTicket(type: reservation.status)
                     Spacer()
                 }
             }
@@ -67,8 +74,7 @@ struct ReservationCell: View {
             .padding(.horizontal, 16)
             
             Button(action: {
-                //TODO: API 호출
-                navigationManager.push(.reservationDetailView(reservationStateType: .waiting))
+                getOrderDetail(orderId: reservation.orderId)
             }, label: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.primary01)
@@ -92,8 +98,22 @@ struct ReservationCell: View {
         }
         .padding(.horizontal, 16)
     }
-}
-
-#Preview {
-    ReservationCell()
+    
+    //MARK: - Network
+    
+    private func getOrderDetail(orderId: Int) {
+        orderService.getOrderDetail(orderID: orderId)
+            .sink { event in
+                switch event {
+                case .finished:
+                    print("get order detail finished")
+                case .failure(let error):
+                    print(error)
+                }
+            } receiveValue: { result in
+                guard let reservation = result.first else { return }
+                navigationManager.push(.reservationDetailView(reservation: reservation))
+            }
+            .store(in: &bag)
+    }
 }

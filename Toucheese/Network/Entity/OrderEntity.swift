@@ -16,6 +16,12 @@ struct OrderEntity: Encodable, Hashable {
     let orderRequestItemDtos: [ItemRequestEntity]
 }
 
+struct UpdateOrderEntity: Encodable {
+    let studioId: Int
+    let orderDateTime: String
+    let orderRequestItemDtos: [ItemRequestEntity]
+}
+
 struct ItemRequestEntity: Encodable, Hashable {
     let itemId: Int
     let itemQuantity: Int

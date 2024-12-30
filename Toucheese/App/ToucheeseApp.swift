@@ -54,6 +54,11 @@ struct ToucheeseApp: App {
                     }
                 }
             }
+//            ToucheeseTabView()
+//                .toucheeseAlert(alert: $navigationManager.alert)
+//                .toucheeseToast(toast: $navigationManager.toast)
+//                .environmentObject(navigationManager)
+            
         }
     }
 }
