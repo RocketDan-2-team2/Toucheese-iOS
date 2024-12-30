@@ -25,7 +25,7 @@ struct ToucheeseApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if true {
+            if isLogined {
                 NavigationStack(path: $navigationManager.path) {
                     navigationManager.build(.conceptView)
                         .navigationDestination(for: ViewType.self) { view in
