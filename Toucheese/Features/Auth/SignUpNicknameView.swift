@@ -30,7 +30,7 @@ struct SignUpNicknameView: View {
             
             InputField(
                 title: "닉네임",
-                placeholder: "닉네임을 입력해주세요 (국문, 영문 혼합 불가)",
+                placeholder: "국문, 영문 혼합 불가, 숫자 또는 특수문자 불가",
                 fieldState: $fieldState,
                 inputField: $nickname
             )
@@ -65,18 +65,23 @@ struct SignUpNicknameView: View {
         if nickname.isEmpty {
             fieldState = .error(message: "닉네임을 입력해주세요")
         } else if !nickname.isValidNickname() {
+            // 국문일 때
             if nickname.isValidKoreanNickname() {
                 if nickname.count > 7 {
                     fieldState = .error(message: "국문은 최대 7자까지 입력 가능합니다.")
                 } else {
-                    fieldState = .error(message: "자음 또는 모음만 사용할 수 없습니다.")
+                    fieldState = .error(message: "자음 또는 모음, 특수문자를 사용할 수 없습니다.")
                 }
-            } else if nickname.isValidEnglishNickname() {
+            }
+            // 영문일 때
+            else if nickname.isValidEnglishNickname() {
                 if nickname.count > 14 {
                     fieldState = .error(message: "영문은 최대 14자까지 입력 가능합니다.")
                 }
-            } else {
-                fieldState = .error(message: "국문과 영문을 함께 사용할 수 없습니다.")
+            }
+            // 국문만 또는 영문만으로 구성되어 있지 않을 때
+            else {
+                fieldState = .error(message: "국문과 영문, 특수기호를 함께 사용할 수 없습니다.")
             }
         } else {
             // API 호출
