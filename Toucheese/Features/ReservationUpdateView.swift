@@ -13,7 +13,7 @@ struct ReservationUpdateView: View {
     
     @EnvironmentObject private var navigationManager: NavigationManager
     
-    let orderService = MockOrderService()
+    let orderService = DefaultOrderService()
     @State private var bag = Set<AnyCancellable>()
     
     let reservation: ReservationEntity
@@ -31,12 +31,18 @@ struct ReservationUpdateView: View {
                         .padding(.vertical, 15.5)
                     Spacer()
                 }
+                
+                //TODO: 이상한 곳으로 선택되어 있음 ..
+                
                 BookingTimePicker(
                     selectedDate: $selectedDate,
                     hoursRawData: hoursRawData,
                     isTimeSelected: $isTimeSelected)
             }
+            .scrollIndicators(.hidden)
+            
             Spacer()
+            
             Button(action: {
                 updateReservation()
             }, label: {
@@ -75,9 +81,10 @@ struct ReservationUpdateView: View {
             itemQuantity: 1,
             orderRequestOptionDtos: optionList
         )
+        
         let updateReservation = UpdateOrderEntity(
             studioId: studioId,
-            orderDateTime: changeDate.toString(),
+            orderDateTime: changeDate.getISODateString(),
             orderRequestItemDtos: [item]
         )
 

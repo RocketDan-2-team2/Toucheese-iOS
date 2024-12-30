@@ -21,6 +21,15 @@ extension Date {
         return Self.isoFormatter.string(from: self)
     }
         
+    /// 주문 정보에 date 넣을 때 사용하는 메소드
+    func getISODateString() -> String {
+        guard let timeZone = TimeZone(abbreviation: "KST") else { return "" }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
+        formatter.timeZone = timeZone
+        
+        return formatter.string(from: self)
+    }
     
     func getDateString() -> String {
         let formatter = DateFormatter()

@@ -153,11 +153,6 @@ struct OrderView: View {
     
     private func createOrder() {
         
-        guard let timeZone = TimeZone(abbreviation: "KST") else { return }
-        let dateString = ISO8601DateFormatter.string(from: selectedDate,
-                                                     timeZone: timeZone,
-                                                     formatOptions: [.withFullDate, .withTime, .withColonSeparatorInTime])
-        
         var newOptionList: [OptionRequestEntity] = []
         for option in selectedOptions {
             let newOption = OptionRequestEntity(optionId: option.id, optionQuantity: 1)
@@ -170,7 +165,7 @@ struct OrderView: View {
             email: user.email,
             phone: user.phone,
             studioId: studio.id,
-            orderDateTime: dateString,
+            orderDateTime: selectedDate.getISODateString(),
             orderRequestItemDtos: [item]
         )
         
