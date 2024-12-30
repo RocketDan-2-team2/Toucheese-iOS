@@ -18,16 +18,16 @@ struct OrderView: View {
     
     @State private var selectedPayment: PaymentType = .pg
     @State private var isSuccessOrder: Bool = false
+    @State private var user: UserEntity = .init(
+        name: "-",
+        phone: "-",
+        email: "-"
+    )
     
     let studio: StudioInfo
     let product: StudioProduct
     let totalPrice: Int
     let selectedDate: Date
-    let user: UserEntity = .init(
-        name: "강미미",
-        phone: "010-1234-5678",
-        email: "toucheeseeni@gmail.com"
-    )
     
     private var selectedOptions: [StudioProductOption] {
         product.optionList.filter { $0.count > 0 }
