@@ -16,7 +16,7 @@ struct ReservationCell: View {
     let orderService = DefaultOrderService()
     @State private var bag = Set<AnyCancellable>()
 
-    @State var reservation: ReservationEntity
+    let reservation: ReservationEntity
     
     var body: some View {
         VStack(spacing: 0) {

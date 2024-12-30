@@ -36,10 +36,6 @@ struct ToucheeseTabView: View {
         .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
             navigationManager.build(fullScreenCover)
         }
-        .transaction { transaction in
-            transaction.disablesAnimations = true
-        }
-        
     }
 }
 

@@ -15,7 +15,7 @@ struct ReservationListView: View {
     @State private var reservationList: [ReservationEntity] = []
     
     @State private var bag = Set<AnyCancellable>()
-    
+
     var body: some View {
         ScrollView {
             VStack {
@@ -24,9 +24,14 @@ struct ReservationListView: View {
                 }
                 .padding(.top, 13)
             }
-            .onAppear {
-                fetchReservationList()
-            }
+        }
+        .task {
+            if !reservationList.isEmpty { return }
+            
+            fetchReservationList()
+        }
+        .refreshable {
+            fetchReservationList()
         }
         .navigationTitle("예약 일정")
         .navigationBarTitleDisplayMode(.inline)
