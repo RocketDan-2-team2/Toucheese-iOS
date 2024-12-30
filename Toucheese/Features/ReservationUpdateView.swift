@@ -33,7 +33,7 @@ struct ReservationUpdateView: View {
                 }
 
                 BookingTimePicker(
-                    selectedDate: $selectedDate,
+                    selectedDate: $changeDate,
                     hoursRawData: hoursRawData,
                     isTimeSelected: $isTimeSelected
                 )
@@ -98,7 +98,7 @@ struct ReservationUpdateView: View {
                 }
             } receiveValue: { result in
                 if result {
-                    navigationManager.pop(2)
+                    navigationManager.popToRoot()
                     navigationManager.alert = .dateChanged(date: changeDate.getDateString())
                 } else {
                     navigationManager.toast = .reservationUpdateFail
