@@ -88,7 +88,7 @@ extension BaseService {
                         guard let response = value.response else { return }
                         
                         // TODO: 서버에서 Response 타입 정의가 완료되면 분기처리 제거
-                        if target.path == "/sign-in/oauth" {
+                        if target.path == "/sign-in/oauth" || target.path == "/details" {
                             let body = try JSONDecoder().decode(BaseEntity<T>.self, from: value.data)
                             
                             switch response.statusCode {

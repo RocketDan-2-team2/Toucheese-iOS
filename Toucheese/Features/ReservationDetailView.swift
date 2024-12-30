@@ -104,5 +104,6 @@ struct ReservationDetailView: View {
 #Preview {
     NavigationStack {
         ReservationDetailView(reservationStateType: .confirm)
+            .environmentObject(NavigationManager())
     }
 }
