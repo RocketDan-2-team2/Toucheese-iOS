@@ -13,6 +13,8 @@ struct SignUpCompleteView: View {
     @State private var showContent: Bool = false
     @State private var showButton: Bool = false
     
+    let nickname: String
+    
     var body: some View {
         VStack(spacing: 16) {
             Image(.completeLogo)
@@ -23,7 +25,7 @@ struct SignUpCompleteView: View {
                 .animation(.smooth(duration: 1), value: showContent)
             
             VStack {
-                Text("멋쟁이사자님,\n가입을 축하드려요!")
+                Text("\(nickname)님,\n가입을 축하드려요!")
                     .font(.system(size: 24, weight: .semibold))
                     .frame(height: 68)
                     .opacity(showContent ? 1 : 0)
@@ -67,6 +69,6 @@ struct SignUpCompleteView: View {
 }
 
 #Preview {
-    SignUpCompleteView()
+    SignUpCompleteView(nickname: "지존지호")
         .environmentObject(AuthNavigationManager())
 }
