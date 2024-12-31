@@ -127,6 +127,7 @@ struct OrderSuccessView: View {
                         }
                 })
                 Button(action: {
+                    navigationManager.popToRoot()
                     navigationManager.selectedTab = .reservation
                 }, label: {
                     RoundedRectangle(cornerRadius: 8)
