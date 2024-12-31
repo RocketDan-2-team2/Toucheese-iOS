@@ -13,6 +13,8 @@ protocol AuthService {
     func signIn(_ socialType: SocialType, id: String, email: String?, name: String?) -> AnyPublisher<SignInResultEntity, Error>
     func reissuance() -> AnyPublisher<AuthTokenEntity, Error>
     func reissuance(completion: @escaping (Bool) -> Void)
+    func nicknameCheck(_ nickname: String) -> AnyPublisher<Bool, Error>
+    func profileUpdate(name: String?, nickname: String?, email: String?, phone: String?) -> AnyPublisher<Bool, Error>
 }
 
 final class DefaultAuthService: BaseService<AuthAPI> { }
@@ -53,6 +55,26 @@ extension DefaultAuthService: AuthService {
                 completion(false)
             }
         }
+    }
+    
+    func nicknameCheck(_ nickname: String) -> AnyPublisher<Bool, Error> {
+        requestObjectWithNetworkError(.nicknameCheck(
+            parameters: ["nickname": nickname]
+        ))
+    }
+    
+    func profileUpdate(
+        name: String?,
+        nickname: String?,
+        email: String?,
+        phone: String?
+    ) -> AnyPublisher<Bool, Error> {
+        requestObjectWithNetworkError(.profileUpdate(
+            parameters: ["username": name,
+                         "nickname": nickname,
+                         "email": email,
+                         "phone": phone]
+        ))
     }
 
 }

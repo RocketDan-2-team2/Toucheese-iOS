@@ -58,6 +58,7 @@ struct InputField: View {
                             .foregroundStyle(.gray05)
                             .frame(width: 20, height: 20)
                             .padding(2)
+                            .opacity(inputField.isEmpty ? 0 : 1)
                     }
                 }
                 .padding(.horizontal, 8)
