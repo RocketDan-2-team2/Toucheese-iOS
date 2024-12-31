@@ -15,9 +15,12 @@ struct ReservationDetailView: View {
     
     private let orderService = DefaultOrderService()
     private let studioService = DefaultStudioService()
+    private let userService: UserService = DefaultUserService()
+    
     @State private var bag = Set<AnyCancellable>()
     
     let reservation: ReservationEntity
+    @State private var user: User?
     
     private var description: String? {
         switch reservation.status {
@@ -80,7 +83,9 @@ struct ReservationDetailView: View {
                 Text("주문자 정보")
                     .font(.system(size: 16, weight: .bold))
                     .padding(.vertical, 14)
-                OrderUserInformationView(user: reservation.orderUserDto.translate())
+                if let user {
+                    OrderUserInformationView(user: user)
+                }
             }
             
             Spacer()
@@ -120,7 +125,9 @@ struct ReservationDetailView: View {
                 }
                 .padding(.bottom, 8)
             }
-            
+        }
+        .onAppear {
+            fetchUserDetail()
         }
         .padding(16)
         .navigationTitle("예약 상세 보기")
@@ -131,6 +138,22 @@ struct ReservationDetailView: View {
     }
     
     //MARK: - Network
+    
+    private func fetchUserDetail() {
+        userService.detail()
+            .sink { event in
+                switch event {
+                case .finished:
+                    print(event)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { user in
+                self.user = user.translate()
+                print("user: \(self.user!.nickname)")
+            }
+            .store(in: &bag)
+    }
     
     private func cancelReservation(orderID: Int) {
         orderService.cancelOrder(orderID: orderID)

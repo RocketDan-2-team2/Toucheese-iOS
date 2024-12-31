@@ -32,7 +32,6 @@ struct ToucheeseTabView: View {
             .tabItem { Label("예약일정", systemImage: "calendar") } 
             .tag(TabViewType.reservation)
         }
-        .environmentObject(navigationManager)
         .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
             navigationManager.build(fullScreenCover)
         }

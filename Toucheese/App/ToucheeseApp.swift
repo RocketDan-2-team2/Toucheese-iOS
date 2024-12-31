@@ -26,18 +26,10 @@ struct ToucheeseApp: App {
     var body: some Scene {
         WindowGroup {
             if isLogined {
-                NavigationStack(path: $navigationManager.path) {
-                    navigationManager.build(.conceptView)
-                        .navigationDestination(for: ViewType.self) { view in
-                            navigationManager.build(view)
-                                .toucheeseAlert(alert: $navigationManager.alert)
-                                .toucheeseToast(toast: $navigationManager.toast)
-                        }
-                        .fullScreenCover(item: $navigationManager.fullScreenCover) { fullScreenCover in
-                            navigationManager.build(fullScreenCover)
-                        }
-                }
-                .environmentObject(navigationManager)
+                ToucheeseTabView()
+                    .toucheeseAlert(alert: $navigationManager.alert)
+                    .toucheeseToast(toast: $navigationManager.toast)
+                    .environmentObject(navigationManager)
             } else {
                 NavigationStack(path: $authNavigationManager.path) {
                     authNavigationManager.build(.login)
@@ -54,10 +46,7 @@ struct ToucheeseApp: App {
                     }
                 }
             }
-//            ToucheeseTabView()
-//                .toucheeseAlert(alert: $navigationManager.alert)
-//                .toucheeseToast(toast: $navigationManager.toast)
-//                .environmentObject(navigationManager)
+            
             
         }
     }

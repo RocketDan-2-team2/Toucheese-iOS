@@ -19,6 +19,11 @@ struct UserEntity: Codable {
     let socialProvider: String
     
     func translate() -> User {
-        User(name: username ?? "-", phone: phone ?? "-", email: email)
+        User(
+            name: username ?? "-",
+            phone: phone ?? "-",
+            email: email,
+            nickname: nickname ?? "-"
+        )
     }
 }

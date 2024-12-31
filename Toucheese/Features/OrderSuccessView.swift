@@ -126,20 +126,20 @@ struct OrderSuccessView: View {
                                 .foregroundStyle(.black)
                         }
                 })
-//                Button(action: {
-//                    //TODO: 예약 확인 페이지로 네비게이션
-//                    
-//                }, label: {
-//                    RoundedRectangle(cornerRadius: 8)
-//                        .fill(.primary06)
-//                        .frame(height: 48)
-//                        .overlay {
-//                            Text("예약내역 보기")
-//                                .font(.system(size: 16, weight: .bold))
-//                                .fontWeight(.bold)
-//                                .foregroundStyle(.black)
-//                        }
-//                })
+                Button(action: {
+                    navigationManager.popToRoot()
+                    navigationManager.selectedTab = .reservation
+                }, label: {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.primary06)
+                        .frame(height: 48)
+                        .overlay {
+                            Text("예약내역 보기")
+                                .font(.system(size: 16, weight: .bold))
+                                .fontWeight(.bold)
+                                .foregroundStyle(.black)
+                        }
+                })
             }
             .padding(.bottom, 8)
         }

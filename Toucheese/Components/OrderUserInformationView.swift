@@ -14,14 +14,15 @@ struct OrderUserInformationView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text("성함")
-                Text("연락처")
+//                Text("성함")
+                Text("닉네임")
+//                Text("연락처")
                 Text("이메일")
             }
             .font(.system(size: 14, weight: .medium))
             VStack(alignment: .leading, spacing: 10) {
-                Text(user.name)
-                Text(user.phone)
+                Text(user.nickname)
+//                Text(user.phone)
                 Text(user.email)
                     .tint(.black)
             }

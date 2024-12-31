@@ -126,6 +126,7 @@ struct StudioProductDetailView: View {
                     Button(
                         action: {
                             if let user {
+                                print(user.nickname)
                                 navigationManager.push(
                                     .orderView(
                                         studio: studio,
@@ -177,7 +178,7 @@ struct StudioProductDetailView: View {
                 }
             } receiveValue: { user in
                 self.user = user.translate()
-                print("user!\(user.nickname)")
+                print("user: \(self.user!.nickname)")
             }
             .store(in: &bag)
     }
@@ -248,11 +249,5 @@ struct StudioProductDetailView: View {
             }
             .store(in: &bag)
 
-    }
-}
-
-#Preview {
-    NavigationStack {
-//        StudioProductDetailView(studio: .mockData(), product: .mockData[0], openedHours: <#Binding<[[Int]]>#>)
     }
 }
