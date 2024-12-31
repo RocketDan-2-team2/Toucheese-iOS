@@ -31,25 +31,23 @@ struct FilterRadioButton<T: FilterProtocol>: View {
     }
     
     var body: some View {
-        Button {
+        HStack {
+            selectionButton(isSelected: self.isSelected)
+                .frame(width: 18.0, height: 18.0)
+            
+            if let type {
+                Text(type.title)
+                    .bold(isSelected)
+            } else {
+                Text("전체")
+                    .bold(isSelected)
+            }
+        }
+        .font(.system(size: 14.0))
+        .onTapGesture {
             selectedType = type
             filterAction?()
-        } label: {
-            HStack {
-                selectionButton(isSelected: self.isSelected)
-                    .frame(width: 18.0, height: 18.0)
-                
-                if let type {
-                    Text(type.title)
-                        .bold(isSelected)
-                } else {
-                    Text("전체")
-                        .bold(isSelected)
-                }
-            }
-            .font(.system(size: 14.0))
         }
-        .buttonStyle(PlainButtonStyle())
     }
     
     @ViewBuilder

@@ -18,6 +18,7 @@ struct ToucheeseTabView: View {
                 ConceptView()
                     .navigationDestination(for: ViewType.self) { view in
                         navigationManager.build(view)
+                            .toolbarRole(.editor)
                     }
             }
             .tabItem { Label("홈", systemImage: "house") }
@@ -27,6 +28,7 @@ struct ToucheeseTabView: View {
                 ReservationListView()
                     .navigationDestination(for: ViewType.self) { view in
                         navigationManager.build(view)
+                            .toolbarRole(.editor)
                     }
             }
             .tabItem { Label("예약일정", systemImage: "calendar") } 

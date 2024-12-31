@@ -27,6 +27,7 @@ struct ToucheeseApp: App {
         WindowGroup {
             if isLogined {
                 ToucheeseTabView()
+                    .accentColor(.gray09)
                     .toucheeseAlert(alert: $navigationManager.alert)
                     .toucheeseToast(toast: $navigationManager.toast)
                     .environmentObject(navigationManager)
@@ -37,6 +38,7 @@ struct ToucheeseApp: App {
                             authNavigationManager.build(destination)
                         }
                 }
+                .accentColor(.gray09)
                 .environmentObject(authNavigationManager)
                 .onOpenURL { url in
                     if AuthApi.isKakaoTalkLoginUrl(url) {

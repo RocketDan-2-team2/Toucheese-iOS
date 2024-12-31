@@ -8,6 +8,7 @@
 import SwiftUI
 
 final class AuthNavigationManager: ObservableObject {
+
     @Published var path: [Destination.Auth] = []
     
     @Published var alert: AlertType?
@@ -34,8 +35,8 @@ final class AuthNavigationManager: ObservableObject {
             LoginView()
         case .nickname:
             SignUpNicknameView()
-        case .complete:
-            SignUpCompleteView()
+        case .complete(let nickname):
+            SignUpCompleteView(nickname: nickname)
         }
     }
     
@@ -43,9 +44,9 @@ final class AuthNavigationManager: ObservableObject {
 
 
 enum Destination {
-    enum Auth {
+    enum Auth: Hashable {
         case login
         case nickname
-        case complete
+        case complete(nickname: String)
     }
 }

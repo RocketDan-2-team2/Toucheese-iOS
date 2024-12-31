@@ -117,7 +117,7 @@ struct SignUpNicknameView: View {
             print("SignUpNickname: \(event)")
         } receiveValue: { isSuccessed in
             if !isSuccessed { return }
-            navigationManager.push(.complete)
+            navigationManager.push(.complete(nickname: nickname))
         }
         .store(in: &bag)
     }

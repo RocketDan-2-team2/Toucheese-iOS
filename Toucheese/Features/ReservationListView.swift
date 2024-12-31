@@ -34,8 +34,6 @@ struct ReservationListView: View {
             }
         }
         .task {
-            if !reservationList.isEmpty { return }
-            
             fetchReservationList()
         }
         .refreshable {
