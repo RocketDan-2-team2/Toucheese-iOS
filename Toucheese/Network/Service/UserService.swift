@@ -10,14 +10,14 @@ import Moya
 import Combine
 
 protocol UserService {
-    func detail() -> AnyPublisher<UserDetailEntity, Error>
+    func detail() -> AnyPublisher<UserEntity, Error>
 }
 
 final class DefaultUserService: BaseService<UserAPI> { }
 
 extension DefaultUserService: UserService {
     
-    func detail() -> AnyPublisher<UserDetailEntity, Error> {
+    func detail() -> AnyPublisher<UserEntity, Error> {
         requestObjectWithNetworkError(.detail)
     }
 }

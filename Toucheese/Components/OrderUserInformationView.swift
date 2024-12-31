@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OrderUserInformationView: View {
     
-    let user: UserEntity
+    let user: User
     
     var body: some View {
         HStack {

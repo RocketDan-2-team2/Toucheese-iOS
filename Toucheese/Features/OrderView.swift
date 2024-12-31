@@ -24,7 +24,7 @@ struct OrderView: View {
     let product: StudioProduct
     let totalPrice: Int
     let selectedDate: Date
-    let user: UserEntity
+    let user: User
     
     private var selectedOptions: [StudioProductOption] {
         product.optionList.filter { $0.count > 0 }

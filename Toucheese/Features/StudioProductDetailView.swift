@@ -28,7 +28,7 @@ struct StudioProductDetailView: View {
     
     @State private var isTimeSelected: Bool = false
     
-    @State private var user: UserEntity?
+    @State private var user: User?
     
     let studioService: StudioService = DefaultStudioService()
     let userService: UserService = DefaultUserService()
