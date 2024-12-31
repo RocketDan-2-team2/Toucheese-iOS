@@ -24,7 +24,7 @@ struct OrderUserEntity: Decodable, Hashable {
     let userEmail: String?
     let userPhone: String?
     
-    func translate() -> UserEntity {
+    func translate() -> User {
         .init(
             name: self.userName,
             phone: self.userPhone ?? "",

@@ -14,20 +14,17 @@ struct OrderView: View {
     @EnvironmentObject private var navigationManager: NavigationManager
     
     private let orderService = DefaultOrderService()
+    
     @State private var bag = Set<AnyCancellable>()
     
     @State private var selectedPayment: PaymentType = .pg
     @State private var isSuccessOrder: Bool = false
-    @State private var user: UserEntity = .init(
-        name: "-",
-        phone: "-",
-        email: "-"
-    )
     
     let studio: StudioInfo
     let product: StudioProduct
     let totalPrice: Int
     let selectedDate: Date
+    let user: User
     
     private var selectedOptions: [StudioProductOption] {
         product.optionList.filter { $0.count > 0 }
@@ -44,7 +41,7 @@ struct OrderView: View {
                         Text("주문자 정보")
                             .font(.system(size: 16, weight: .bold))
                             .padding(.vertical, 14)
-                        //TODO: API 받으면 고치기
+                        
                         OrderUserInformationView(user: user)
                     }
                     
@@ -151,6 +148,8 @@ struct OrderView: View {
             .toolbarRole(.editor)
     }
     
+    //MARK: - Network
+    
     private func createOrder() {
         
         var newOptionList: [OptionRequestEntity] = []
@@ -195,8 +194,4 @@ struct OrderView: View {
             }
             .store(in: &bag)
     }
-}
-
-#Preview {
-    OrderView(studio: .init(id: 0, name: "공원스튜디오", profileImage: "", backgrounds: [], popularity: 0, dutyDate: "", address: "", description: ""), product: .init(id: 0, image: "", name: "증명사진", description: "", reviewCount: 0, price: 75000, optionList: [.init(id: 0, name: "보정사진 추가", description: "", price: 30000, count: 1)]), totalPrice: 105000, selectedDate: Date())
 }
