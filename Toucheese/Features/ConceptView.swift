@@ -17,9 +17,11 @@ struct ConceptView: View {
     @State private var conceptList: [ConceptEntity] = []
     
     var body: some View {
-        VStack(spacing: 0) {
-            Text("터치즈 로고")
-                .font (.title)
+        VStack(spacing: 15) {
+            Image("toucheese_logo")
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 80.0)
             
             ScrollView {
                 LazyVGrid(
