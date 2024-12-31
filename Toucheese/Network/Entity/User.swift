@@ -11,4 +11,5 @@ struct User: Hashable {
     let name: String
     let phone: String
     let email: String
+    let nickname: String
 }

@@ -20,15 +20,17 @@ struct ReservationEntity: Decodable, Hashable {
 
 struct OrderUserEntity: Decodable, Hashable {
     let userId: Int
-    let userName: String
+    let userName: String?
     let userEmail: String?
     let userPhone: String?
     
+    //TODO: 이름, 연락처 API 받으면 바꾸기
     func translate() -> User {
         .init(
-            name: self.userName,
+            name: self.userName ?? "",
             phone: self.userPhone ?? "",
-            email: self.userEmail ?? ""
+            email: self.userEmail ?? "",
+            nickname: self.userName ?? ""
         )
     }
 }

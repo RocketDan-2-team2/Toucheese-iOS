@@ -11,18 +11,26 @@ import Combine
 
 struct ReservationListView: View {
     
-    let orderService = DefaultOrderService()
-    @State private var reservationList: [ReservationEntity] = []
+    private let orderService = DefaultOrderService()
     
     @State private var bag = Set<AnyCancellable>()
-
+    
+    @State private var reservationList: [ReservationEntity] = []
+    
     var body: some View {
-        ScrollView {
-            VStack {
-                ForEach(reservationList, id:\.self) { reservation in
-                    ReservationCell(reservation: reservation)
+        VStack {
+            if reservationList.isEmpty {
+               Text("예약된 일정이 없습니다.")
+                    .font(.system(size: 20, weight: .medium))
+            } else {
+                ScrollView {
+                    VStack {
+                        ForEach(reservationList, id:\.self) { reservation in
+                            ReservationCell(reservation: reservation)
+                        }
+                        .padding(.top, 13)
+                    }
                 }
-                .padding(.top, 13)
             }
         }
         .task {
@@ -47,11 +55,11 @@ struct ReservationListView: View {
                     print(error)
                 }
             } receiveValue: { list in
-                reservationList = list
+                self.reservationList = list
             }
             .store(in: &bag)
     }
-
+    
 }
 
 #Preview {
