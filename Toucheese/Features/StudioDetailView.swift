@@ -152,16 +152,6 @@ struct StudioDetailView: View {
                 )
                 .padding(.leading, -10)
             }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                HStack(spacing: 20.0) {
-                    Label("share", systemImage: "square.and.arrow.up")
-                    Label("heart",
-                          // TODO: 유저가 "좋아요" 눌렀는지에 따라 다르게 변경
-                          systemImage: "heart"
-                    )
-                }
-            }
         }
     }
     
